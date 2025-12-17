@@ -1,0 +1,389 @@
+<!-- MOBILE.HTML - WITH CORRECTED LOCAL IMAGE PATHS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Van Heusen - Mobile App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .mobile-frame {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3),
+                        0 0 0 1px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideIn 0.6s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .status-bar {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            padding: 12px 20px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+        .app-header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .like-counter {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            min-height: 500px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.5s ease backwards;
+        }
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        .product-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        /* Fallback styling when image doesn't load */
+        .product-image .placeholder {
+            font-size: 3.5em;
+            color: #667eea;
+            opacity: 0.6;
+            display: none;
+        }
+        .product-image .image-error {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: linear-gradient(135deg, #667eea22, #764ba211);
+            color: #667eea;
+            font-size: 0.75em;
+            text-align: center;
+            padding: 10px;
+        }
+        .product-image .image-error .icon {
+            font-size: 3em;
+            margin-bottom: 5px;
+        }
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.95);
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: 700;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .product-info {
+            padding: 12px;
+        }
+        .product-name {
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+        .product-price {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        .like-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .like-button:hover {
+            transform: scale(1.1);
+        }
+        .like-button.liked {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            animation: heartBeat 0.4s ease;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
+        }
+        .floating-cart {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px 32px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            animation: bounce 2s infinite, fadeIn 0.8s ease 0.5s backwards;
+            font-weight: 600;
+            font-size: 1.05em;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .floating-cart:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="status-bar">
+            <span>9:41 AM</span>
+            <span>⚡ 85% 📶</span>
+        </div>
+        <div class="app-header">
+            <h1>Van Heusen</h1>
+            <div class="like-counter" id="likeCount">♥ 0</div>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+    
+    <div class="floating-cart" onclick="proceedToWhatsApp()">
+        Continue on WhatsApp →
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+        let likedProducts = [];
+
+        // IMPORTANT: Use relative paths with forward slashes (/)
+        // The images folder should be in the same directory as this HTML file
+        const products = [
+            {
+                id: 'VH001', 
+                name: 'Classic Blue Formal Shirt', 
+                price: 2500, 
+                badge: 'NEW',
+                image: 'images/classic blue formal shirt.png'  // Use forward slashes!
+            },
+            {
+                id: 'VH002', 
+                name: 'White Premium Shirt', 
+                price: 2800, 
+                badge: 'PREMIUM',
+                image: 'images/white premium shirt.jpg'
+            },
+            {
+                id: 'VH003', 
+                name: 'Light Pink Shirt', 
+                price: 2600, 
+                badge: 'TRENDING',
+                image: 'images/light pink shirt.png'
+            },
+            {
+                id: 'VH004', 
+                name: 'Navy Blue Tie', 
+                price: 800, 
+                badge: 'HOT',
+                image: 'images/navy blue tie.jpg'
+            },
+            {
+                id: 'VH005', 
+                name: 'Striped Tie', 
+                price: 750, 
+                badge: 'SALE',
+                image: 'images/stripped tie.jpg'
+            },
+            {
+                id: 'VH006', 
+                name: 'Brown Leather Belt', 
+                price: 1200, 
+                badge: 'NEW',
+                image: 'images/brown belt.jpg'
+            }
+        ];
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <button class="like-button" id="like-${p.id}" onclick="toggleLike('${p.id}')">
+                        🤍
+                    </button>
+                    <div class="product-image">
+                        <div class="product-badge">${p.badge}</div>
+                        <img 
+                            src="${p.image}" 
+                            alt="${p.name}" 
+                            loading="lazy"
+                            onerror="handleImageError(this, '${p.name}')"
+                        >
+                        <div class="image-error">
+                            <div class="icon">🖼️</div>
+                            <div>Image not found<br><small>${p.image}</small></div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">₹${p.price}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleImageError(img, productName) {
+            console.error(`❌ Image not found: ${img.src}`);
+            console.log(`Looking for: ${productName}`);
+            img.style.display = 'none';
+            const errorDiv = img.nextElementSibling;
+            if (errorDiv && errorDiv.classList.contains('image-error')) {
+                errorDiv.style.display = 'flex';
+            }
+        }
+
+        async function toggleLike(productId) {
+            const button = document.getElementById(`like-${productId}`);
+            const isLiked = button.classList.contains('liked');
+            
+            if (isLiked) {
+                button.classList.remove('liked');
+                button.textContent = '🤍';
+                likedProducts = likedProducts.filter(id => id !== productId);
+            } else {
+                button.classList.add('liked');
+                button.textContent = '❤️';
+                likedProducts.push(productId);
+                
+                try {
+                    await fetch(`${API_URL}/api/products/like`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            product_id: productId,
+                            channel: 'mobile'
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+            
+            document.getElementById('likeCount').textContent = `♥ ${likedProducts.length}`;
+        }
+
+        function proceedToWhatsApp() {
+            if (likedProducts.length === 0) {
+                alert('❤️ Please like at least one product to continue!');
+                return;
+            }
+            localStorage.setItem('current_step', '2');
+            window.location.href = `whatsapp.html?session=${sessionId}`;
+        }
+
+        window.onload = () => {
+            renderProducts();
+            localStorage.setItem('current_step', '1');
+            
+            // Log the image paths for debugging
+            console.log('📸 Looking for images in:');
+            products.forEach(p => {
+                console.log(`  - ${p.image}`);
+            });
+        };
+    </script>
+</body>
+</html>

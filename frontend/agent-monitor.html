@@ -1,0 +1,414 @@
+<!-- AGENT-MONITOR.HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Monitor - Real-time</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 20px;
+        }
+        .monitor {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+        .header h1 {
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .status-item {
+            background: #0d1117;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid #30363d;
+        }
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .agent-card {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #30363d;
+            transition: all 0.3s;
+        }
+        .agent-card.active {
+            border-color: #58a6ff;
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+        }
+        .agent-card.success {
+            border-color: #3fb950;
+        }
+        .agent-card.failed {
+            border-color: #f85149;
+        }
+        .agent-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #58a6ff;
+        }
+        .agent-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .status-idle { background: #30363d; }
+        .status-processing { background: #1f6feb; animation: pulse 1s infinite; }
+        .status-success { background: #238636; }
+        .status-failed { background: #da3633; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .log-container {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .log-orchestrator { background: #1f6feb20; border-left: 3px solid #1f6feb; }
+        .log-recommendation { background: #9e6a0320; border-left: 3px solid #9e6a03; }
+        .log-inventory { background: #7d4e5720; border-left: 3px solid #7d4e57; }
+        .log-payment { background: #238636; border-left: 3px solid #3fb950; }
+        .log-error { background: #da363320; border-left: 3px solid #f85149; }
+        .demo-controls {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+        .demo-btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .demo-btn:hover {
+            background: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="monitor">
+        <div class="header">
+            <h1>🤖 AI Agent Monitor</h1>
+            <p>Real-time visualization of multi-agent orchestration</p>
+            <div class="status-bar">
+                <div class="status-item">
+                    Session: <strong id="sessionDisplay">Loading...</strong>
+                </div>
+                <div class="status-item">
+                    Active Agents: <strong id="activeCount">0</strong>
+                </div>
+                <div class="status-item">
+                    Total Calls: <strong id="totalCalls">0</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-controls">
+            <h3 style="margin-bottom: 10px;">🎬 Edge Case Demonstrations:</h3>
+            <button class="demo-btn" onclick="demoPaymentRetry()">💳 Payment Retry</button>
+            <button class="demo-btn" onclick="demoOutOfStock()">📦 Out of Stock</button>
+            <button class="demo-btn" onclick="demoOrderModify()">✏️ Order Modify</button>
+            <button class="demo-btn" onclick="demoFullJourney()">🚀 Full Journey</button>
+        </div>
+
+        <div class="agent-grid">
+            <div class="agent-card" id="agent-orchestrator">
+                <div class="agent-name">🎯 Orchestrator</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="orch-calls">0</span></div>
+                </div>
+            </div>
+            
+            <div class="agent-card" id="agent-recommendation">
+                <div class="agent-name">🎨 Recommendation</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="rec-calls">0</span></div>
+                </div>
+            </div>
+            
+            <div class="agent-card" id="agent-inventory">
+                <div class="agent-name">📦 Inventory</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="inv-calls">0</span></div>
+                </div>
+            </div>
+            
+            <div class="agent-card" id="agent-payment">
+                <div class="agent-name">💳 Payment</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="pay-calls">0</span></div>
+                </div>
+            </div>
+            
+            <div class="agent-card" id="agent-fulfillment">
+                <div class="agent-name">🚚 Fulfillment</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="ful-calls">0</span></div>
+                </div>
+            </div>
+            
+            <div class="agent-card" id="agent-loyalty">
+                <div class="agent-name">🎁 Loyalty</div>
+                <div class="agent-status status-idle">Idle</div>
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div>Calls: <span id="loy-calls">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-entry log-orchestrator">
+                [SYSTEM] Agent monitor initialized. Ready for demonstrations.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+        let ws;
+        let agentCalls = {
+            orchestrator: 0,
+            recommendation: 0,
+            inventory: 0,
+            payment: 0,
+            fulfillment: 0,
+            loyalty: 0
+        };
+        let totalCalls = 0;
+
+        function addLog(message, type = 'orchestrator') {
+            const log = document.getElementById('logContainer');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function updateAgentStatus(agent, status) {
+            const card = document.getElementById(`agent-${agent}`);
+            if (!card) return;
+            
+            const statusEl = card.querySelector('.agent-status');
+            statusEl.className = `agent-status status-${status}`;
+            statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            
+            if (status === 'processing') {
+                card.classList.add('active');
+            } else if (status === 'success') {
+                card.classList.remove('active');
+                card.classList.add('success');
+                setTimeout(() => card.classList.remove('success'), 2000);
+            } else if (status === 'failed') {
+                card.classList.remove('active');
+                card.classList.add('failed');
+            } else {
+                card.classList.remove('active');
+            }
+        }
+
+        function incrementAgentCall(agent) {
+            agentCalls[agent]++;
+            totalCalls++;
+            const callEl = document.getElementById(`${agent.slice(0,3)}-calls`);
+            if (callEl) callEl.textContent = agentCalls[agent];
+            document.getElementById('totalCalls').textContent = totalCalls;
+            document.getElementById('activeCount').textContent = 
+                Object.values(agentCalls).filter(c => c > 0).length;
+        }
+
+        // Edge Case Demonstrations
+        async function demoPaymentRetry() {
+            addLog('🎬 Starting Payment Retry Demo (Edge Case #1)', 'orchestrator');
+            
+            updateAgentStatus('payment', 'processing');
+            incrementAgentCall('payment');
+            addLog('Attempting payment via Gateway 1 (Razorpay)...', 'payment');
+            
+            await sleep(1200);
+            addLog('❌ Gateway 1 FAILED: Timeout error', 'error');
+            updateAgentStatus('payment', 'failed');
+            
+            await sleep(500);
+            updateAgentStatus('payment', 'processing');
+            addLog('🔄 Retrying with Gateway 2 (PayU)...', 'payment');
+            
+            await sleep(800);
+            addLog('❌ Gateway 2 FAILED: Bank declined', 'error');
+            
+            await sleep(500);
+            addLog('🔄 Switching to UPI Direct fallback...', 'payment');
+            
+            await sleep(700);
+            addLog('✅ Payment SUCCESS via UPI! Transaction ID: TXN123456', 'payment');
+            updateAgentStatus('payment', 'success');
+            
+            addLog('⏱️ Total time: 2.7 seconds (auto-retry handled)', 'orchestrator');
+        }
+
+        async function demoOutOfStock() {
+            addLog('🎬 Starting Out of Stock Demo (Edge Case #2)', 'orchestrator');
+            
+            updateAgentStatus('inventory', 'processing');
+            incrementAgentCall('inventory');
+            addLog('Checking stock for Blue Shirt Size M at Bandra store...', 'inventory');
+            
+            await sleep(500);
+            addLog('❌ Size M unavailable at current location', 'error');
+            
+            await sleep(300);
+            addLog('🔍 Scanning 5 nearby stores...', 'inventory');
+            
+            await sleep(400);
+            addLog('✅ Found at Powai Store (3km) - 1 in stock', 'inventory');
+            addLog('✅ Found at Kurla Store (7km) - 2 in stock', 'inventory');
+            
+            await sleep(300);
+            addLog('🔍 Finding alternative products...', 'inventory');
+            addLog('✅ Navy blue variant available at Bandra', 'inventory');
+            addLog('✅ Light blue variant available at Bandra', 'inventory');
+            
+            updateAgentStatus('inventory', 'success');
+            addLog('📱 Customer notified with 3 options', 'orchestrator');
+        }
+
+        async function demoOrderModify() {
+            addLog('🎬 Starting Order Modification Demo (Edge Case #3)', 'orchestrator');
+            
+            addLog('Customer updated quantity from 1 to 2', 'orchestrator');
+            
+            // Parallel agent calls
+            updateAgentStatus('inventory', 'processing');
+            updateAgentStatus('loyalty', 'processing');
+            incrementAgentCall('inventory');
+            incrementAgentCall('loyalty');
+            
+            addLog('Checking inventory for updated quantity...', 'inventory');
+            addLog('Recalculating loyalty offers...', 'loyalty');
+            
+            await sleep(500);
+            addLog('✅ Stock available for quantity 2', 'inventory');
+            updateAgentStatus('inventory', 'success');
+            
+            await sleep(300);
+            addLog('💡 New bundle offer available: 10% off!', 'loyalty');
+            addLog('✅ Better discount applied automatically', 'loyalty');
+            updateAgentStatus('loyalty', 'success');
+            
+            await sleep(200);
+            addLog('📊 Recalculated total: ₹4,350 (saved ₹650)', 'orchestrator');
+            addLog('⏱️ Total time: 1.6 seconds', 'orchestrator');
+        }
+
+        async function demoFullJourney() {
+            addLog('🎬 Starting Full Customer Journey Demo', 'orchestrator');
+            await sleep(1000);
+            
+            // Recommendation
+            updateAgentStatus('recommendation', 'processing');
+            incrementAgentCall('recommendation');
+            addLog('Analyzing customer preferences...', 'recommendation');
+            await sleep(800);
+            addLog('✅ Found 5 matching products', 'recommendation');
+            updateAgentStatus('recommendation', 'success');
+            
+            await sleep(500);
+            
+            // Inventory
+            updateAgentStatus('inventory', 'processing');
+            incrementAgentCall('inventory');
+            addLog('Checking store availability...', 'inventory');
+            await sleep(600);
+            addLog('✅ Available at Bandra Store', 'inventory');
+            updateAgentStatus('inventory', 'success');
+            
+            await sleep(500);
+            
+            // Loyalty
+            updateAgentStatus('loyalty', 'processing');
+            incrementAgentCall('loyalty');
+            addLog('Calculating offers...', 'loyalty');
+            await sleep(400);
+            addLog('✅ Bundle offer: 20% off applied', 'loyalty');
+            updateAgentStatus('loyalty', 'success');
+            
+            await sleep(500);
+            
+            // Payment
+            await demoPaymentRetry();
+            
+            await sleep(500);
+            
+            addLog('🎉 Journey complete! All agents coordinated successfully.', 'orchestrator');
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Initialize
+        window.onload = () => {
+            document.getElementById('sessionDisplay').textContent = 
+                sessionId ? sessionId.slice(0, 15) + '...' : 'N/A';
+            
+            // Auto-start demo based on URL parameter
+            const params = new URLSearchParams(window.location.search);
+            const demo = params.get('demo');
+            
+            if (demo === 'payment') {
+                setTimeout(demoPaymentRetry, 1000);
+            }
+        };
+    </script>
+</body>
+</html>

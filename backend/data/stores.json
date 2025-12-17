@@ -1,0 +1,44 @@
+{
+  "stores": [
+    {
+      "store_id": "S001",
+      "name": "Bandra Store",
+      "location": "Mumbai",
+      "address": "Shop 23, Linking Road, Bandra West",
+      "distance": "2km",
+      "phone": "+91 22 1234 5678",
+      "timings": "10 AM - 10 PM",
+      "coordinates": {"lat": 19.0596, "lng": 72.8295}
+    },
+    {
+      "store_id": "S002",
+      "name": "Powai Store",
+      "location": "Mumbai",
+      "address": "Phoenix Market City, Powai",
+      "distance": "5km",
+      "phone": "+91 22 2345 6789",
+      "timings": "11 AM - 11 PM",
+      "coordinates": {"lat": 19.1176, "lng": 72.9060}
+    },
+    {
+      "store_id": "S003",
+      "name": "Andheri Store",
+      "location": "Mumbai",
+      "address": "Infinity Mall, Andheri West",
+      "distance": "7km",
+      "phone": "+91 22 3456 7890",
+      "timings": "10 AM - 10 PM",
+      "coordinates": {"lat": 19.1136, "lng": 72.8697}
+    },
+    {
+      "store_id": "S004",
+      "name": "Kurla Store",
+      "location": "Mumbai",
+      "address": "Phoenix Mall, Kurla",
+      "distance": "8km",
+      "phone": "+91 22 4567 8901",
+      "timings": "11 AM - 11 PM",
+      "coordinates": {"lat": 19.0883, "lng": 72.8789}
+    }
+  ]
+}

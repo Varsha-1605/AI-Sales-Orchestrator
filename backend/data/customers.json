@@ -1,0 +1,26 @@
+{
+  "customers": [
+    {
+      "customer_id": "CUST001",
+      "name": "Rahul Sharma",
+      "phone": "+91 98765 43210",
+      "email": "rahul.sharma@email.com",
+      "location": "Bandra, Mumbai",
+      "loyalty_points": 500,
+      "tier": "Gold",
+      "preferences": {
+        "brands": ["Van Heusen", "Louis Philippe"],
+        "sizes": ["40"],
+        "colors": ["Blue", "White", "Black"],
+        "price_range": [2000, 4000]
+      },
+      "purchase_history": [
+        {
+          "date": "2024-11-15",
+          "items": ["VH001", "VH004"],
+          "total": 3300
+        }
+      ]
+    }
+  ]
+}

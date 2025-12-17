@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Purchase Follow-up - Van Heusen AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: slideIn 0.6s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .timeline {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease backwards;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .timeline-icon.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+        }
+
+        .timeline-icon.pending {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .timeline-item:not(:last-child) .timeline-icon::after {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 50px;
+            background: linear-gradient(180deg, #667eea, transparent);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .timeline-content h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content .timestamp {
+            color: #999;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .whatsapp-message {
+            background: #e7ffdb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 12px;
+            border-left: 4px solid #25d366;
+            font-style: italic;
+            color: #333;
+        }
+
+        .action-card {
+            background: white;
+            margin: 0 30px 30px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.6s ease 1s backwards;
+        }
+
+        .action-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: grayscale(100%);
+        }
+
+        .star:hover,
+        .star.active {
+            filter: grayscale(0%);
+            transform: scale(1.2);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .recommendation-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            margin: 0 30px 30px;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            animation: fadeInUp 0.6s ease 1.2s backwards;
+        }
+
+        .recommendation-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .product-recommendation {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-recommendation:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .product-info-rec {
+            flex: 1;
+        }
+
+        .product-info-rec strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+
+        .product-info-rec .price {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>✨ Thank You, Rahul!</h1>
+            <p>Your order journey & personalized care</p>
+        </div>
+
+        <!-- Order Timeline -->
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon completed">✅</div>
+                <div class="timeline-content">
+                    <h3>Order Confirmed</h3>
+                    <p>Your order #VH2025001 has been placed successfully</p>
+                    <div class="whatsapp-message">
+                        "Hi Rahul! Your order is confirmed. Track it anytime!"
+                    </div>
+                    <p class="timestamp">2 hours ago • via WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon completed">📦</div>
+                <div class="timeline-content">
+                    <h3>Order Packed</h3>
+                    <p>Items carefully packed at Bandra Store</p>
+                    <div class="whatsapp-message">
+                        "Your items are packed with care. Ready for dispatch!"
+                    </div>
+                    <p class="timestamp">1 hour ago • via WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon pending">🚚</div>
+                <div class="timeline-content">
+                    <h3>Out for Delivery</h3>
+                    <p>Express delivery - arrives tomorrow by 10 AM</p>
+                    <div class="whatsapp-message">
+                        "On the way! Track your delivery in real-time."
+                    </div>
+                    <p class="timestamp">Scheduled for tomorrow • via WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">🎁</div>
+                <div class="timeline-content">
+                    <h3>Styling Tips</h3>
+                    <p>How to style your new formal outfit for the wedding</p>
+                    <div class="whatsapp-message">
+                        "💡 Pro styling tip: Pair your blue shirt with navy tie for a sophisticated look. Watch our 2-min video guide!"
+                    </div>
+                    <p class="timestamp">After delivery • via WhatsApp</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating Card -->
+        <div class="action-card">
+            <h3>⭐ Rate Your Experience</h3>
+            <p style="text-align: center; color: #666; margin-bottom: 10px;">
+                How was your shopping journey with us?
+            </p>
+            <div class="rating-stars" id="ratingStars">
+                <span class="star" data-rating="1">⭐</span>
+                <span class="star" data-rating="2">⭐</span>
+                <span class="star" data-rating="3">⭐</span>
+                <span class="star" data-rating="4">⭐</span>
+                <span class="star" data-rating="5">⭐</span>
+            </div>
+            <p id="ratingFeedback" style="text-align: center; color: #667eea; font-weight: 600; min-height: 25px;"></p>
+
+            <div class="quick-actions">
+                <div class="action-btn" onclick="showSupport()">
+                    💬 Need Help?
+                </div>
+                <div class="action-btn" onclick="trackOrder()">
+                    📍 Track Order
+                </div>
+                <div class="action-btn" onclick="viewInvoice()">
+                    📄 View Invoice
+                </div>
+                <div class="action-btn" onclick="initiateReturn()">
+                    🔄 Easy Returns
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="recommendation-section">
+            <h3>🎯 Complete Your Look</h3>
+            <p style="color: #666; margin-bottom: 15px;">
+                Based on your purchase, customers also bought:
+            </p>
+
+            <div class="product-recommendation">
+                <div class="product-info-rec">
+                    <strong>Navy Formal Trousers</strong>
+                    <span>Perfect match • 85% buy together</span><br>
+                    <span class="price">₹2,200</span>
+                </div>
+                <button class="add-btn" onclick="addToCart('trousers')">Add</button>
+            </div>
+
+            <div class="product-recommendation">
+                <div class="product-info-rec">
+                    <strong>Premium Leather Wallet</strong>
+                    <span>Complete the professional look</span><br>
+                    <span class="price">₹1,500</span>
+                </div>
+                <button class="add-btn" onclick="addToCart('wallet')">Add</button>
+            </div>
+
+            <div class="product-recommendation">
+                <div class="product-info-rec">
+                    <strong>Formal Shoes (Black)</strong>
+                    <span>Wedding essential • 30% off</span><br>
+                    <span class="price">₹3,200</span>
+                </div>
+                <button class="add-btn" onclick="addToCart('shoes')">Add</button>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center; color: #1a1a1a; font-weight: 600;">
+                🎁 Special Offer: Add 2+ items, get 15% off!
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Your loyalty: <strong>595 points earned</strong> • Gold Member</p>
+            <p style="font-size: 0.9em; opacity: 0.8;">Next reward at 1,000 points</p>
+            <button class="back-btn" onclick="backToHome()">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+
+        // Rating System
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                document.querySelectorAll('.star').forEach((s, idx) => {
+                    if (idx < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+                
+                const feedback = document.getElementById('ratingFeedback');
+                const messages = {
+                    '1': 'We appreciate your feedback. Let us make it better! 💙',
+                    '2': 'Thank you! We\'ll work on improving your experience.',
+                    '3': 'Good! We\'re always looking to improve.',
+                    '4': 'Great! We\'re glad you enjoyed shopping with us! 😊',
+                    '5': 'Excellent! Thank you for being an amazing customer! 🎉'
+                };
+                feedback.textContent = messages[rating];
+
+                // Send rating to backend
+                sendRating(rating);
+            });
+        });
+
+        async function sendRating(rating) {
+            try {
+                await fetch(`${API_URL}/api/feedback/rating`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        rating: parseInt(rating),
+                        order_id: 'VH2025001'
+                    })
+                });
+                console.log('Rating sent:', rating);
+            } catch (error) {
+                console.error('Error sending rating:', error);
+            }
+        }
+
+        function showSupport() {
+            alert('💬 Support Chat\n\n' +
+                  'Hi Rahul! How can we help?\n\n' +
+                  '• Track your order\n' +
+                  '• Initiate return/exchange\n' +
+                  '• Sizing questions\n' +
+                  '• Product recommendations\n\n' +
+                  'Reply anytime - we\'re here 24/7!');
+        }
+
+        function trackOrder() {
+            alert('📍 Order Tracking\n\n' +
+                  'Order: #VH2025001\n' +
+                  'Status: Out for Delivery\n\n' +
+                  'Estimated Delivery: Tomorrow 10 AM\n' +
+                  'Delivery Partner: BlueDart\n' +
+                  'Tracking ID: BD2025123456\n\n' +
+                  'Live tracking link sent to WhatsApp!');
+        }
+
+        function viewInvoice() {
+            alert('📄 Invoice Details\n\n' +
+                  'Order: #VH2025001\n' +
+                  'Date: ' + new Date().toLocaleDateString() + '\n\n' +
+                  'Items:\n' +
+                  '• Blue Formal Shirt - ₹2,500\n' +
+                  '• Navy Blue Tie - ₹800\n\n' +
+                  'Subtotal: ₹3,300\n' +
+                  'Discount: -₹330\n' +
+                  'Total: ₹2,970\n\n' +
+                  'PDF invoice sent to your email!');
+        }
+
+        function initiateReturn() {
+            alert('🔄 Easy Returns\n\n' +
+                  '30-day return policy\n' +
+                  'Free pickup from your doorstep\n' +
+                  'Instant refund on acceptance\n\n' +
+                  'To return:\n' +
+                  '1. Keep tags intact\n' +
+                  '2. Click "Initiate Return" on WhatsApp\n' +
+                  '3. Schedule pickup\n\n' +
+                  'Questions? We\'re here to help!');
+        }
+
+        function addToCart(item) {
+            const items = {
+                'trousers': 'Navy Formal Trousers',
+                'wallet': 'Premium Leather Wallet',
+                'shoes': 'Formal Shoes (Black)'
+            };
+            
+            alert('✅ Added to Cart!\n\n' +
+                  items[item] + ' has been added.\n\n' +
+                  'Total items: ' + (Math.floor(Math.random() * 3) + 2) + '\n' +
+                  'Special offer active: 15% off on 2+ items!\n\n' +
+                  'Continue shopping or checkout?');
+        }
+
+        function backToHome() {
+            window.location.href = `index.html?session=${sessionId}`;
+        }
+
+        window.onload = () => {
+            localStorage.setItem('current_step', '6');
+            console.log('✅ Post-Purchase Follow-up page loaded');
+        };
+    </script>
+</body>
+</html>

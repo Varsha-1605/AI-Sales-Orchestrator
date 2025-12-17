@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp - Van Heusen AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .whatsapp-container {
+            width: 400px;
+            height: 700px;
+            background: #0a0a0a;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .wa-header {
+            background: #1f2c34;
+            padding: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .wa-chat {
+            flex: 1;
+            background: #0b141a;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.bot { text-align: left; }
+        .message.user { text-align: right; }
+        .message-bubble {
+            display: inline-block;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 5px 0;
+            word-wrap: break-word;
+        }
+        .bot .message-bubble {
+            background: #1f2c34;
+            color: white;
+        }
+        .user .message-bubble {
+            background: #005c4b;
+            color: white;
+        }
+        .product-card {
+            background: #1f2c34;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: white;
+        }
+        .product-card strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #25d366;
+        }
+        .quick-reply {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .quick-reply button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .quick-reply button:hover {
+            background: #1ea952;
+            transform: scale(1.05);
+        }
+        .wa-input {
+            background: #1f2c34;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .wa-input input {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            outline: none;
+        }
+        .wa-input input::placeholder {
+            color: #8696a0;
+        }
+        .wa-input button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .typing-indicator {
+            display: inline-block;
+            background: #1f2c34;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #8696a0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <div class="wa-header">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                👔
+            </div>
+            <div>
+                <div style="font-weight: bold;">Van Heusen AI</div>
+                <div style="font-size: 12px; color: #8696a0;">Online</div>
+            </div>
+        </div>
+        
+        <div class="wa-chat" id="chatContainer">
+            <!-- Messages will be added here -->
+        </div>
+        
+        <div class="wa-input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+        let conversationState = 'initial'; // Track conversation flow
+        let cartItems = [];
+
+        // Initialize conversation
+        window.onload = () => {
+            localStorage.setItem('current_step', '2');
+            setTimeout(() => {
+                addMessage('Hi Rahul! 👋 I see you liked 1 shirt on our app. Would you like to see it again?', false);
+                addQuickReplies([
+                    {text: '👍 Yes, show that!', action: 'show_products'},
+                    {text: '📦 Check availability', action: 'check_stores'}
+                ]);
+            }, 500);
+        };
+
+        function addMessage(text, isUser = false) {
+            const chat = document.getElementById('chatContainer');
+            const msg = document.createElement('div');
+            msg.className = `message ${isUser ? 'user' : 'bot'}`;
+            msg.innerHTML = `<div class="message-bubble">${text}</div>`;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const chat = document.getElementById('chatContainer');
+            const typing = document.createElement('div');
+            typing.className = 'message bot';
+            typing.id = 'typing';
+            typing.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+            chat.appendChild(typing);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function addQuickReplies(buttons) {
+            const chat = document.getElementById('chatContainer');
+            const qr = document.createElement('div');
+            qr.className = 'quick-reply';
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.textContent = btn.text;
+                button.onclick = () => handleQuickReply(btn.action);
+                qr.appendChild(button);
+            });
+            chat.appendChild(qr);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showProductCard(product) {
+            const chat = document.getElementById('chatContainer');
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <strong>${product.name}</strong>
+                ₹${product.price} | ${product.size ? `Size: ${product.size} | ` : ''}Available
+                <div class="quick-reply" style="margin-top: 10px;">
+                    <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>
+                    <button onclick="checkInStore('${product.id}')">Check in Store</button>
+                </div>
+            `;
+            chat.appendChild(card);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function handleQuickReply(action) {
+            // Remove previous quick reply buttons
+            document.querySelectorAll('.quick-reply').forEach(qr => qr.remove());
+
+            switch(action) {
+                case 'show_products':
+                    addMessage('Show me the shirt', true);
+                    addTypingIndicator();
+                    await sleep(800);
+                    removeTypingIndicator();
+                    addMessage('Here is the shirt you liked:', false);
+                    
+                    // Show products
+                    showProductCard({
+                        id: 'VH001',
+                        name: 'Classic Blue Formal Shirt',
+                        price: 2500,
+                        size: '40'
+                    });
+                    conversationState = 'products_shown';
+                    break;
+
+                case 'check_stores':
+                    addMessage('Check availability near me', true);
+                    addTypingIndicator();
+                    await sleep(600);
+                    removeTypingIndicator();
+                    addMessage('Checking nearby stores...', false);
+                    await sleep(400);
+                    addMessage('Here are stores near you with stock availability:', false);
+                    await sleep(200);
+                    addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
+                    await sleep(200);
+                    addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
+                    await sleep(200);
+                    addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
+                    addQuickReplies([
+                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                        {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
+                        {text: '👕 Show products', action: 'show_products'}
+                    ]);
+                    break;
+
+                case 'show_recommendations':
+                    addMessage('Show matching items', true);
+                    addTypingIndicator();
+                    await sleep(600);
+                    removeTypingIndicator();
+                    addMessage('Great! Here are items that match perfectly:', false);
+                    
+                    showProductCard({
+                        id: 'VH004',
+                        name: 'Navy Blue Silk Tie',
+                        price: 800
+                    });
+                    
+                    showProductCard({
+                        id: 'VH006',
+                        name: 'Brown Leather Belt',
+                        price: 1200
+                    });
+                    
+                    addMessage('💡 Bundle offer: Buy 3+ items, get 20% off!', false);
+                    conversationState = 'recommendations_shown';
+                    break;
+
+                case 'reserve_bandra':
+                    addMessage('Reserve at Bandra store', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    addMessage('✅ Items reserved at Bandra Store for 24 hours!\n\n📍 Shop 23, Linking Road, Bandra West\n⏰ Open until 10 PM\n📦 3 items ready for you\n\nYour shopping history is shared with our store team for faster service! 🚀', false);
+                    addQuickReplies([
+                        {text: '🏪 Visit Store Now', action: 'visit_store'},
+                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
+                    ]);
+                    break;
+
+                case 'reserve_powai':
+                    addMessage('Reserve at Powai store', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    addMessage('✅ Items reserved at Powai Store for 24 hours!\n\n📍 Phoenix Market City, Powai\n⏰ Open until 11 PM\n📦 1 item ready for you\n\n💡 Note: Limited stock - we recommend visiting soon!', false);
+                    addQuickReplies([
+                        {text: '🏪 Visit Store Now', action: 'visit_store'},
+                        {text: '🗺️ Get Directions', action: 'get_directions_powai'},
+                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
+                    ]);
+                    break;
+
+                case 'notify_andheri':
+                    addMessage('Notify when Andheri restocks', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    addMessage('🔔 Restock Alert Set!\n\nWe\'ll notify you on WhatsApp when your items are back in stock at Andheri Store.\n\n📅 Expected restock: 2-3 days\n📍 Infinity Mall, Andheri West\n\nMeanwhile, would you like to:\n• Reserve at Bandra (2km) - 3 in stock\n• Reserve at Powai (5km) - 1 in stock', false);
+                    addQuickReplies([
+                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                        {text: '👕 Browse More', action: 'show_products'}
+                    ]);
+                    break;
+
+                case 'get_directions_powai':
+                    addMessage('Get directions to Powai', true);
+                    await sleep(300);
+                    addMessage('📍 Powai Store - Phoenix Market City\n\n🚗 5km from your location\n⏱️ 15-20 mins via Western Express Highway\n\n[Opening Google Maps...]\n\nStore Contact: +91 22 6789 0123\n\nYour reserved items will be ready when you arrive! 🎉', false);
+                    addQuickReplies([
+                        {text: '📞 Call Store', action: 'call_store_powai'},
+                        {text: '🏪 Visit Store', action: 'visit_store'}
+                    ]);
+                    break;
+
+                case 'call_store_powai':
+                    addMessage('Call Powai store', true);
+                    await sleep(300);
+                    addMessage('📞 Calling Powai Store...\n\n+91 22 6789 0123\n\nOur team is ready to assist you!\n⏰ Open now until 11 PM', false);
+                    break;
+
+                case 'visit_store':
+                    addMessage('Take me to store', true);
+                    await sleep(500);
+                    window.location.href = `store-dashboard.html?session=${sessionId}`;
+                    break;
+            }
+        }
+
+        async function addToCart(productId, productName, price) {
+            cartItems.push({id: productId, name: productName, price: price});
+            
+            addMessage(`Add ${productName} to cart`, true);
+            
+            addTypingIndicator();
+            await sleep(500);
+            removeTypingIndicator();
+            
+            addMessage(`✅ Added to cart! 🛒\n\nTotal items: ${cartItems.length}\nTotal: ₹${cartItems.reduce((sum, item) => sum + item.price, 0)}`, false);
+            
+            await sleep(300);
+            addMessage('Would you like matching accessories?', false);
+            
+            addQuickReplies([
+                {text: '👔 Show Ties & Belts', action: 'show_recommendations'},
+                {text: '🏪 Visit Store', action: 'check_stores'},
+                {text: '💳 Checkout', action: 'checkout'}
+            ]);
+
+            // Send to backend
+            try {
+                await fetch(`${API_URL}/api/cart/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: 1,
+                        size: '40'
+                    })
+                });
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
+        }
+
+        async function checkInStore(productId) {
+            addMessage('Check in store', true);
+            
+            addTypingIndicator();
+            await sleep(600);
+            removeTypingIndicator();
+            
+            addMessage('Checking store availability...', false);
+            
+            await sleep(400);
+            addMessage('✅ Available at Bandra Store (2km)\n📦 3 pieces in stock\n⏰ Open until 10 PM', false);
+            
+            addQuickReplies([
+                {text: '📍 Reserve Now', action: 'reserve_bandra'},
+                {text: '🛒 Add to Cart', action: 'add_this'}
+            ]);
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim().toLowerCase();
+            if (!message) return;
+            
+            addMessage(input.value.trim(), true);
+            input.value = '';
+            
+            addTypingIndicator();
+            await sleep(800);
+            removeTypingIndicator();
+            
+            // Smart response based on keywords
+            if (message.includes('store') || message.includes('shop') || message.includes('where')) {
+                addMessage('Here are stores near you with stock availability:', false);
+                await sleep(300);
+                addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
+                await sleep(200);
+                addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
+                await sleep(200);
+                addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
+                addQuickReplies([
+                    {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                    {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                    {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
+                    {text: '👕 Show products', action: 'show_products'}
+                ]);
+            }
+            else if (message.includes('tie') || message.includes('belt') || message.includes('accessory') || message.includes('match')) {
+                handleQuickReply('show_recommendations');
+            }
+            else if (message.includes('add') || message.includes('cart')) {
+                if (message.includes('tie')) {
+                    await addToCart('VH004', 'Navy Blue Silk Tie', 800);
+                } else {
+                    addMessage('Which item would you like to add?', false);
+                    addQuickReplies([
+                        {text: '👔 Navy Tie', action: 'add_tie'},
+                        {text: '👔 Brown Belt', action: 'add_belt'}
+                    ]);
+                }
+            }
+            else if (message.includes('reserve') || message.includes('book')) {
+                handleQuickReply('reserve_bandra');
+            }
+            else if (message.includes('visit') || message.includes('go')) {
+                handleQuickReply('visit_store');
+            }
+            else if (message.includes('help')) {
+                addMessage('I can help you with:\n• Finding products\n• Checking store availability\n• Adding items to cart\n• Reserving items\n• Getting recommendations\n\nWhat would you like to do?', false);
+                addQuickReplies([
+                    {text: '👕 Show Products', action: 'show_products'},
+                    {text: '🏪 Check Stores', action: 'check_stores'},
+                    {text: '💡 Recommendations', action: 'show_recommendations'}
+                ]);
+            }
+            else {
+                // Default smart response
+                addMessage('I can help you with that! Would you like to:', false);
+                addQuickReplies([
+                    {text: '👕 See Products', action: 'show_products'},
+                    {text: '🏪 Check Stores', action: 'check_stores'},
+                    {text: '💡 Get Recommendations', action: 'show_recommendations'}
+                ]);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Enter key to send
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

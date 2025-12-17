@@ -1,0 +1,370 @@
+<!-- STORE-DASHBOARD.HTML - PREMIUM VERSION -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Associate Dashboard - Van Heusen Bandra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            animation: slideDown 0.6s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .customer-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 0 0 20px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease 0.1s backwards;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .customer-profile {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            animation: scaleIn 0.6s ease 0.2s backwards;
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .customer-info h2 { 
+            margin-bottom: 8px;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        .customer-info p { 
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+        .loyalty-badge {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1a1a1a;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            animation: shine 2s infinite;
+        }
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            animation: slideUp 0.6s ease 0.3s backwards;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        .activity-item {
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .activity-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+        .activity-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #667eea;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .product-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+        .recommendation {
+            padding: 18px;
+            margin: 12px 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .recommendation:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            animation: slideUp 0.6s ease 0.5s backwards;
+        }
+        .btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .sections { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🏪 Store Associate Dashboard</h1>
+            <p>Bandra Store | Associate: Priya Sharma | Real-time Customer Insights</p>
+        </div>
+        
+        <div class="customer-card">
+            <div class="customer-profile">
+                <div class="avatar">👤</div>
+                <div class="customer-info">
+                    <h2>Rahul Sharma</h2>
+                    <p>📞 +91 98765 43210</p>
+                    <p>📍 Bandra, Mumbai (2km away)</p>
+                    <span class="loyalty-badge">⭐ Gold Member • 500 Points</span>
+                </div>
+            </div>
+            
+            <div class="sections">
+                <div class="section">
+                    <h3>📱 Recent Online Activity</h3>
+                    <div class="activity-item">
+                        <strong>Mobile App</strong>
+                        Liked 1 formal shirt<br>
+                        <small style="color: rgba(255,255,255,0.6);"></small>
+                    </div>
+                    <div class="activity-item">
+                        <strong>WhatsApp Chat</strong>
+                        Added blue shirt to cart<br>
+                        <small style="color: rgba(255,255,255,0.6);"></small>
+                    </div>
+                    <div class="activity-item">
+                        <strong>Web Chat</strong>
+                        Checked store availability<br>
+                        <small style="color: rgba(255,255,255,0.6);"></small>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>🛒 Cart Contents</h3>
+                    <div class="product-item">
+                        <div>
+                            <strong>Classic Blue Formal Shirt</strong><br>
+                            Size: 40 | Qty: 1
+                        </div>
+                        <div style="text-align: right;">
+                            <strong style="color: #667eea; font-size: 1.2em;">₹2,500</strong>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div>
+                            <strong>Navy Blue Tie</strong><br>
+                            One Size | Qty: 1
+                        </div>
+                        <div style="text-align: right;">
+                            <strong style="color: #667eea; font-size: 1.2em;">₹800</strong>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Subtotal:</span>
+                            <strong>₹3,300</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: #38ef7d; margin-bottom: 8px;">
+                            <span>Discount (10% - 2 items):</span>
+                            <strong>-₹330</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 1.3em;">
+                            <strong>Current Total:</strong>
+                            <strong style="color: #667eea;">₹2,970</strong>
+                        </div>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(255, 215, 0, 0.1); border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                            <div style="font-size: 0.9em; color: rgba(255, 215, 0, 0.9); margin-bottom: 5px;">
+                                💡 <strong>Add 1 more item to unlock:</strong>
+                            </div>
+                            <div style="font-size: 0.85em; color: rgba(255,255,255,0.8);">
+                                • 20% Bundle Discount (instead of 10%)<br>
+                                • Additional ₹330 savings!<br>
+                                • Recommended: Brown Leather Belt (₹1,200)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>💡 AI Recommendations</h3>
+                    <div class="recommendation">
+                        <strong style="color: #667eea; font-size: 1.1em;">Brown Leather Belt</strong><br>
+                        78% match with customer's style<br>
+                        <small style="color: rgba(255,255,255,0.7);">💡 Complete the formal look • ₹1,200</small>
+                    </div>
+                    <div class="recommendation">
+                        <strong style="color: #667eea; font-size: 1.1em;">Navy Formal Trousers</strong><br>
+                        72% match rate<br>
+                        <small style="color: rgba(255,255,255,0.7);">🎁 Bundle offer available • ₹2,200</small>
+                    </div>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(56, 239, 125, 0.1); border-radius: 12px; border: 1px solid rgba(56, 239, 125, 0.3);">
+                        <strong style="color: #38ef7d;">💰 Upsell Opportunity</strong><br>
+                        <small>Add belt to unlock 20% bundle discount<br>
+                        Potential AOV increase: +35%</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="processCheckout()">
+                    💳 Process Checkout
+                </button>
+                <button class="btn btn-success" onclick="applyOffers()">
+                    🎁 Apply Bundle Offer (20% off)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+
+        function processCheckout() {
+            localStorage.setItem('current_step', '5');
+            window.location.href = `agent-monitor.html?session=${sessionId}&demo=payment`;
+        }
+
+        function applyOffers() {
+            alert('🎁 Bundle Offer Applied!\n\n' +
+                  '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                  'CURRENT CART (2 items):\n' +
+                  '• Blue Formal Shirt: ₹2,500\n' +
+                  '• Navy Blue Tie: ₹800\n' +
+                  'Subtotal: ₹3,300\n\n' +
+                  '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                  'RECOMMENDED (Add Belt):\n' +
+                  '• Brown Leather Belt: ₹1,200\n' +
+                  'New Subtotal: ₹4,500\n\n' +
+                  '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                  'SAVINGS BREAKDOWN:\n' +
+                  '✨ Bundle Discount (20%): -₹900\n' +
+                  '⭐ Loyalty Points: -₹200\n\n' +
+                  '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                  '💰 FINAL TOTAL: ₹3,400\n' +
+                  '🎉 YOU SAVE: ₹1,100\n\n' +
+                  '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                  'Current Total (2 items): ₹2,970\n' +
+                  'With Belt (3 items): ₹3,400\n' +
+                  'Extra Cost: Only ₹430 for ₹1,200 belt!\n\n' +
+                  'Add belt to cart? 🛍️');
+        }
+
+        window.onload = () => {
+            localStorage.setItem('current_step', '4');
+        };
+    </script>
+</body>
+</html>

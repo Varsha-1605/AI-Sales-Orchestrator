@@ -1,0 +1,31 @@
+
+# Web Framework
+fastapi
+uvicorn[standard]
+python-multipart
+
+# WebSockets
+websockets
+
+# LangChain & LangGraph
+langchain
+langgraph
+langchain-anthropic
+langchain-community
+langchain-core
+
+# Pydantic (Data Validation)
+pydantic
+pydantic-settings
+
+# Environment Variables
+python-dotenv
+
+# File Operations
+aiofiles
+
+# HTTP Client
+httpx
+
+# Utilities
+typing-extensions
