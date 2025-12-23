@@ -31,7 +31,7 @@ This prototype demonstrates an AI-powered sales orchestration system that:
 
 ---
 ## Demo: 
-https://drive.google.com/file/d/1Rp1Sri9QjqHn9KaFsxa9mAPPNeGTcSI_/view?usp=drive_link
+[Video](https://drive.google.com/file/d/1Rp1Sri9QjqHn9KaFsxa9mAPPNeGTcSI_/view?usp=drive_link)
 ---
 
 ## 📦 Tech Stack
