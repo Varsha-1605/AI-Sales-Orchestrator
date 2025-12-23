@@ -30,7 +30,8 @@ This prototype demonstrates an AI-powered sales orchestration system that:
 ```
 
 ---
-## Demo: 
+## Demo
+
 [Video](https://drive.google.com/file/d/1Rp1Sri9QjqHn9KaFsxa9mAPPNeGTcSI_/view?usp=drive_link)
 ---
 
