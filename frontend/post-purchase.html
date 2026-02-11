@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Purchase Follow-up - Van Heusen AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            height: 90vh;
+            max-height: 900px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: slideIn 0.6s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .scrollable-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+        
+        .timeline {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease backwards;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .timeline-icon.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+        }
+
+        .timeline-icon.pending {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .timeline-item:not(:last-child) .timeline-icon::after {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 50px;
+            background: linear-gradient(180deg, #667eea, transparent);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .timeline-content h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content .timestamp {
+            color: #999;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .whatsapp-message {
+            background: #e7ffdb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 12px;
+            border-left: 4px solid #25d366;
+            font-style: italic;
+            color: #333;
+        }
+
+        .action-card {
+            background: white;
+            margin: 0 30px 30px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.6s ease 1s backwards;
+        }
+
+        .action-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: grayscale(100%);
+        }
+
+        .star:hover,
+        .star.active {
+            filter: grayscale(0%);
+            transform: scale(1.2);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .recommendation-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            margin: 0 30px 30px;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            animation: fadeInUp 0.6s ease 1.2s backwards;
+        }
+
+        .recommendation-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .product-recommendation {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-recommendation:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .product-info-rec {
+            flex: 1;
+        }
+
+        .product-info-rec strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+
+        .product-info-rec .price {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .footer p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 id="headerTitle">✨ Thank You, Rahul!</h1>
+            <p id="headerSubtitle">Your order journey & personalized care</p>
+        </div>
+
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+            <!-- Order Timeline -->
+            <div class="timeline" id="timelineContainer">
+                <!-- Timeline items will be dynamically generated -->
+            </div>
+
+        <!-- Rating Card -->
+        <div class="action-card">
+            <h3>⭐ Rate Your Experience</h3>
+            <p style="text-align: center; color: #666; margin-bottom: 10px;">
+                How was your shopping journey with us?
+            </p>
+            <div class="rating-stars" id="ratingStars">
+                <span class="star" data-rating="1">⭐</span>
+                <span class="star" data-rating="2">⭐</span>
+                <span class="star" data-rating="3">⭐</span>
+                <span class="star" data-rating="4">⭐</span>
+                <span class="star" data-rating="5">⭐</span>
+            </div>
+            <p id="ratingFeedback" style="text-align: center; color: #667eea; font-weight: 600; min-height: 25px;"></p>
+
+            <div class="quick-actions">
+                <div class="action-btn" onclick="showSupport()">
+                    💬 Need Help?
+                </div>
+                <div class="action-btn" onclick="trackOrder()">
+                    📍 Track Order
+                </div>
+                <div class="action-btn" onclick="viewInvoice()">
+                    📄 View Invoice
+                </div>
+                <div class="action-btn" onclick="initiateReturn()">
+                    🔄 Easy Returns
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="recommendation-section" id="recommendationsSection">
+            <!-- Recommendations will be dynamically generated based on purchased items -->
+        </div>
+        </div>
+        <!-- End Scrollable Content -->
+
+        <!-- Footer -->
+        <div class="footer" id="loyaltyFooter">
+            <p>Your loyalty: <strong id="pointsEarned">0 points earned</strong> • Gold Member</p>
+            <p style="font-size: 0.9em; opacity: 0.8;">Next reward at 1,000 points</p>
+            <button class="back-btn" onclick="backToHome()">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+        let purchasedItems = [];
+        let orderTotal = 0;
+        let orderNumber = '';
+        
+        // All available products for recommendations
+        const allProducts = [
+            {id: 'VH001', name: 'Classic Blue Formal Shirt', price: 2500, category: 'shirts', reasoning: 'Premium wrinkle-resistant fabric', buyRate: '287 customers this month'},
+            {id: 'VH002', name: 'Navy Blue Silk Tie', price: 800, category: 'ties', reasoning: '85% of shirt buyers also got this', buyRate: 'Bestseller for formal'},
+            {id: 'VH003', name: 'Navy Formal Trousers', price: 2200, category: 'trousers', reasoning: 'Perfect match • 85% buy together', buyRate: 'Top choice for professionals'},
+            {id: 'VH004', name: 'Charcoal Blazer', price: 4500, category: 'blazers', reasoning: 'Complete formal look', buyRate: 'Premium choice'},
+            {id: 'VH005', name: 'White Dress Shirt', price: 2300, category: 'shirts', reasoning: 'Timeless professional staple', buyRate: '320 sold this month'},
+            {id: 'VH006', name: 'Brown Leather Belt', price: 1200, category: 'accessories', reasoning: 'Essential formal accessory', buyRate: '92% match with trousers'},
+            {id: 'VH007', name: 'Black Formal Shoes', price: 3200, category: 'shoes', reasoning: 'Complete professional look • 85% buy together', buyRate: '30% off limited time'},
+            {id: 'VH008', name: 'Premium Leather Wallet', price: 1500, category: 'accessories', reasoning: 'Sophisticated accessory', buyRate: 'Executive favorite'},
+            {id: 'VH009', name: 'Grey Slim Fit Trousers', price: 2400, category: 'trousers', reasoning: 'Modern versatile fit', buyRate: 'Trending style'},
+            {id: 'VH010', name: 'Burgundy Silk Tie', price: 850, category: 'ties', reasoning: 'Bold professional statement • 78% buy together', buyRate: 'Premium collection'},
+            {id: 'VH011', name: 'Light Blue Linen Shirt', price: 2600, category: 'shirts', reasoning: 'Summer formal favorite', buyRate: 'Just restocked'},
+            {id: 'VH012', name: 'Black Leather Belt', price: 1100, category: 'accessories', reasoning: 'Classic essential', buyRate: '88% match rate'},
+            {id: 'VH013', name: 'Tan Suede Shoes', price: 3500, category: 'shoes', reasoning: 'Versatile formal-casual', buyRate: 'Premium quality'},
+            {id: 'VH014', name: 'Silver Cufflinks Set', price: 900, category: 'accessories', reasoning: 'Elegant finishing touch', buyRate: 'Wedding bestseller'},
+            {id: 'VH008C', name: 'Black Formal Trousers', price: 2300, category: 'trousers', reasoning: 'Essential for power dressing • 92% buy together', buyRate: 'Most popular choice'},
+            {id: 'VH010', name: 'Black Blazer', price: 5500, category: 'blazers', reasoning: 'Complete the sophisticated look • Bestseller', buyRate: 'Executive favorite'}
+        ];
+
+        // Rating System
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                document.querySelectorAll('.star').forEach((s, idx) => {
+                    if (idx < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+                
+                const feedback = document.getElementById('ratingFeedback');
+                const messages = {
+                    '1': 'We appreciate your feedback. Let us make it better! 💙',
+                    '2': 'Thank you! We\'ll work on improving your experience.',
+                    '3': 'Good! We\'re always looking to improve.',
+                    '4': 'Great! We\'re glad you enjoyed shopping with us! 😊',
+                    '5': 'Excellent! Thank you for being an amazing customer! 🎉'
+                };
+                feedback.textContent = messages[rating];
+
+                // Send rating to backend
+                sendRating(rating);
+            });
+        });
+
+        async function sendRating(rating) {
+            try {
+                await fetch(`${API_URL}/api/feedback/rating`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        rating: parseInt(rating),
+                        order_id: 'VH2025001'
+                    })
+                });
+                console.log('Rating sent:', rating);
+            } catch (error) {
+                console.error('Error sending rating:', error);
+            }
+        }
+
+        function showSupport() {
+            alert('💬 Support Chat\n\n' +
+                  'Hi Rahul! How can we help?\n\n' +
+                  '• Track your order\n' +
+                  '• Initiate return/exchange\n' +
+                  '• Sizing questions\n' +
+                  '• Product recommendations\n\n' +
+                  'Reply anytime - we\'re here 24/7!');
+        }
+
+        function trackOrder() {
+            const itemCount = purchasedItems.length;
+            const itemText = itemCount === 1 ? `${purchasedItems[0].name}` : `${itemCount} items`;
+            
+            alert('📍 Order Tracking\n\n' +
+                  `Order: ${orderNumber}\n` +
+                  'Status: Out for Delivery\n' +
+                  `Items: ${itemText}\n\n` +
+                  'Estimated Delivery: Tomorrow 10 AM\n' +
+                  'Delivery Partner: BlueDart\n' +
+                  `Tracking ID: BD${orderNumber.replace('#VH', '')}\n\n` +
+                  'Live tracking link sent to WhatsApp!');
+        }
+
+        function viewInvoice() {
+            const subtotal = purchasedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discount = Math.round(subtotal * 0.1);
+            const total = subtotal - discount;
+            
+            let itemsList = '';
+            purchasedItems.forEach(item => {
+                itemsList += `• ${item.name}${item.size ? ' (Size ' + item.size + ')' : ''} - ₹${item.price.toLocaleString()}\n`;
+            });
+            
+            alert('📄 Invoice Details\n\n' +
+                  `Order: ${orderNumber}\n` +
+                  'Date: ' + new Date().toLocaleDateString() + '\n\n' +
+                  'Items:\n' +
+                  itemsList + '\n' +
+                  `Subtotal: ₹${subtotal.toLocaleString()}\n` +
+                  `Discount: -₹${discount.toLocaleString()}\n` +
+                  `Total: ₹${total.toLocaleString()}\n\n` +
+                  'PDF invoice sent to your email!');
+        }
+
+        function initiateReturn() {
+            const itemCount = purchasedItems.length;
+            const itemList = purchasedItems.map(item => `• ${item.name}`).join('\n');
+            
+            alert('🔄 Easy Returns\n\n' +
+                  `Order: ${orderNumber}\n` +
+                  `Items in this order:\n${itemList}\n\n` +
+                  '30-day return policy\n' +
+                  'Free pickup from your doorstep\n' +
+                  'Instant refund on acceptance\n\n' +
+                  'To return:\n' +
+                  '1. Keep tags intact\n' +
+                  '2. Click "Initiate Return" on WhatsApp\n' +
+                  '3. Schedule pickup\n\n' +
+                  'Questions? We\'re here to help!');
+        }
+
+        function addToCart(item) {
+            const items = {
+                'trousers': 'Navy Formal Trousers',
+                'wallet': 'Premium Leather Wallet',
+                'shoes': 'Formal Shoes (Black)'
+            };
+            
+            alert('✅ Added to Cart!\n\n' +
+                  items[item] + ' has been added.\n\n' +
+                  'Total items: ' + (Math.floor(Math.random() * 3) + 2) + '\n' +
+                  'Special offer active: 15% off on 2+ items!\n\n' +
+                  'Continue shopping or checkout?');
+        }
+
+        function backToHome() {
+            window.location.href = `index.html?session=${sessionId}`;
+        }
+
+        function loadPurchasedItems() {
+            // Load purchased items from localStorage
+            const savedCart = localStorage.getItem('cartItems');
+            const savedTotal = localStorage.getItem('orderTotal');
+            
+            if (savedCart) {
+                purchasedItems = JSON.parse(savedCart);
+            }
+            
+            if (savedTotal) {
+                orderTotal = parseFloat(savedTotal);
+            }
+            
+            // Generate order number based on session and timestamp
+            const orderDate = new Date();
+            const orderSuffix = String(orderDate.getHours()).padStart(2, '0') + String(orderDate.getMinutes()).padStart(2, '0');
+            orderNumber = `#VH2026${orderSuffix}`;
+            
+            console.log('Purchased items:', purchasedItems);
+            console.log('Order total:', orderTotal);
+            console.log('Order number:', orderNumber);
+            
+            // Generate dynamic content
+            generateTimeline();
+            generateRecommendations();
+            updateLoyaltyPoints();
+        }
+        
+        function generateTimeline() {
+            const container = document.getElementById('timelineContainer');
+            const itemCount = purchasedItems.length;
+            const itemNames = purchasedItems.map(item => item.name).join(', ');
+            const itemSummary = itemCount === 1 ? purchasedItems[0].name : `${itemCount} items (${itemNames})`;
+            
+            // Determine styling tips based on what was bought
+            let stylingTip = '💡 Pro styling tip: ';
+            const hasShirt = purchasedItems.some(item => item.name.toLowerCase().includes('shirt'));
+            const hasTie = purchasedItems.some(item => item.name.toLowerCase().includes('tie'));
+            const hasTrousers = purchasedItems.some(item => item.name.toLowerCase().includes('trouser'));
+            const hasBlazer = purchasedItems.some(item => item.name.toLowerCase().includes('blazer'));
+            
+            if (hasShirt && hasTie) {
+                stylingTip += 'Your shirt and tie combo is perfect! Add matching trousers for a complete look.';
+            } else if (hasShirt && hasTrousers) {
+                stylingTip += 'Shirt and trousers pair beautifully! Add a tie to elevate your style.';
+            } else if (hasShirt) {
+                stylingTip += 'Pair your shirt with navy tie and formal trousers for a sophisticated look.';
+            } else if (hasTrousers) {
+                stylingTip += 'Match your trousers with a crisp shirt and leather belt for a polished look.';
+            } else if (hasTie) {
+                stylingTip += 'This tie pairs beautifully with light blue or white formal shirts.';
+            } else {
+                stylingTip += 'Complete your professional wardrobe with matching accessories!';
+            }
+            
+            container.innerHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-icon completed">✅</div>
+                    <div class="timeline-content">
+                        <h3>Order Confirmed</h3>
+                        <p>Your order ${orderNumber} has been placed successfully</p>
+                        <div class="whatsapp-message">
+                            "Hi Rahul! Your order for ${itemSummary} is confirmed. Track it anytime!"
+                        </div>
+                        <p class="timestamp">2 hours ago • via WhatsApp</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon completed">📦</div>
+                    <div class="timeline-content">
+                        <h3>Order Packed</h3>
+                        <p>${itemCount} ${itemCount === 1 ? 'item' : 'items'} carefully packed at Bandra Store</p>
+                        <div class="whatsapp-message">
+                            "Your ${itemCount === 1 ? 'item is' : 'items are'} packed with care. Ready for dispatch!"
+                        </div>
+                        <p class="timestamp">1 hour ago • via WhatsApp</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon pending">🚚</div>
+                    <div class="timeline-content">
+                        <h3>Out for Delivery</h3>
+                        <p>Express delivery - arrives tomorrow by 10 AM</p>
+                        <div class="whatsapp-message">
+                            "On the way! Your ${itemCount === 1 ? 'item' : itemCount + ' items'} will reach you soon. Track in real-time."
+                        </div>
+                        <p class="timestamp">Scheduled for tomorrow • via WhatsApp</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">🎁</div>
+                    <div class="timeline-content">
+                        <h3>Styling Tips</h3>
+                        <p>How to style your ${itemCount === 1 ? 'new purchase' : 'new items'}</p>
+                        <div class="whatsapp-message">
+                            "${stylingTip} Watch our 2-min styling guide!"
+                        </div>
+                        <p class="timestamp">After delivery • via WhatsApp</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateRecommendations() {
+            const container = document.getElementById('recommendationsSection');
+            
+            // Determine recommendations based on what was purchased
+            const boughtCategories = purchasedItems.map(item => {
+                const name = item.name.toLowerCase();
+                if (name.includes('shirt')) return 'shirts';
+                if (name.includes('tie')) return 'ties';
+                if (name.includes('trouser')) return 'trousers';
+                if (name.includes('blazer')) return 'blazers';
+                if (name.includes('belt') || name.includes('wallet') || name.includes('cufflink')) return 'accessories';
+                if (name.includes('shoe')) return 'shoes';
+                return 'other';
+            });
+            
+            // Recommend items from categories they didn't buy
+            const recommendations = [];
+            
+            // Priority recommendations: Black Trousers and Black Blazer for completing the look
+            if (!boughtCategories.includes('trousers')) {
+                recommendations.push(allProducts.find(p => p.id === 'VH008C')); // Black Formal Trousers
+            }
+            if (!boughtCategories.includes('blazers')) {
+                recommendations.push(allProducts.find(p => p.id === 'VH010')); // Black Blazer
+            }
+            
+            // Fill remaining slots with other recommendations
+            if (recommendations.length < 3 && !boughtCategories.includes('shoes')) {
+                recommendations.push(allProducts.find(p => p.id === 'VH007')); // Black Formal Shoes
+            }
+            if (recommendations.length < 3 && !boughtCategories.includes('accessories') && !recommendations.some(r => r && r.category === 'accessories')) {
+                recommendations.push(allProducts.find(p => p.id === 'VH012')); // Black Leather Belt
+            }
+            if (recommendations.length < 3 && !boughtCategories.includes('ties')) {
+                recommendations.push(allProducts.find(p => p.id === 'VH002')); // Navy Blue Silk Tie
+            }
+            
+            // If they bought everything, show premium accessories
+            if (recommendations.length === 0) {
+                recommendations.push(
+                    allProducts.find(p => p.id === 'VH008'), // Wallet
+                    allProducts.find(p => p.id === 'VH014')  // Cufflinks
+                );
+            }
+            
+            // Take top 3 recommendations
+            const topRecommendations = recommendations.filter(r => r).slice(0, 3);
+            
+            let recsHTML = `
+                <h3>🎯 Complete Your Look</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    Based on your purchase, customers also bought:
+                </p>
+            `;
+            
+            topRecommendations.forEach(product => {
+                recsHTML += `
+                    <div class="product-recommendation">
+                        <div class="product-info-rec">
+                            <strong>${product.name}</strong>
+                            <span>${product.reasoning}</span><br>
+                            <span class="price">₹${product.price.toLocaleString()}</span>
+                        </div>
+                        <button class="add-btn" onclick="addRecommendationToCart('${product.id}')">Add</button>
+                    </div>
+                `;
+            });
+            
+            recsHTML += `
+                <div style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center; color: #1a1a1a; font-weight: 600;">
+                    🎁 Special Offer: Add 2+ items, get 15% off!
+                </div>
+            `;
+            
+            container.innerHTML = recsHTML;
+        }
+        
+        function updateLoyaltyPoints() {
+            // Calculate loyalty points: 1 point per ₹10 spent
+            const pointsEarned = Math.round(orderTotal / 10);
+            document.getElementById('pointsEarned').textContent = `${pointsEarned} points earned`;
+        }
+        
+        async function addRecommendationToCart(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Add to cart in localStorage
+            let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+            const existing = cartItems.find(item => item.id === product.id);
+            
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Call backend API
+            try {
+                await fetch(`${API_URL}/api/cart/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: product.id,
+                        product_name: product.name,
+                        price: product.price,
+                        quantity: 1
+                    })
+                });
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
+            
+            const newTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            
+            alert(`✅ Added to Cart!\n\n` +
+                  `${product.name} has been added.\n\n` +
+                  `Total items: ${itemCount}\n` +
+                  `Cart total: ₹${newTotal.toLocaleString()}\n` +
+                  `${itemCount >= 2 ? '🎁 Special offer active: 15% off on 2+ items!\n\n' : ''}` +
+                  'Continue shopping or visit store to checkout?');
+        }
+
+        window.onload = () => {
+            localStorage.setItem('current_step', '6');
+            loadPurchasedItems();
+            console.log('✅ Post-Purchase Follow-up page loaded');
+        };
+    </script>
+</body>
+</html>

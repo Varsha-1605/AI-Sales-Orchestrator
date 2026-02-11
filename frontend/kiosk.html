@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-Store Kiosk - Van Heusen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .kiosk-container {
+            max-width: 900px;
+            width: 100%;
+            height: 90vh;
+            max-height: 800px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .kiosk-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .kiosk-header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+        }
+
+        .kiosk-header .store-info {
+            text-align: right;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Scrollable Content */
+        .kiosk-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #f5f7fa;
+        }
+
+        .kiosk-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .kiosk-content::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        .kiosk-content::-webkit-scrollbar-thumb {
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+
+        /* Landing Screen */
+        .landing-screen {
+            text-align: center;
+            padding: 60px 40px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scan-icon {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .barcode-animation {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 60px rgba(102, 126, 234, 0.5); }
+        }
+
+        .scan-laser {
+            position: absolute;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+            animation: scan 2s linear infinite;
+            display: none;
+        }
+
+        .scan-laser.active {
+            display: block;
+        }
+
+        @keyframes scan {
+            0% { top: 20%; }
+            100% { top: 80%; }
+        }
+
+        .landing-screen h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .landing-screen p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .scan-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .scan-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Session Screen */
+        .session-screen {
+            padding: 40px;
+            display: none;
+        }
+
+        .session-screen.active {
+            display: block;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .welcome-banner h2 {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .context-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .context-section h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item, .liked-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item strong, .liked-item strong {
+            color: #2c3e50;
+            font-size: 1.05em;
+        }
+
+        .cart-item .price {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .quantity-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .kiosk-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .kiosk-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kiosk-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .kiosk-btn .icon {
+            font-size: 2em;
+        }
+
+        .kiosk-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .kiosk-btn.primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Footer */
+        .kiosk-footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 40px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .kiosk-footer p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* POS Payment Screen */
+        .pos-screen {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .pos-screen.active {
+            display: block;
+        }
+
+        .pos-terminal {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+        }
+
+        .pos-terminal h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        .pos-amount {
+            font-size: 3em;
+            font-weight: 800;
+            color: #38ef7d;
+            margin-bottom: 30px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #38ef7d;
+        }
+
+        .payment-method .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .processing {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .processing.active {
+            display: block;
+            animation: fadeInScale 0.4s ease;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-checkmark {
+            font-size: 4em;
+            color: #38ef7d;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="kiosk-container">
+        <!-- Header -->
+        <div class="kiosk-header">
+            <div>
+                <h1>🏪 Van Heusen In-Store Kiosk</h1>
+                <p style="opacity: 0.8; font-size: 0.9em;">Your Personal Shopping Assistant</p>
+            </div>
+            <div class="store-info">
+                <strong id="storeName">Bandra Store</strong><br>
+                <span id="kioskDetails">Kiosk #2 • Open till 10 PM</span>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="kiosk-content">
+            <!-- Landing Screen: Barcode Scan -->
+            <div class="landing-screen" id="landingScreen">
+                <div class="scan-icon">
+                    <div class="barcode-animation">📱</div>
+                    <div class="scan-laser" id="scanLaser"></div>
+                </div>
+                <h2>Scan Product Barcode</h2>
+                <p>Scan any product QR code or barcode to start shopping</p>
+                <button class="scan-btn" onclick="simulateScan()">
+                    📷 Simulate Barcode Scan
+                </button>
+                <p style="margin-top: 30px; color: #999; font-size: 0.95em;">
+                    💡 Try scanning products on shelf or your mobile app QR code
+                </p>
+            </div>
+
+            <!-- Session Screen: After Recognition -->
+            <div class="session-screen" id="sessionScreen">
+                <div class="welcome-banner">
+                    <h2 id="welcomeMessage">👋 Welcome back!</h2>
+                    <p id="contextSummary">Loading your shopping journey...</p>
+                </div>
+
+                <!-- Cart Section -->
+                <div class="context-section" id="cartSection" style="display: none;">
+                    <h3>🛒 Your Cart</h3>
+                    <div id="kioskCartItems"></div>
+                </div>
+
+                <!-- Liked Items Section -->
+                <div class="context-section" id="likedSection" style="display: none;">
+                    <h3>❤️ Items You Liked</h3>
+                    <div id="kioskLikedItems"></div>
+                </div>
+
+                <!-- Kiosk Actions -->
+                <div class="kiosk-actions">
+                    <button class="kiosk-btn" onclick="reserveForTryOn()">
+                        <span class="icon">🛍️</span>
+                        <span>Reserve for Try-On</span>
+                    </button>
+
+                    <button class="kiosk-btn" onclick="addLikedToCart()">
+                        <span class="icon">➕</span>
+                        <span>Add Liked to Cart</span>
+                    </button>
+
+                    <button class="kiosk-btn primary" onclick="showPOSPayment()">
+                        <span class="icon">💳</span>
+                        <span>Complete Purchase</span>
+                    </button>
+
+                    <button class="kiosk-btn" onclick="callAssociate()">
+                        <span class="icon">🔔</span>
+                        <span>Call Store Associate</span>
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px; padding: 20px;">
+                    <button class="kiosk-btn" onclick="viewStoreDashboard()" style="max-width: 400px;">
+                        <span class="icon">🖥️</span>
+                        <span>View on Associate Dashboard</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- POS Payment Screen -->
+            <div class="pos-screen" id="posScreen">
+                <h2 style="color: #2c3e50; font-size: 2.2em; margin-bottom: 20px;">💳 Payment Terminal</h2>
+                
+                <div class="pos-terminal">
+                    <h2>Order Total</h2>
+                    <div class="pos-amount" id="posAmount">₹0</div>
+                    
+                    <div id="paymentMethods">
+                        <h3 style="margin-bottom: 20px; opacity: 0.9;">Select Payment Method</h3>
+                        <div class="payment-methods">
+                            <div class="payment-method" onclick="processPayment('card')">
+                                <div class="icon">💳</div>
+                                <div>Card</div>
+                            </div>
+                            <div class="payment-method" onclick="processPayment('upi')">
+                                <div class="icon">📱</div>
+                                <div>UPI</div>
+                            </div>
+                            <div class="payment-method" onclick="processPayment('cash')">
+                                <div class="icon">💵</div>
+                                <div>Cash</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="processing" id="processing">
+                        <div class="success-checkmark">✅</div>
+                        <div style="margin-top: 15px;">Payment Successful!</div>
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">
+                            Receipt printing...
+                        </div>
+                    </div>
+                </div>
+
+                <button class="scan-btn" onclick="backToSession()" style="margin-top: 20px;">
+                    ← Back to Cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="kiosk-footer">
+            <p>Need help? Press the <strong>Call Associate</strong> button or scan your loyalty card</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let sessionId = localStorage.getItem('session_id');
+        let cartItems = [];
+        let likedProducts = [];
+        let purchasedItems = [];
+        
+        // All available products - MUST MATCH mobile.html and whatsapp.html
+        const allProducts = [
+            {id: 'VH001', name: 'Classic Blue Formal Shirt', price: 2500, size: '40', category: 'shirts'},
+            {id: 'VH002', name: 'White Premium Shirt', price: 2800, size: '40', category: 'shirts'},
+            {id: 'VH003', name: 'Light Pink Shirt', price: 2600, size: '40', category: 'shirts'},
+            {id: 'VH004', name: 'Navy Blue Tie', price: 800, category: 'ties'},
+            {id: 'VH005', name: 'Striped Tie', price: 750, category: 'ties'},
+            {id: 'VH006', name: 'Brown Leather Belt', price: 1200, category: 'accessories'},
+            {id: 'VH007', name: 'Navy Formal Trousers', price: 2200, size: '32', category: 'trousers'},
+            {id: 'VH008', name: 'Charcoal Blazer', price: 4500, size: '42', category: 'blazers'},
+            {id: 'VH009', name: 'Black Formal Shoes', price: 3200, size: '9', category: 'shoes'},
+            {id: 'VH010', name: 'Premium Leather Wallet', price: 1500, category: 'accessories'},
+            {id: 'VH011', name: 'Grey Slim Fit Trousers', price: 2400, size: '32', category: 'trousers'},
+            {id: 'VH012', name: 'Black Leather Belt', price: 1100, category: 'accessories'},
+            {id: 'VH013', name: 'Silver Cufflinks Set', price: 900, category: 'accessories'},
+            {id: 'VH014', name: 'Tan Suede Shoes', price: 3500, size: '9', category: 'shoes'}
+        ];
+
+        function simulateScan() {
+            // Show scanning animation
+            const laser = document.getElementById('scanLaser');
+            laser.classList.add('active');
+            
+            // Simulate scan delay
+            setTimeout(() => {
+                laser.classList.remove('active');
+                recognizeSession();
+            }, 2000);
+        }
+
+        function recognizeSession() {
+            // Load session data from localStorage
+            const savedCart = localStorage.getItem('cartItems');
+            const savedLikes = localStorage.getItem('likedProducts');
+            
+            console.log('Raw localStorage - cartItems:', savedCart);
+            console.log('Raw localStorage - likedProducts:', savedLikes);
+            
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+            
+            if (savedLikes) {
+                likedProducts = JSON.parse(savedLikes);
+            }
+            
+            console.log('Parsed - cartItems:', cartItems);
+            console.log('Parsed - likedProducts:', likedProducts);
+            console.log('Session recognized:', {cartItems, likedProducts});
+            
+            // Switch to session screen
+            document.getElementById('landingScreen').style.display = 'none';
+            document.getElementById('sessionScreen').classList.add('active');
+            
+            // Generate personalized welcome
+            generateWelcome();
+            displaySessionContext();
+        }
+
+        function generateWelcome() {
+            const cartCount = cartItems.length;
+            const likedCount = likedProducts.length;
+            
+            // Check if user came from web chat or WhatsApp
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source') || 'whatsapp'; // default to whatsapp for backward compatibility
+            const sourceText = source === 'chat' ? 'online' : 'on WhatsApp';
+            
+            let message = '👋 Welcome back, Rahul!';
+            let summary = '';
+            
+            if (cartCount > 0 && likedCount > 0) {
+                summary = `I see you added ${cartCount} ${cartCount === 1 ? 'item' : 'items'} to cart ${sourceText} and liked ${likedCount} ${likedCount === 1 ? 'product' : 'products'} on our app!`;
+            } else if (cartCount > 0) {
+                summary = `I see you added ${cartCount} ${cartCount === 1 ? 'item' : 'items'} to cart ${sourceText}. Ready to complete your purchase?`;
+            } else if (likedCount > 0) {
+                summary = `I see you liked ${likedCount} ${likedCount === 1 ? 'product' : 'products'} on our app. Let's add them to your cart!`;
+            } else {
+                summary = 'Ready to start shopping? Browse our latest collection!';
+            }
+            
+            document.getElementById('welcomeMessage').textContent = message;
+            document.getElementById('contextSummary').textContent = summary;
+        }
+
+        function displaySessionContext() {
+            // Display cart items
+            if (cartItems.length > 0) {
+                document.getElementById('cartSection').style.display = 'block';
+                const cartHTML = cartItems.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            ${item.size ? `<span style="color: #666; font-size: 0.9em;"> • Size ${item.size}</span>` : ''}
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="quantity-badge">Qty: ${item.quantity}</span>
+                            <span class="price">₹${(item.price * item.quantity).toLocaleString()}</span>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('kioskCartItems').innerHTML = cartHTML;
+            }
+            
+            // Display liked items
+            if (likedProducts.length > 0) {
+                document.getElementById('likedSection').style.display = 'block';
+                
+                console.log('Displaying liked products:');
+                likedProducts.forEach(id => console.log('  - ID:', id));
+                
+                const likedHTML = likedProducts.map(productId => {
+                    const product = allProducts.find(p => p.id === productId);
+                    console.log(`Mapping ${productId} to:`, product);
+                    if (!product) return '';
+                    return `
+                        <div class="liked-item">
+                            <div>
+                                <strong>${product.name}</strong>
+                                ${product.size ? `<span style="color: #666; font-size: 0.9em;"> • Size ${product.size}</span>` : ''}
+                            </div>
+                            <span class="price">₹${product.price.toLocaleString()}</span>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('kioskLikedItems').innerHTML = likedHTML;
+            }
+        }
+
+        async function reserveForTryOn() {
+            const itemsToReserve = [...cartItems, ...likedProducts.map(id => {
+                const product = allProducts.find(p => p.id === id);
+                return product ? {id: product.id, name: product.name, price: product.price} : null;
+            }).filter(item => item !== null)];
+            
+            if (itemsToReserve.length === 0) {
+                alert('⚠️ No Items to Reserve\n\nPlease add items to your cart or like some products first.');
+                return;
+            }
+            
+            const roomNumber = Math.floor(Math.random() * 5) + 1;
+            
+            // Send notification to store dashboard
+            const notification = {
+                type: 'try-on',
+                customer: 'Rahul',
+                kiosk: '#2',
+                room: roomNumber,
+                items: itemsToReserve.length,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('kioskNotification', JSON.stringify(notification));
+            
+            // Create detailed item list
+            let itemsList = '';
+            const cartItemCount = cartItems.length;
+            const likedItemCount = likedProducts.length;
+            
+            itemsList += `📦 From Cart (${cartItemCount}):\n`;
+            cartItems.forEach(item => {
+                itemsList += `• ${item.name}${item.size ? ' (Size ' + item.size + ')' : ''}\n`;
+            });
+            
+            if (likedProducts.length > 0) {
+                itemsList += `\n❤️ From Liked (${likedItemCount}):\n`;
+                likedProducts.forEach(id => {
+                    const product = allProducts.find(p => p.id === id);
+                    if (product) {
+                        itemsList += `• ${product.name}${product.size ? ' (Size ' + product.size + ')' : ''}\n`;
+                    }
+                });
+            }
+            
+            alert(`✅ Items Reserved!\n\n` +
+                  `Try-On Room #${roomNumber} is ready for you\n\n` +
+                  `Total items to try: ${itemsToReserve.length}\n\n` +
+                  itemsList + '\n' +
+                  `Store associate Priya has been notified and will bring these items to your room!`);
+        }
+        
+
+        async function addLikedToCart() {
+            // Re-load both cart and liked products from localStorage to ensure fresh data
+            const savedCart = localStorage.getItem('cartItems');
+            const savedLikes = localStorage.getItem('likedProducts');
+            
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+            if (savedLikes) {
+                likedProducts = JSON.parse(savedLikes);
+            }
+            
+            console.log('Current cart before adding:', cartItems);
+            console.log('Liked products to add:', likedProducts);
+            
+            if (!likedProducts || likedProducts.length === 0) {
+                alert('⚠️ No Liked Products\n\nYou haven\'t liked any products yet. Browse our collection first!');
+                return;
+            }
+            
+            let addedCount = 0;
+            let updatedCount = 0;
+            
+            for (const productId of likedProducts) {
+                console.log('Processing liked product ID:', productId);
+                const product = allProducts.find(p => p.id === productId);
+                console.log('Found product:', product);
+                
+                if (!product) {
+                    console.log('Product not found in allProducts for ID:', productId);
+                    continue;
+                }
+                
+                // Check if already in cart - must match exact ID
+                const existing = cartItems.find(item => item.id === productId);
+                if (existing) {
+                    console.log('Product already in cart, incrementing quantity');
+                    existing.quantity++;
+                    updatedCount++;
+                } else {
+                    console.log('Adding new product to cart');
+                    cartItems.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        size: product.size || 'Default',
+                        quantity: 1
+                    });
+                    addedCount++;
+                }
+                
+                // Add to backend
+                try {
+                    await fetch(`${API_URL}/api/cart/add`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            product_id: product.id,
+                            product_name: product.name,
+                            price: product.price,
+                            size: product.size,
+                            quantity: 1
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error adding to cart:', error);
+                }
+            }
+            
+            // Update localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            console.log('Updated cart:', cartItems);
+            
+            // Clear liked products
+            likedProducts = [];
+            localStorage.setItem('likedProducts', JSON.stringify(likedProducts));
+            
+            // Refresh display
+            displaySessionContext();
+            
+            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalMoved = addedCount + updatedCount;
+            
+            alert(`✅ Added to Cart!\n\n` +
+                  `${totalMoved} ${totalMoved === 1 ? 'item' : 'items'} moved from likes to cart\n` +
+                  `(${addedCount} new, ${updatedCount} quantity updated)\n\n` +
+                  `Total items in cart: ${cartItems.length}\n` +
+                  `Cart total: ₹${total.toLocaleString()}\n\n` +
+                  `Ready to complete your purchase at the kiosk?`);
+        }
+
+        function showPOSPayment() {
+            if (cartItems.length === 0) {
+                alert('⚠️ Cart is Empty\n\nPlease add items to your cart before checkout.');
+                return;
+            }
+            
+            // Calculate total
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discount = Math.round(subtotal * (cartItems.length >= 3 ? 0.20 : 0.10));
+            const total = subtotal - discount;
+            
+            // Save for later
+            localStorage.setItem('orderTotal', total.toString());
+            purchasedItems = [...cartItems];
+            
+            // Show POS screen
+            document.getElementById('sessionScreen').classList.remove('active');
+            document.getElementById('posScreen').classList.add('active');
+            document.getElementById('posAmount').textContent = `₹${total.toLocaleString()}`;
+        }
+
+        async function processPayment(method) {
+            const paymentMethods = document.getElementById('paymentMethods');
+            const processing = document.getElementById('processing');
+            
+            paymentMethods.style.display = 'none';
+            processing.classList.add('active');
+            
+            // Simulate payment processing
+            setTimeout(async () => {
+                // Call backend to save order
+                try {
+                    await fetch(`${API_URL}/api/order/complete`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            items: purchasedItems,
+                            payment_method: method,
+                            total: localStorage.getItem('orderTotal'),
+                            store: 'Bandra Store',
+                            kiosk: '#2'
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error completing order:', error);
+                }
+                
+                // Clear cart
+                localStorage.removeItem('likedProducts');
+                
+                // Redirect to post-purchase
+                setTimeout(() => {
+                    window.location.href = `post-purchase.html?session=${sessionId}`;
+                }, 2000);
+            }, 2500);
+        }
+
+        function callAssociate() {
+            const notification = {
+                type: 'assistance',
+                customer: 'Rahul',
+                kiosk: '#2',
+                cart_items: cartItems.length,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('kioskNotification', JSON.stringify(notification));
+            
+            alert('🔔 Store Associate Called\n\n' +
+                  'Priya has been notified and is on her way to assist you!\n\n' +
+                  'She can help you with:\n' +
+                  '• Product recommendations\n' +
+                  '• Size guidance\n' +
+                  '• Try-on room access\n' +
+                  '• Completing your purchase\n\n' +
+                  'Expected wait time: ~2 minutes');
+        }
+
+        function viewStoreDashboard() {
+            window.open(`store-dashboard.html?session=${sessionId}`, '_blank');
+        }
+
+        function backToSession() {
+            document.getElementById('posScreen').classList.remove('active');
+            document.getElementById('sessionScreen').classList.add('active');
+            
+            // Reset payment screen
+            document.getElementById('paymentMethods').style.display = 'block';
+            document.getElementById('processing').classList.remove('active');
+        }
+
+        window.onload = () => {
+            localStorage.setItem('current_step', '3.5'); // Between WhatsApp and Store Dashboard
+            console.log('✅ In-Store Kiosk loaded');
+            
+            // Get store from URL or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const storeParam = urlParams.get('store') || localStorage.getItem('selected_store') || 'bandra';
+            
+            // Update store display based on selection
+            const storeInfo = {
+                'bandra': {
+                    name: 'Bandra Store',
+                    details: 'Kiosk #2 • Open till 10 PM'
+                },
+                'powai': {
+                    name: 'Powai Store',
+                    details: 'Kiosk #5 • Open till 11 PM'
+                }
+            };
+            
+            const selectedStore = storeInfo[storeParam] || storeInfo['bandra'];
+            document.getElementById('storeName').textContent = selectedStore.name;
+            document.getElementById('kioskDetails').textContent = selectedStore.details;
+            console.log('Store set to:', selectedStore.name);
+            
+            // If there's a session, show it
+            if (sessionId && (localStorage.getItem('cartItems') || localStorage.getItem('likedProducts'))) {
+                // Auto-recognize for demo purposes (remove in production)
+                setTimeout(() => {
+                    if (urlParams.get('auto') === 'true') {
+                        simulateScan();
+                    }
+                }, 500);
+            }
+        };
+    </script>
+</body>
+</html>

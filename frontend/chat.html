@@ -1,0 +1,3448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Widget - Van Heusen</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: #1a252f;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .conversation-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .conversation-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .conversation-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-left-color: #667eea;
+        }
+
+        .conversation-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-date {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        .conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .conversations-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .conversations-list::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+
+        .conversations-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow: hidden;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .header-info h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .status {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-messages {
+            flex: 1 1 auto;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #f5f7fa;
+            min-height: 0;
+            max-height: calc(100vh - 180px); /* Reserve space for header and input */
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot { text-align: left; }
+        .message.user { text-align: right; }
+
+        .message-bubble {
+            display: inline-block;
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+
+        .bot .message-bubble {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom-left-radius: 4px;
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+        
+        .bot .message-bubble strong,
+        .bot .message-bubble b {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .bot .message-bubble em,
+        .bot .message-bubble i {
+            font-style: italic;
+            color: #555;
+        }
+
+        .user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .typing-indicator {
+            display: inline-block;
+            background: white;
+            padding: 14px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .suggestion-btn {
+            background: #f0f2f5;
+            color: #667eea;
+            border: 1px solid #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 85%;
+        }
+
+        .product-card h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .product-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .product-card .price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .product-card .reasoning {
+        background: #f0f2f5;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #555;
+        border-left: 3px solid #667eea;
+    }
+
+        .product-card .social-proof {
+            color: #4CAF50;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .product-card .urgency {
+            color: #ff6b6b;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .cart-display {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cart-display h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 10px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-name {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .cart-item-remove {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cart-item-remove:hover {
+            background: #ee5a6f;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 15px;
+        }
+
+        .quantity-control button {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-control button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .quantity-control button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .quantity-control span {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .cart-item-price {
+            font-size: 14px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .cart-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+            text-align: right;
+        }
+
+        .cart-total strong {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .cart-total .discount-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-input button {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #voiceBtn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        #voiceBtn.listening {
+            animation: pulse-voice 1s infinite;
+        }
+
+        @keyframes pulse-voice {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.7); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(245, 87, 108, 0); }
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .language-selector select {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .language-selector select option {
+            background: #667eea;
+            color: white;
+        }
+
+        .agent-indicator {
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #667eea;
+            margin-top: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar for conversation history -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>💬 Conversations</h3>
+            <button class="new-chat-btn" onclick="createNewConversation()">
+                ➕ New Chat
+            </button>
+        </div>
+        <div class="conversations-list" id="conversationsList">
+            <!-- Conversations will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Main chat container -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="avatar">🤖</div>
+            <div class="header-info">
+                <h2>Van Heusen AI Assistant</h2>
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Online - AI Powered</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here -->
+        </div>
+
+        <div class="language-selector">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+                <option value="gu">ગુજરાતી (Gujarati)</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="te">తెలుగు (Telugu)</option>
+                <option value="bn">বাংলা (Bengali)</option>
+            </select>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Ask me anything about products, stores, or orders..."
+                    autocomplete="off"
+                >
+                <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
+                <button id="sendBtn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let ws = null;
+        let isProcessing = false;
+
+        // Voice Recognition
+        let recognition = null;
+        let isListening = false;
+        let voiceEnabled = false;
+        
+        // Multilingual Support
+        let currentLanguage = localStorage.getItem('vh_language') || 'en';
+
+        // Cart tracking
+        let cartItems = [];
+        
+        // Track activity for store dashboard
+        function trackActivity(channel, action) {
+            const activities = JSON.parse(localStorage.getItem('recentActivity') || '[]');
+            activities.push({
+                channel: channel,
+                action: action,
+                timestamp: new Date().toISOString()
+            });
+            // Keep only last 10 activities
+            if (activities.length > 10) {
+                activities.splice(0, activities.length - 10);
+            }
+            localStorage.setItem('recentActivity', JSON.stringify(activities));
+        }
+
+        // Conversation Management
+        let conversations = JSON.parse(localStorage.getItem('vh_conversations') || '[]');
+        let currentConversationId = localStorage.getItem('vh_current_conversation') || null;
+        
+        // Legacy session support
+        const sessionId = localStorage.getItem('session_id') || 'SESSION_web_' + Date.now();
+        const isNewSession = !localStorage.getItem('session_id');
+        if (isNewSession) {
+            localStorage.setItem('session_id', sessionId);
+        }
+
+        // Conversation context tracking (SALES PSYCHOLOGY)
+        let conversationContext = {
+            occasion: null,
+            colorPreference: null,
+            objections: [],
+            productsShown: false
+        };
+
+        // Initialize
+        window.onload = () => {
+            // Check URL parameters to see if we're coming from another interface
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasSessionParam = urlParams.has('session');
+            const currentStep = localStorage.getItem('current_step');
+            
+            // If opening chat.html directly (no session param) AND not continuing from mobile/WhatsApp,
+            // clear everything for a fresh start
+            if (!hasSessionParam && (!currentStep || currentStep === '0' || currentStep === '1')) {
+                // Clear cart and session for fresh start
+                cartItems = [];
+                localStorage.removeItem('cartItems');
+                localStorage.removeItem('likedProducts');
+                localStorage.removeItem('current_step');
+                console.log('🆕 Starting fresh session - cart cleared');
+            } else {
+                // Continuing from mobile/WhatsApp - preserve cart
+                const savedCart = localStorage.getItem('cartItems');
+                if (savedCart) {
+                    cartItems = JSON.parse(savedCart);
+                    console.log('📦 Loaded cart from previous session:', cartItems.length, 'items');
+                }
+            }
+            
+            loadConversations();
+            if (!currentConversationId || !findConversation(currentConversationId)) {
+                createNewConversation();
+            } else {
+                loadConversation(currentConversationId);
+            }
+            connectWebSocket();
+            initVoiceRecognition();
+            initLanguage();
+        };
+
+        function findConversation(id) {
+            return conversations.find(c => c.id === id);
+        }
+
+        function createNewConversation() {
+            const newConvo = {
+                id: 'conv_' + Date.now(),
+                title: 'New Conversation',
+                messages: [],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            conversations.unshift(newConvo);
+            currentConversationId = newConvo.id;
+            saveConversations();
+            loadConversations();
+            clearChatMessages();
+            initializeChat();
+        }
+
+        function loadConversations() {
+            const list = document.getElementById('conversationsList');
+            list.innerHTML = '';
+            
+            conversations.forEach(convo => {
+                const item = document.createElement('div');
+                item.className = 'conversation-item' + (convo.id === currentConversationId ? ' active' : '');
+                item.onclick = () => switchConversation(convo.id);
+                
+                const date = new Date(convo.updatedAt);
+                const dateStr = formatDate(date);
+                
+                item.innerHTML = `
+                    <div class="conversation-title">${convo.title}</div>
+                    <div class="conversation-date">${dateStr}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function formatDate(date) {
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        function switchConversation(id) {
+            if (id === currentConversationId) return;
+            
+            saveCurrentConversation();
+            currentConversationId = id;
+            localStorage.setItem('vh_current_conversation', id);
+            loadConversation(id);
+            loadConversations();
+        }
+
+        function loadConversation(id) {
+            const convo = findConversation(id);
+            if (!convo) return;
+            
+            clearChatMessages();
+            convo.messages.forEach(msg => {
+                if (msg.type === 'bot') {
+                    addBotMessage(msg.text, false);
+                } else {
+                    addUserMessage(msg.text, false);
+                }
+            });
+            
+            // Scroll to bottom
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function saveCurrentConversation() {
+            const convo = findConversation(currentConversationId);
+            if (!convo) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const messages = [];
+            
+            chatMessages.querySelectorAll('.message').forEach(msgEl => {
+                const isBot = msgEl.classList.contains('bot');
+                const bubble = msgEl.querySelector('.message-bubble');
+                if (bubble) {
+                    messages.push({
+                        type: isBot ? 'bot' : 'user',
+                        text: bubble.textContent
+                    });
+                }
+            });
+            
+            convo.messages = messages;
+            convo.updatedAt = new Date().toISOString();
+            
+            // Update title based on first user message
+            if (messages.length > 0 && convo.title === 'New Conversation') {
+                const firstUserMsg = messages.find(m => m.type === 'user');
+                if (firstUserMsg) {
+                    convo.title = firstUserMsg.text.substring(0, 30) + (firstUserMsg.text.length > 30 ? '...' : '');
+                }
+            }
+            
+            saveConversations();
+        }
+
+        function saveConversations() {
+            localStorage.setItem('vh_conversations', JSON.stringify(conversations));
+        }
+
+        function clearChatMessages() {
+            document.getElementById('chatMessages').innerHTML = '';
+        }
+
+        async function initializeChat() {
+            // Get customer name from session
+            const customerName = "Rahul"; // In real app, fetch from session
+            
+            // Check if conversation already has messages
+            const convo = findConversation(currentConversationId);
+            if (convo && convo.messages.length > 0) {
+                return; // Don't add welcome message if conversation already exists
+            }
+            
+            // Personalized welcome message
+            setTimeout(() => {
+                addBotMessage(
+                    `Hi ${customerName}! 👋 Welcome back to Van Heusen.\n\n` +
+                    "I'm your AI shopping assistant powered by Claude. I can help you with:\n\n" +
+                    "🔍 Finding products that match your style\n" +
+                    "📍 Checking real-time store availability\n" +
+                    "💡 Getting personalized recommendations\n" +
+                    "📦 Tracking orders and delivery\n" +
+                    "🎁 Applying best offers automatically\n\n" +
+                    "What brings you here today?"
+                );
+                
+                addSuggestions([
+                    "Looking for formal wear",
+                    "Need outfit for an occasion",
+                    "What's in my cart?",
+                    "Check store locations"
+                ]);
+            }, 500);
+        }
+
+        function connectWebSocket() {
+            // Don't block page load - connect WebSocket asynchronously
+            setTimeout(() => {
+                try {
+                    console.log('Attempting WebSocket connection...');
+                    ws = new WebSocket(`ws://localhost:8000/ws/${sessionId}`);
+                    
+                    // Set a timeout for connection
+                    const connectionTimeout = setTimeout(() => {
+                        if (ws.readyState !== WebSocket.OPEN) {
+                            console.log('WebSocket connection timeout, using fallback');
+                            updateStatus('Using fallback mode', false);
+                            ws.close();
+                        }
+                    }, 2000); // 2 second timeout
+                    
+                    ws.onopen = () => {
+                        clearTimeout(connectionTimeout);
+                        console.log('WebSocket connected');
+                        updateStatus('Online - AI Powered', true);
+                    };
+                    
+                    ws.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        handleWebSocketMessage(data);
+                    };
+                    
+                    ws.onerror = () => {
+                        clearTimeout(connectionTimeout);
+                        updateStatus('Using fallback mode', false);
+                    };
+                    
+                    ws.onclose = () => {
+                        clearTimeout(connectionTimeout);
+                        updateStatus('Reconnecting...', false);
+                        setTimeout(connectWebSocket, 3000);
+                    };
+                } catch (error) {
+                    console.error('WebSocket error:', error);
+                    updateStatus('Using fallback mode', false);
+                }
+            }, 100); // Delay WebSocket connection to not block page rendering
+        }
+
+        function updateStatus(text, isOnline) {
+            const statusEl = document.getElementById('statusText');
+            statusEl.textContent = text;
+            const dot = document.querySelector('.status-dot');
+            dot.style.background = isOnline ? '#4CAF50' : '#FFA726';
+        }
+
+        function handleWebSocketMessage(data) {
+            if (data.type === 'agent_called') {
+                showAgentActivity(data.agent);
+            } else if (data.type === 'orchestrator_complete') {
+                // Response will come via API
+            }
+        }
+
+        function showAgentActivity(agentName) {
+            const indicator = document.createElement('div');
+            indicator.className = 'agent-indicator';
+            indicator.textContent = `🤖 ${agentName} agent working...`;
+            
+            const container = document.getElementById('chatMessages');
+            container.appendChild(indicator);
+            container.scrollTop = container.scrollHeight;
+            
+            setTimeout(() => indicator.remove(), 2000);
+        }
+
+        // ============ VOICE RECOGNITION FUNCTIONS ============
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                // Configure for Indian English
+                recognition.lang = 'en-IN';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => {
+                    isListening = true;
+                    document.getElementById('voiceBtn').classList.add('listening');
+                    document.getElementById('messageInput').placeholder = '🎤 Listening...';
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('messageInput').value = transcript;
+                    stopListening();
+                    
+                    // Auto-send message after voice input
+                    setTimeout(() => sendMessage(), 500);
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    stopListening();
+                    if (event.error !== 'no-speech') {
+                        alert('Voice recognition error. Please try again.');
+                    }
+                };
+
+                recognition.onend = () => {
+                    stopListening();
+                };
+
+                voiceEnabled = true;
+                console.log('Voice recognition initialized (en-IN)');
+            } else {
+                console.warn('Speech recognition not supported');
+                document.getElementById('voiceBtn').style.display = 'none';
+            }
+        }
+
+        function toggleVoice() {
+            if (!voiceEnabled) {
+                alert('Voice input is not supported in your browser.');
+                return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (recognition && !isListening) {
+                recognition.start();
+            }
+        }
+
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+                isListening = false;
+                document.getElementById('voiceBtn').classList.remove('listening');
+                updatePlaceholder();
+            }
+        }
+
+        // Text-to-Speech Function
+        function speakResponse(text) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('Text-to-speech not supported');
+                return;
+            }
+
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
+            // Clean text for speech (remove markdown, emojis, special characters)
+            const cleanText = text
+                .replace(/\*\*(.+?)\*\*/g, '$1')  // Remove bold
+                .replace(/\*(.+?)\*/g, '$1')      // Remove italic
+                .replace(/[🎉💝🎁✨🌟💎🛍️🎊👔💼🎯📦🏪🚚💰⭐🔥💯✅❌🎤➤]/g, '')  // Remove emojis
+                .replace(/\[(.+?)\]\(.+?\)/g, '$1')  // Extract link text
+                .replace(/\n/g, '. ');  // Replace newlines with pauses
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-IN';  // Indian English
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.9;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // ============ MULTILINGUAL FUNCTIONS ============
+        function initLanguage() {
+            const savedLang = localStorage.getItem('vh_language') || 'en';
+            currentLanguage = savedLang;
+            document.getElementById('languageSelect').value = savedLang;
+            updatePlaceholder();
+        }
+
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            currentLanguage = select.value;
+            localStorage.setItem('vh_language', currentLanguage);
+            updatePlaceholder();
+            
+            // Show language change confirmation
+            const langName = select.options[select.selectedIndex].text;
+            addBotMessage(`Language changed to ${langName}`, true, false);
+        }
+
+        function updatePlaceholder() {
+            const placeholders = {
+                'en': 'Ask me anything about products, stores, or orders...',
+                'hi': 'उत्पाद, स्टोर या आदेश के बारे में कुछ भी पूछें...',
+                'mr': 'उत्पादने, स्टोअर्स किंवा ऑर्डरबद्दल काहीही विचारा...',
+                'gu': 'ઉત્પાદનો, સ્ટોર્સ અથવા ઓર્ડર વિશે કંઈપણ પૂછો...',
+                'ta': 'தயாரிப்புகள், ஸ்டோர்கள் அல்லது ஆர்டர்கள் பற்றி எதையும் கேளுங்கள்...',
+                'te': 'ఉత్పత్తులు, స్టోర్లు లేదా ఆర్డర్ల గురించి ఏదైనా అడగండి...',
+                'bn': 'পণ্য, স্টোর বা অর্ডার সম্পর্কে কিছু জিজ্ঞাসা করুন...'
+            };
+            document.getElementById('messageInput').placeholder = placeholders[currentLanguage] || placeholders['en'];
+        }
+
+        // Translation API Integration (Backend)
+        async function translateText(text, targetLang) {
+            if (targetLang === 'en' || !text) return text;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/translate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        source_lang: 'auto',
+                        target_lang: targetLang
+                    })
+                });
+                
+                const data = await response.json();
+                return data.translated_text || text;
+            } catch (error) {
+                console.error('Translation error:', error);
+                return text;  // Fallback to original
+            }
+        }
+
+
+        function addBotMessage(text, showTime = true, save = true) {
+            const container = document.getElementById('chatMessages');
+            const msg = document.createElement('div');
+            msg.className = 'message bot';
+            
+            // Convert markdown-style formatting to HTML
+            let formattedText = text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold** → <strong>
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')              // *italic* → <em>
+                .replace(/•/g, '&nbsp;&nbsp;•')                     // Bullet points
+                .replace(/\n/g, '<br>');                            // Line breaks
+            
+            const time = showTime ? `<span class="message-time">${getCurrentTime()}</span>` : '';
+            msg.innerHTML = `
+                <div class="message-bubble">${formattedText}${time}</div>
+            `;
+            
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            
+            // Text-to-Speech for bot responses
+            speakResponse(text);
+            
+            // Save to conversation
+            if (save) {
+                const convo = findConversation(currentConversationId);
+                if (convo) {
+                    convo.messages.push({ type: 'bot', text: text });
+                    convo.updatedAt = new Date().toISOString();
+                    saveConversations();
+                }
+            }
+        }
+
+        function addUserMessage(text, save = true) {
+            const container = document.getElementById('chatMessages');
+            const msg = document.createElement('div');
+            msg.className = 'message user';
+            msg.innerHTML = `
+                <div class="message-bubble">
+                    ${text}
+                    <span class="message-time">${getCurrentTime()}</span>
+                </div>
+            `;
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            
+            // Save to conversation and update title
+            if (save) {
+                const convo = findConversation(currentConversationId);
+                if (convo) {
+                    convo.messages.push({ type: 'user', text: text });
+                    convo.updatedAt = new Date().toISOString();
+                    
+                    // Update title from first user message
+                    if (convo.title === 'New Conversation' && text.trim()) {
+                        convo.title = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+                    }
+                    
+                    saveConversations();
+                    loadConversations();
+                }
+            }
+        }
+
+        function addTypingIndicator() {
+            const container = document.getElementById('chatMessages');
+            const typing = document.createElement('div');
+            typing.className = 'message bot';
+            typing.id = 'typing';
+            typing.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            container.appendChild(typing);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function addSuggestions(suggestions) {
+            const container = document.getElementById('chatMessages');
+            const suggestionsDiv = document.createElement('div');
+            suggestionsDiv.className = 'suggestions';
+            
+            suggestions.forEach(text => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-btn';
+                btn.textContent = text;
+                btn.onclick = () => {
+                    document.getElementById('messageInput').value = text;
+                    sendMessage();
+                    suggestionsDiv.remove();
+                };
+                suggestionsDiv.appendChild(btn);
+            });
+            
+            container.appendChild(suggestionsDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // function addProductCard(product) {
+        //     const container = document.getElementById('chatMessages');
+        //     const card = document.createElement('div');
+        //     card.className = 'message bot';
+        //     card.innerHTML = `
+        //         <div class="product-card">
+        //             <h4>${product.name}</h4>
+        //             <p>${product.category || ''}</p>
+        //             <p class="price">₹${product.price}</p>
+        //             <p style="font-size: 12px; color: #4CAF50;">✓ Available</p>
+        //         </div>
+        //     `;
+        //     container.appendChild(card);
+        //     container.scrollTop = container.scrollHeight;
+        // }
+        function addProductCard(product) {
+        const container = document.getElementById('chatMessages');
+        const card = document.createElement('div');
+        card.className = 'message bot';
+        card.innerHTML = `
+            <div class="product-card">
+                <h4>${product.name}</h4>
+                <p>${product.category || ''}</p>
+                <p class="price">₹${product.price}</p>
+                ${product.reasoning ? `<div class="reasoning">💡 ${product.reasoning}</div>` : ''}
+                ${product.socialProof ? `<div class="social-proof">👥 ${product.socialProof}</div>` : ''}
+                ${product.urgency ? `<div class="urgency">⚡ ${product.urgency}</div>` : ''}
+                <p style="font-size: 12px; color: #4CAF50;">✓ Available</p>
+                <button class="suggestion-btn" onclick="addToCartFromCard('${product.id || 'UNKNOWN'}', '${product.name}', ${product.price}, '${product.size || '40'}')" style="margin-top: 10px; width: 100%;">🛒 Add to Cart</button>
+            </div>
+        `;
+        container.appendChild(card);
+        container.scrollTop = container.scrollHeight;
+        }
+
+        function showCartWithModifyOption() {
+            console.log('Showing cart with items:', JSON.stringify(cartItems, null, 2));
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const cartContainer = document.createElement('div');
+            cartContainer.className = 'message bot-message';
+            
+            // Build cart from actual items
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="cart-display">
+                        <h3>🛒 Your Cart</h3>
+                        <p style="text-align: center; color: #999; padding: 20px 0;">🛍️ Your cart is empty</p>
+                    </div>
+                `;
+            } else {
+                let itemsHtml = '';
+                let subtotal = 0;
+                
+                cartItems.forEach(item => {
+                    const itemTotal = item.price * (item.quantity || 1);
+                    subtotal += itemTotal;
+                    itemsHtml += `
+                        <div class="cart-item">
+                            <span class="cart-item-name">${item.name}${item.size ? ` (Size ${item.size})` : ''}</span>
+                            <div class="quantity-control">
+                                <button onclick="updateQuantity('${item.id}', ${item.price}, -1)">−</button>
+                                <span id="qty-${item.id}">${item.quantity || 1}</span>
+                                <button onclick="updateQuantity('${item.id}', ${item.price}, 1)">+</button>
+                            </div>
+                            <span class="cart-item-price" id="price-${item.id}">₹${itemTotal.toLocaleString()}</span>
+                            <button class="cart-item-remove" onclick="removeFromCart('${item.id}', '${item.name}')">×</button>
+                        </div>
+                    `;
+                });
+                
+                const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                let discount = totalQty >= 3 ? 0.2 : 0.1;
+                const total = Math.round(subtotal * (1 - discount));
+                const discountText = totalQty >= 3 ? '20% OFF' : '10% OFF';
+                
+                cartContainer.innerHTML = `
+                    <div class="cart-display">
+                        <h3>🛒 Your Cart</h3>
+                        ${itemsHtml}
+                        <div class="cart-total">
+                            <strong>Total: <span id="cartTotal">₹${total.toLocaleString()}</span><span class="discount-badge" id="discountBadge">${discountText}</span></strong>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(cartContainer);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function addToCartFromCard(productId, productName, price, size) {
+            console.log('Adding to cart:', {productId, productName, price, size});
+            
+            // Check if item already in cart
+            const existing = cartItems.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity = (existing.quantity || 1) + 1;
+                console.log('Item exists, incremented quantity:', existing);
+            } else {
+                cartItems.push({id: productId, name: productName, price: price, size: size, quantity: 1});
+                console.log('New item added');
+            }
+            
+            // Sync to localStorage for cross-interface access
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Track activity
+            trackActivity('Web Chat', `Added ${productName} to cart`);
+            
+            console.log('Current cartItems:', JSON.stringify(cartItems, null, 2));
+            
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const discount = totalItems >= 3 ? 0.2 : 0.1;
+            const total = Math.round(subtotal * (1 - discount));
+            
+            addBotMessage(`✅ Added ${productName} to cart! 🛒\n\nTotal items: ${totalItems}\nTotal: ₹${total.toLocaleString()}`);
+            
+            if (totalItems >= 3 && totalItems - 1 < 3) {
+                const savings = subtotal - total;
+                setTimeout(() => {
+                    addBotMessage(`🎉 You unlocked 20% bundle discount! Saving ₹${savings.toLocaleString()}!`);
+                }, 400);
+            }
+            
+            setTimeout(() => {
+                addSuggestions([
+                    "View cart",
+                    "Proceed to checkout",
+                    "Add more items",
+                    "See matching accessories"
+                ]);
+            }, 600);
+            
+            // Call backend
+            try {
+                await fetch(`${API_URL}/api/cart/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: 1,
+                        size: size
+                    })
+                });
+            } catch (error) {
+                console.error('Cart add error:', error);
+            }
+        }
+
+        async function updateQuantity(productId, unitPrice, change) {
+            const qtyEl = document.getElementById(`qty-${productId}`);
+            const currentQty = parseInt(qtyEl.textContent);
+            const newQty = currentQty + change;
+            
+            if (newQty < 1) return;
+            
+            // Update cartItems array
+            const item = cartItems.find(i => i.id === productId);
+            if (item) {
+                item.quantity = newQty;
+            }
+            
+            // Update UI immediately (real-time)
+            qtyEl.textContent = newQty;
+            
+            // Recalculate totals from cartItems array
+            let subtotal = 0;
+            cartItems.forEach(item => {
+                const itemQty = item.quantity || 1;
+                const itemTotal = item.price * itemQty;
+                subtotal += itemTotal;
+                
+                // Update individual item price display
+                const priceEl = document.getElementById(`price-${item.id}`);
+                if (priceEl) {
+                    priceEl.textContent = `₹${itemTotal.toLocaleString()}`;
+                }
+            });
+            
+            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            let discount = totalQty >= 3 ? 0.2 : 0.1;
+            const total = Math.round(subtotal * (1 - discount));
+            const savings = subtotal - total;
+            const discountText = totalQty >= 3 ? '20% OFF' : '10% OFF';
+            
+            document.getElementById('cartTotal').textContent = `₹${total.toLocaleString()}`;
+            document.getElementById('discountBadge').textContent = discountText;
+            
+            // Show message for discount upgrade
+            const wasUnder3 = totalQty - change < 3;
+            const isNow3OrMore = totalQty >= 3;
+            
+            if (isNow3OrMore && wasUnder3) {
+                addBotMessage(`🎉 Great news! You unlocked ${Math.round(discount * 100)}% bundle discount!\n\nYou're now saving ₹${savings.toLocaleString()}!`);
+            } else {
+                addBotMessage(`✅ Cart updated! New total: ₹${total.toLocaleString()}`);
+            }
+            
+            // Call backend
+            try {
+                await fetch(`${API_URL}/api/cart/update`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: newQty
+                    })
+                });
+            } catch (error) {
+                console.error('Cart update error:', error);
+            }
+        }
+
+        async function removeFromCart(productId, productName) {
+            console.log('Removing from cart:', productId, productName);
+            
+            // Remove from cartItems array
+            cartItems = cartItems.filter(item => item.id !== productId);
+            
+            // Sync to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            console.log('Cart after removal:', JSON.stringify(cartItems, null, 2));
+            
+            addBotMessage(`❌ Removed ${productName} from cart`);
+            
+            // Refresh cart display
+            setTimeout(() => {
+                // Remove old cart display
+                const oldCart = document.querySelector('.cart-display');
+                if (oldCart && oldCart.parentElement) {
+                    oldCart.parentElement.remove();
+                }
+                
+                // Show updated cart
+                showCartWithModifyOption();
+                
+                if (cartItems.length > 0) {
+                    const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    setTimeout(() => {
+                        if (totalQty < 3) {
+                            addBotMessage("💡 Add more items to unlock 20% bundle discount!");
+                        }
+                    }, 300);
+                }
+            }, 500);
+            
+            // Call backend
+            try {
+                await fetch(`${API_URL}/api/cart/remove`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId
+                    })
+                });
+            } catch (error) {
+                console.error('Cart remove error:', error);
+            }
+        }
+
+        async function sendMessage() {
+            if (isProcessing) return;
+            
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message (in user's language)
+            addUserMessage(message);
+            input.value = '';
+            
+            // Disable input
+            isProcessing = true;
+            document.getElementById('sendBtn').disabled = true;
+            document.getElementById('voiceBtn').disabled = true;
+            
+            // Show typing
+            addTypingIndicator();
+            
+            // Translate user message to English if needed
+            let messageInEnglish = message;
+            if (currentLanguage !== 'en') {
+                messageInEnglish = await translateText(message, 'en');
+            }
+            
+            // Always use smart fallback for consistent demo experience
+            // Backend integration can be enabled later
+            setTimeout(async () => {
+                removeTypingIndicator();
+                
+                // Use our intelligent response system (in English)
+                const smartResponse = getSmartFallback(messageInEnglish);
+                
+                // Translate response to user's language
+                let responseInUserLang = smartResponse;
+                if (currentLanguage !== 'en') {
+                    responseInUserLang = await translateText(smartResponse, currentLanguage);
+                }
+                
+                addBotMessage(responseInUserLang);
+                
+                // Add contextual suggestions
+                addContextualSuggestions(messageInEnglish);
+            }, 1000);
+            
+            /* Backend API integration (disabled for demo consistency)
+            try {
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        message: message,
+                        channel: 'web'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                removeTypingIndicator();
+                
+                if (data.response) {
+                    addBotMessage(data.response);
+                }
+                
+                if (data.recommendations && data.recommendations.length > 0) {
+                    setTimeout(() => {
+                        addBotMessage("Here are some recommendations:");
+                        data.recommendations.forEach((product, index) => {
+                            setTimeout(() => addProductCard(product), index * 200);
+                        });
+                    }, 500);
+                }
+                
+                addContextualSuggestions(message);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                
+                const fallbackResponse = getSmartFallback(message);
+                addBotMessage(fallbackResponse);
+                addContextualSuggestions(message);
+            }
+            */
+            
+            // Re-enable input
+            isProcessing = false;
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('voiceBtn').disabled = false;
+        }
+
+        function getSmartFallback(message) {
+            const msg = message.toLowerCase();
+            
+            // ========== AFFIRMATIVE RESPONSES (HANDLE FIRST) ==========
+            if (msg === 'sure' || msg === 'yes' || msg === 'okay' || msg === 'ok' || msg === 'yeah' || msg === 'yep' || msg === 'sounds good') {
+                setTimeout(() => {
+                    addBotMessage("Great! I've noted that. What would you like to do next?");
+                    addSuggestions([
+                        "Add to cart",
+                        "See in-store",
+                        "Check availability",
+                        "Show more options"
+                    ]);
+                }, 100);
+                return "Perfect! 👍";
+            }
+            
+            // MODIFY/CHANGE SELECTIONS
+            if (msg.includes('modify') || msg.includes('change selection') || msg.includes('different')) {
+                setTimeout(() => {
+                    addBotMessage("No problem! What would you like to change?");
+                    addSuggestions([
+                        "Show different colors",
+                        "Different style",
+                        "Change occasion",
+                        "Start over"
+                    ]);
+                }, 100);
+                return "Let me help you adjust your selections! 🔄";
+            }
+            
+            // ========== SALES PSYCHOLOGY LAYER ==========
+            
+            // OBJECTION HANDLING - Price
+            if (msg.includes('expensive') || msg.includes('pricey') || msg.includes('too much') || msg.includes('costly')) {
+                conversationContext.objections.push('price');
+                return "I completely understand - budget is important! 💡\n\n" +
+                    "Here's what makes this a smart investment:\n" +
+                    "✨ **Premium fabric** that lasts 3x longer than regular brands\n" +
+                    "💎 You're a **Gold Member**: 500 points = **₹200 instant discount**\n" +
+                    "🎁 Add just 1 more item = **20% bundle discount unlocked**\n\n" +
+                    "**Your final price: ₹2,000** (down from ₹2,500)\n" +
+                    "+ **Free alterations** + **30-day returns**!\n\n" +
+                    "When you think about cost-per-wear over the years, it's actually very economical. Fair? 😊";
+            }
+            
+            // OBJECTION HANDLING - Quality Concerns
+            if (msg.includes('quality') || msg.includes('is it good') || msg.includes('worth it')) {
+                return "Great question! Quality is what we're known for. 🌟\n\n" +
+                    "**What sets us apart:**\n" +
+                    "✓ 100% premium cotton (not blended)\n" +
+                    "✓ Double-stitched seams for durability\n" +
+                    "✓ Color-fast dyes (won't fade)\n" +
+                    "✓ 1-year warranty against defects\n\n" +
+                    "👥 Over **250+ customers** bought this exact shirt last month with **4.8/5 stars**!\n\n" +
+                    "Want to see it in-store before deciding?";
+            }
+            
+            // OBJECTION HANDLING - Indecision
+            if (msg.includes('not sure') || msg.includes('confused') || msg.includes('help me choose') || msg.includes("don't know")) {
+                return "No worries at all - I'm here to guide you! 🤝\n\n" +
+                    "Let me ask you a quick question to narrow it down:\n\n" +
+                    "What matters most to you?\n" +
+                    "• Looking sharp & professional\n" +
+                    "• All-day comfort\n" +
+                    "• Staying within budget\n" +
+                    "• Making a memorable impression\n\n" +
+                    "Pick one and I'll find your perfect match!";
+            }
+            
+            // OBJECTION HANDLING - Priority-based recommendations
+            if (msg.includes('all-day comfort') || msg.includes('comfort') || msg.includes('comfortable')) {
+                setTimeout(() => {
+                    addBotMessage("Perfect! Comfort is key for long interviews. Here's what I recommend:");
+                    
+                    const comfortOutfit = [
+                        {
+                            id: "VH001B",
+                            name: "Light Blue Formal Shirt", 
+                            category: "Comfort Fit", 
+                            price: 2450,
+                            size: "40",
+                            reasoning: "Breathable fabric with stretch - stays comfortable all day long",
+                            socialProof: "Top rated for comfort",
+                            urgency: "Premium wrinkle-resistant material"
+                        },
+                        {
+                            id: "VH008",
+                            name: "Blue Formal Trousers", 
+                            category: "Flexible Fit", 
+                            price: 2200,
+                            size: "32",
+                            reasoning: "Stretch waistband - moves with you, no restriction",
+                            socialProof: "Most comfortable choice"
+                        },
+                        {
+                            id: "VH006",
+                            name: "Brown Leather Belt", 
+                            category: "Soft Leather", 
+                            price: 1200,
+                            size: "34",
+                            reasoning: "Soft premium leather - no digging or discomfort",
+                            socialProof: "Comfortable all day"
+                        }
+                    ];
+                    
+                    comfortOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 These items prioritize comfort without compromising professionalism!");
+                        addSuggestions([
+                            "Add to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Finding the most comfortable options for you...";
+            }
+            
+            if (msg.includes('sharp') || msg.includes('professional') || msg.includes('looking sharp')) {
+                setTimeout(() => {
+                    addBotMessage("Excellent! Let's make sure you look sharp and command respect:");
+                    
+                    const sharpOutfit = [
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Crisp & Sharp", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "Crisp white - the sharpest, most professional choice",
+                            socialProof: "Executive favorite",
+                            urgency: "Premium quality"
+                        },
+                        {
+                            id: "VH008C",
+                            name: "Black Formal Trousers", 
+                            category: "Professional Base", 
+                            price: 2300,
+                            size: "32",
+                            reasoning: "Sharp black & white - classic professional look",
+                            socialProof: "Interview essential"
+                        },
+                        {
+                            id: "VH007",
+                            name: "Black Leather Belt", 
+                            category: "Polished Touch", 
+                            price: 1300,
+                            size: "34",
+                            reasoning: "Polished finish - completes the sharp look",
+                            socialProof: "Professional standard"
+                        }
+                    ];
+                    
+                    sharpOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💼 This combination guarantees a sharp, commanding presence!");
+                        addSuggestions([
+                            "Add to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Selecting the sharpest professional look...";
+            }
+            
+            if (msg.includes('budget') || msg.includes('affordable') || msg.includes('within budget')) {
+                setTimeout(() => {
+                    addBotMessage("Smart thinking! Here's a professional look that's budget-friendly:");
+                    
+                    const budgetOutfit = [
+                        {
+                            id: "VH001B",
+                            name: "Light Blue Formal Shirt", 
+                            category: "Great Value", 
+                            price: 2450,
+                            size: "40",
+                            reasoning: "Professional quality at best price - excellent value",
+                            socialProof: "Best seller in this range"
+                        },
+                        {
+                            id: "VH008",
+                            name: "Blue Formal Trousers", 
+                            category: "Budget Smart", 
+                            price: 2200,
+                            size: "32",
+                            reasoning: "Quality trousers without breaking the bank",
+                            socialProof: "Great value choice"
+                        },
+                        {
+                            id: "VH006",
+                            name: "Brown Leather Belt", 
+                            category: "Affordable", 
+                            price: 1200,
+                            size: "34",
+                            reasoning: "Completes the look - best price point",
+                            socialProof: "Budget friendly"
+                        }
+                    ];
+                    
+                    budgetOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        const total = budgetOutfit.reduce((sum, item) => sum + item.price, 0);
+                        const bundlePrice = Math.round(total * 0.8);
+                        addBotMessage(`💰 Total: ₹${total.toLocaleString()} → With 20% bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${(total - bundlePrice).toLocaleString()}!)`);
+                        addSuggestions([
+                            "Add bundle to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Finding the best value options for you...";
+            }
+            
+            if (msg.includes('memorable') || msg.includes('impression') || msg.includes('stand out')) {
+                setTimeout(() => {
+                    addBotMessage("Great! Let's make sure you're memorable for all the right reasons:");
+                    
+                    const impressionOutfit = [
+                        {
+                            id: "VH011",
+                            name: "Navy Blue Blazer", 
+                            category: "Statement Piece", 
+                            price: 5800,
+                            size: "40",
+                            reasoning: "A blazer instantly elevates your presence - memorable and professional",
+                            socialProof: "Executive choice",
+                            urgency: "Premium collection"
+                        },
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Classic Foundation", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "Crisp white under navy blazer - timeless combination",
+                            socialProof: "Professional standard"
+                        },
+                        {
+                            id: "VH008",
+                            name: "Blue Formal Trousers", 
+                            category: "Coordinated Look", 
+                            price: 2200,
+                            size: "32",
+                            reasoning: "Completes the coordinated navy ensemble",
+                            socialProof: "Sharp professional look"
+                        }
+                    ];
+                    
+                    impressionOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("✨ This outfit will make you unforgettable - professional and commanding!");
+                        addSuggestions([
+                            "Add to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Creating a memorable professional look...";
+            }
+            
+            // OBJECTION HANDLING - Show alternative outfit options
+            if (msg.includes('show alternative') || msg.includes('show other') || msg.includes('different option')) {
+                setTimeout(() => {
+                    addBotMessage("Sure! Here are some alternative options for interviews:");
+                    
+                    // Check context to show appropriate alternatives
+                    const conversationText = document.getElementById('chatMessages').innerText.toLowerCase();
+                    let alternatives = [];
+                    
+                    if (conversationText.includes('interview') || conversationText.includes('meeting')) {
+                        // Interview alternatives - conservative options
+                        alternatives = [
+                            {
+                                id: "VH001B",
+                                name: "Light Blue Formal Shirt", 
+                                category: "Professional Alternative", 
+                                price: 2450,
+                                size: "40",
+                                reasoning: "Still professional - light blue is interview-appropriate for most industries",
+                                socialProof: "Popular for tech/creative interviews"
+                            },
+                            {
+                                id: "VH008",
+                                name: "Blue Formal Trousers", 
+                                category: "Navy Option", 
+                                price: 2200,
+                                size: "32",
+                                reasoning: "Navy is as professional as black - alternative to all-black look",
+                                socialProof: "Equally appropriate for interviews"
+                            },
+                            {
+                                id: "VH011",
+                                name: "Navy Blue Blazer", 
+                                category: "Power Piece", 
+                                price: 5800,
+                                size: "40",
+                                reasoning: "Navy blazer elevates any interview outfit - shows seriousness and professionalism",
+                                socialProof: "Executive choice for important interviews"
+                            }
+                        ];
+                    } else {
+                        // Wedding/Party alternatives - more variety
+                        alternatives = [
+                            {
+                                id: "VH003",
+                                name: "Light Pink Formal Shirt", 
+                                category: "Wedding Option", 
+                                price: 2600,
+                                size: "40",
+                                reasoning: "Perfect for weddings - photographs beautifully",
+                                socialProof: "Trending for celebrations"
+                            },
+                            {
+                                id: "VH002B",
+                                name: "Cream Formal Shirt", 
+                                category: "Softer Choice", 
+                                price: 2700,
+                                size: "40",
+                                reasoning: "Elegant alternative to white - sophisticated",
+                                socialProof: "Popular for evening events"
+                            },
+                            {
+                                id: "VH008B",
+                                name: "Light Grey Formal Trousers", 
+                                category: "Versatile", 
+                                price: 2100,
+                                size: "32",
+                                reasoning: "Pairs beautifully with lighter shirt colors",
+                                socialProof: "Versatile for celebrations"
+                            }
+                        ];
+                    }
+                    
+                    alternatives.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 All great choices! Which style appeals to you?");
+                        addSuggestions([
+                            "Show complete outfit",
+                            "Add to cart",
+                            "See in-store",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Showing you more options...";
+            }
+            
+            // OBJECTION HANDLING - Comparison Shopping
+            if (msg.includes('compare') || msg.includes('other brands') || (msg.includes('alternatives') && !msg.includes('show'))) {
+                return "Smart to compare! Let me show you why customers choose us: 🏆\n\n" +
+                    "**Van Heusen vs Others:**\n" +
+                    "✅ Premium fabric quality (not synthetic blends)\n" +
+                    "✅ Perfect fit guarantee (free alterations)\n" +
+                    "✅ 30-day easy returns (no questions asked)\n" +
+                    "✅ Loyalty rewards (you're already earning!)\n" +
+                    "✅ 1-year warranty\n\n" +
+                    "Plus, you get **instant 10-20% discounts** with bundles.\n\n" +
+                    "Want to see our bestsellers?";
+            }
+            
+                    
+            // INITIAL INTEREST - FORMAL WEAR (Level 1) - Enhanced with natural language
+            if (msg.includes('looking for formal') || msg.includes('need formal') || msg.includes('formal wear') || 
+                msg.includes('formal shirt') || msg.includes('want formal') || msg.includes('buy formal') ||
+                msg.includes('show me formal') || msg.includes('formal clothes') || msg.includes('formal attire') ||
+                msg.includes('need something formal') || msg.includes('want to buy shirt')) {
+                
+                // Check if they already mentioned occasion in same message
+                if (msg.includes('office') || msg.includes('work') || msg.includes('professional')) {
+                    setTimeout(() => {
+                        addBotMessage("Professional look coming up!\n\nAny color preferences?");
+                        addSuggestions([
+                            "Light Blue",
+                            "Classic White",
+                            "Pastels",
+                            "Surprise me"
+                        ]);
+                    }, 100);
+                    return "Smart choice! Let's build your professional wardrobe! 💼";
+                }
+                else if (msg.includes('wedding') || msg.includes('party') || msg.includes('celebration')) {
+                    setTimeout(() => {
+                        addBotMessage("Perfect! Weddings call for something special.\n\nWhat colors do you usually prefer?");
+                        addSuggestions([
+                            "Blues & Navy",
+                            "Whites & Pastels",
+                            "Dark colors",
+                            "Show me all options"
+                        ]);
+                    }, 100);
+                    return "Excellent! Let me help you look your best for the wedding! 💍";
+                }
+                else if (msg.includes('interview') || msg.includes('meeting')) {
+                    setTimeout(() => {
+                        addBotMessage("Making the right impression is key!\n\nDo you prefer a traditional or modern look?");
+                        addSuggestions([
+                            "Traditional/Classic",
+                            "Modern/Contemporary",
+                            "Not sure, help me decide"
+                        ]);
+                    }, 100);
+                    return "Great! Let's ensure you make a strong impression! 🎯";
+                }
+                else {
+                    setTimeout(() => {
+                        addBotMessage("Great choice! Let me understand your preferences better.\n\nWhat's the occasion you're shopping for?");
+                        addSuggestions([
+                            "Office/Work",
+                            "Wedding/Party",
+                            "Interview/Meeting",
+                            "Just updating wardrobe"
+                        ]);
+                    }, 100);
+                    return "I'd love to help you find the perfect formal wear! 👔";
+                }
+            }
+            
+            // OCCASION RESPONSES (Level 2) - Enhanced with variations
+            else if (msg.includes('updating wardrobe') || msg.includes('refresh wardrobe') || 
+                     msg.includes('wardrobe update') || msg.includes('just updating')) {
+                setTimeout(() => {
+                    addBotMessage("Perfect! Building a versatile wardrobe is smart. Let me show you our essentials collection:");
+                    
+                    const wardrobeEssentials = [
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Wardrobe Essential", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "The most versatile piece - works for ANY occasion",
+                            socialProof: "Our #1 bestseller - 320 sold this month",
+                            urgency: "Must-have for every wardrobe"
+                        },
+                        {
+                            id: "VH001",
+                            name: "Classic Blue Formal Shirt", 
+                            category: "Essential #2", 
+                            price: 2500,
+                            size: "40",
+                            reasoning: "Second most important - pairs with everything",
+                            socialProof: "Essential for professionals"
+                        },
+                        {
+                            id: "VH008C",
+                            name: "Black Formal Trousers", 
+                            category: "Base Essential", 
+                            price: 2300,
+                            size: "32",
+                            reasoning: "Goes with any shirt color - wardrobe foundation",
+                            socialProof: "Essential for every wardrobe"
+                        },
+                        {
+                            id: "VH007",
+                            name: "Black Leather Belt", 
+                            category: "Must-Have Accessory", 
+                            price: 1300,
+                            size: "34",
+                            reasoning: "Classic black belt - matches all formal wear",
+                            socialProof: "Wardrobe essential"
+                        }
+                    ];
+                    
+                    wardrobeEssentials.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 250);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 These 4 essentials form the perfect wardrobe foundation. Mix & match for any occasion!");
+                        addSuggestions([
+                            "Add all to cart",
+                            "Show more essentials",
+                            "See in-store",
+                            "Continue shopping"
+                        ]);
+                    }, 1500);
+                }, 100);
+                return "Excellent! Let's build a versatile wardrobe! 👔";
+            }
+            
+            else if (msg.includes('wedding') || msg.includes('party') || msg.includes('celebration') || 
+                     msg.includes('for a wedding') || msg.includes('going to a party') || msg.includes('attending')) {
+                setTimeout(() => {
+                    addBotMessage("Perfect! Weddings call for something special.\n\nWhat colors do you usually prefer?");
+                    addSuggestions([
+                        "Blues & Navy",
+                        "Whites & Pastels",
+                        "Dark colors",
+                        "Show me all options"
+                    ]);
+                }, 100);
+                return "Excellent! Let me help you look your best for the wedding! 💍";
+            }
+            
+            else if (msg.includes('office') || msg.includes('work') || msg.includes('professional') ||
+                     msg.includes('for office') || msg.includes('workplace') || msg.includes('corporate') ||
+                     msg.includes('for work') || msg.includes('job')) {
+                setTimeout(() => {
+                    addBotMessage("Professional look coming up!\n\nAny color preferences?");
+                    addSuggestions([
+                        "Light Blue",
+                        "Classic White",
+                        "Pastels",
+                        "Surprise me"
+                    ]);
+                }, 100);
+                return "Smart choice! Let's build your professional wardrobe! 💼";
+            }
+            
+            else if (msg.includes('interview') || msg.includes('meeting') || msg.includes('presentation')) {
+                setTimeout(() => {
+                    addBotMessage("Making the right impression is key!\n\nDo you prefer a traditional or modern look?");
+                    addSuggestions([
+                        "Traditional/Classic",
+                        "Modern/Contemporary",
+                        "Not sure, help me decide"
+                    ]);
+                }, 100);
+                return "Great! Let's ensure you make a strong impression! 🎯";
+            }
+            
+            // Interview/Meeting style responses
+            else if (msg.includes('traditional') || msg.includes('classic')) {
+                setTimeout(() => {
+                    addBotMessage("Perfect choice! Traditional looks are always respected.\n\nHere's what I recommend for interviews:");
+                    
+                    const traditionalOutfit = [
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Foundation Piece", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "The safest choice - universally appropriate for any interview",
+                            socialProof: "Most popular for interviews",
+                            urgency: "Premium quality"
+                        },
+                        {
+                            id: "VH008C",
+                            name: "Black Formal Trousers", 
+                            category: "Professional Base", 
+                            price: 2300,
+                            size: "32",
+                            reasoning: "Classic white & black combination - commands respect",
+                            socialProof: "Essential for formal interviews"
+                        },
+                        {
+                            id: "VH007",
+                            name: "Black Leather Belt", 
+                            category: "Finishing Touch", 
+                            price: 1300,
+                            size: "34",
+                            reasoning: "Completes the traditional professional look",
+                            socialProof: "Interview essential"
+                        }
+                    ];
+                    
+                    traditionalOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💼 This classic combination never fails to impress! Want to add the complete set to cart?");
+                        addSuggestions([
+                            "Add bundle to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Curating the perfect interview outfit...";
+            }
+            
+            else if (msg.includes('modern') || msg.includes('contemporary')) {
+                setTimeout(() => {
+                    addBotMessage("Great! Modern styling while staying professional.\n\nHere's what I recommend:");
+                    
+                    const modernOutfit = [
+                        {
+                            id: "VH001B",
+                            name: "Light Blue Formal Shirt", 
+                            category: "Modern Choice", 
+                            price: 2450,
+                            size: "40",
+                            reasoning: "Shows personality while staying professional - modern yet appropriate",
+                            socialProof: "Popular among young professionals"
+                        },
+                        {
+                            id: "VH008",
+                            name: "Blue Formal Trousers", 
+                            category: "Contemporary Style", 
+                            price: 2200,
+                            size: "32",
+                            reasoning: "Tonal blue outfit - modern and confident",
+                            socialProof: "Trending for creative industries"
+                        },
+                        {
+                            id: "VH006A",
+                            name: "Blue Leather Belt", 
+                            category: "Modern Touch", 
+                            price: 1250,
+                            size: "34",
+                            reasoning: "Completes the coordinated modern look",
+                            socialProof: "Perfect for contemporary styling"
+                        }
+                    ];
+                    
+                    modernOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 This modern look shows confidence while staying professional! Ready to proceed?");
+                        addSuggestions([
+                            "Add bundle to cart",
+                            "See in-store",
+                            "Show alternatives",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Curating modern professional look...";
+            }
+            
+            // COLOR PREFERENCE RESPONSES (Level 3) - Enhanced with natural variations
+            else if (msg.includes('show me all') || msg.includes('all option') || msg.includes('surprise me') || 
+                     msg.includes('not sure') || msg.includes('help me decide')) {
+                setTimeout(() => {
+                    addBotMessage("Great! Here's a curated selection across popular colors for weddings:");
+                    
+                    const mixedProducts = [
+                        {
+                            id: "VH001",
+                            name: "Classic Blue Formal Shirt", 
+                            category: "Blue Collection", 
+                            price: 2500,
+                            size: "40",
+                            reasoning: "Timeless and sophisticated - works for any wedding role",
+                            socialProof: "287 customers bought this month"
+                        },
+                        {
+                            id: "VH008E",
+                            name: "White Formal Trousers", 
+                            category: "White Collection", 
+                            price: 2400,
+                            size: "32",
+                            reasoning: "Clean and elegant - perfect for summer weddings",
+                            socialProof: "Trending for wedding season"
+                        },
+                        {
+                            id: "VH003",
+                            name: "Light Pink Formal Shirt", 
+                            category: "Pink Collection", 
+                            price: 2600,
+                            size: "40",
+                            reasoning: "Perfect for spring/summer weddings - photographs beautifully",
+                            socialProof: "Most popular for wedding guests"
+                        },
+                        {
+                            id: "VH010",
+                            name: "Black Formal Blazer", 
+                            category: "Black Collection", 
+                            price: 5500,
+                            size: "40",
+                            reasoning: "For evening weddings - commands attention and respect",
+                            socialProof: "Premium choice for formal events"
+                        }
+                    ];
+                    
+                    mixedProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 Which style catches your eye? I can show you complete outfits in any color!");
+                        addSuggestions([
+                            "Show complete outfit",
+                            "More blue options",
+                            "More white options",
+                            "See in-store"
+                        ]);
+                    }, 1500);
+                }, 100);
+                return "Exploring all our best options for you...";
+            }
+            
+            else if (msg.includes('light blue') || msg.includes('sky blue')) {
+                setTimeout(() => {
+                    addBotMessage("Excellent taste! Light blue is perfect for a fresh, professional look.\n\nBased on your preferences, here's what I recommend:");
+                    
+
+                    const blueProducts = [
+                    {
+                        id: "VH001B",
+                        name: "Light Blue Formal Shirt", 
+                        category: "Premium Quality", 
+                        price: 2450,
+                        size: "40",
+                        reasoning: "Perfect for office wear - fresh and sophisticated. Premium wrinkle-resistant fabric.",
+                        socialProof: "Top choice for business professionals",
+                        urgency: "Only 5 left in Size 40 at Bandra!"
+                    },
+                    {
+                        id: "VH005",
+                        name: "Light Blue Silk Tie", 
+                        category: "Perfect Match", 
+                        price: 750,
+                        reasoning: "Completes the monochrome light blue look - modern and elegant!",
+                        socialProof: "Trending for tonal outfits"
+                    },
+                    {
+                        id: "VH008D",
+                        name: "Light Blue Formal Trousers", 
+                        category: "Complete the Look", 
+                        price: 2250,
+                        size: "32",
+                        reasoning: "Complete tonal light blue outfit - sophisticated and coordinated",
+                        socialProof: "Perfect for formal occasions"
+                    },
+                    {
+                        id: "VH006B",
+                        name: "Light Blue Leather Belt", 
+                        category: "Finishing Touch", 
+                        price: 1250,
+                        size: "34",
+                        reasoning: "Completes the coordinated look perfectly",
+                        socialProof: "Essential accessory"
+                    },
+                    {
+                        id: "VH012B",
+                        name: "Light Blue Formal Shoes", 
+                        category: "Premium Footwear", 
+                        price: 3400,
+                        size: "9",
+                        reasoning: "Complete the professional light blue ensemble",
+                        socialProof: "Trending for tonal styling"
+                    },
+                    {
+                        id: "VH014B",
+                        name: "Light Blue Formal Socks", 
+                        category: "Final Detail", 
+                        price: 300,
+                        reasoning: "Perfect finishing touch - attention to detail matters!",
+                        socialProof: "Complete the look"
+                    }
+                    ];
+                    
+                    blueProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 250);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 Pro tip: Complete coordinated light blue outfit for a modern professional look! Would you like to add all items to cart?");
+                        addSuggestions([
+                            "Add all to cart",
+                            "Show complete outfit",
+                            "Modify selections",
+                            "See in-store"
+                        ]);
+                    }, 1800);
+                }, 100);
+                return "Analyzing your style preferences...";
+            }
+            
+            else if (msg.includes('blue') || msg.includes('navy') || msg.includes('show me blue') || msg.includes('want blue')) {
+                setTimeout(() => {
+                    addBotMessage("Excellent taste! Blue tones are always sophisticated.\n\nBased on your preferences, here's what I recommend:");
+                    
+
+                    const regularBlueProducts = [
+                    {
+                        id: "VH001",
+                        name: "Classic Blue Formal Shirt", 
+                        category: "Premium Quality", 
+                        price: 2500,
+                        size: "40",
+                        reasoning: "Our #1 seller for formal occasions - classic and versatile. Premium wrinkle-resistant fabric.",
+                        socialProof: "287 customers bought this month",
+                        urgency: "Only 3 left in Size 40 at Bandra!"
+                    },
+                    {
+                        id: "VH004",
+                        name: "Navy Blue Silk Tie", 
+                        category: "Perfect Match", 
+                        price: 800,
+                        reasoning: "Completes the blue tonal look - sophisticated!",
+                        socialProof: "Bestseller for office wear"
+                    },
+                    {
+                        id: "VH008",
+                        name: "Blue Formal Trousers", 
+                        category: "Complete the Look", 
+                        price: 2200,
+                        size: "32",
+                        reasoning: "Complete blue formal ensemble - professional and elegant",
+                        socialProof: "Top choice for business professionals"
+                    },
+                    {
+                        id: "VH006A",
+                        name: "Blue Leather Belt", 
+                        category: "Finishing Touch", 
+                        price: 1250,
+                        size: "34",
+                        reasoning: "Completes the coordinated blue outfit perfectly",
+                        socialProof: "Essential for formal wear"
+                    },
+                    {
+                        id: "VH012",
+                        name: "Blue Formal Shoes", 
+                        category: "Premium Footwear", 
+                        price: 3500,
+                        size: "9",
+                        reasoning: "Complete blue ensemble - sharp and modern",
+                        socialProof: "Trending for professionals"
+                    },
+                    {
+                        id: "VH014",
+                        name: "Blue Formal Socks", 
+                        category: "Final Detail", 
+                        price: 300,
+                        reasoning: "Perfect finishing touch - complete coordination!",
+                        socialProof: "Attention to detail matters"
+                    }
+                    ];
+                    
+                    regularBlueProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 250);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 Pro tip: These items create a complete professional outfit! Would you like to see the complete outfit or modify selections?");
+                        addSuggestions([
+                            "Show complete outfit",
+                            "Add matching accessories",
+                            "Add to cart",
+                            "See in-store"
+                        ]);
+                    }, 1800);
+                }, 100);
+                return "Analyzing your style preferences...";
+            }
+            
+            else if (msg.includes('white') || msg.includes('show me white') || msg.includes('want white') || msg.includes('classic white')) {
+                setTimeout(() => {
+                    addBotMessage("Classic and elegant choice!\n\nHere are my top recommendations:");
+                    
+                    const whiteProducts = [
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Timeless Classic", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "Most versatile piece - works for ANY occasion. Premium fabric, wrinkle-resistant.",
+                            socialProof: "320 customers bought this month (our #1 bestseller!)",
+                            urgency: "Limited stock - restocking next week"
+                        },
+                        {
+                            id: "VH005C",
+                            name: "White Silk Tie", 
+                            category: "Elegant Match", 
+                            price: 750,
+                            reasoning: "Elegant tonal white outfit - sophisticated and modern",
+                            socialProof: "Premium styling choice"
+                        },
+                        {
+                            id: "VH008E",
+                            name: "White Formal Trousers", 
+                            category: "Complete the Look", 
+                            price: 2400,
+                            size: "32",
+                            reasoning: "Complete white ensemble - sharp and professional",
+                            socialProof: "Perfect for summer office wear"
+                        },
+                        {
+                            id: "VH006C",
+                            name: "White Leather Belt", 
+                            category: "Finishing Touch", 
+                            price: 1250,
+                            size: "34",
+                            reasoning: "Maintains the clean white aesthetic",
+                            socialProof: "Essential accessory"
+                        },
+                        {
+                            id: "VH012C",
+                            name: "White Formal Shoes", 
+                            category: "Premium Footwear", 
+                            price: 3600,
+                            size: "9",
+                            reasoning: "Complete white formal look - ultra modern",
+                            socialProof: "Trending for formal events"
+                        },
+                        {
+                            id: "VH014C",
+                            name: "White Formal Socks", 
+                            category: "Final Detail", 
+                            price: 300,
+                            reasoning: "Perfect finishing touch - complete coordination!",
+                            socialProof: "Complete the ensemble"
+                        }
+                    ];
+                    
+                    whiteProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 250);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("Complete white ensemble - ultra modern and sophisticated! Want to add all items to cart?");
+                        addSuggestions([
+                            "Add all to cart",
+                            "Show complete outfit",
+                            "Modify selections",
+                            "See in-store"
+                        ]);
+                    }, 1800);
+                }, 100);
+                return "Curating elegant options for you...";
+            }
+            
+            else if (msg.includes('pastel') || msg.includes('light color') || msg.includes('pink') || msg.includes('lavender')) {
+                setTimeout(() => {
+                    addBotMessage("Beautiful pastel tones - perfect for weddings and special occasions!\n\nHere are my top recommendations:");
+                    
+                    const pastelProducts = [
+                        {
+                            id: "VH003",
+                            name: "Light Pink Formal Shirt", 
+                            category: "Wedding Special", 
+                            price: 2600,
+                            size: "40",
+                            reasoning: "Perfect for wedding season - photographs beautifully! Modern yet elegant.",
+                            socialProof: "Trending for spring weddings",
+                            urgency: "5 left in your size"
+                        },
+                        {
+                            id: "VH005D",
+                            name: "Pink Silk Tie", 
+                            category: "Perfect Match", 
+                            price: 750,
+                            reasoning: "Completes the pink tonal look - elegant for weddings",
+                            socialProof: "Popular for celebrations"
+                        },
+                        {
+                            id: "VH008F",
+                            name: "Pink Formal Trousers", 
+                            category: "Complete the Look", 
+                            price: 2350,
+                            size: "32",
+                            reasoning: "Complete pink formal ensemble - sophisticated and unique",
+                            socialProof: "Trending for weddings"
+                        },
+                        {
+                            id: "VH006D",
+                            name: "Pink Leather Belt", 
+                            category: "Finishing Touch", 
+                            price: 1200,
+                            size: "34",
+                            reasoning: "Completes the coordinated pink outfit",
+                            socialProof: "Perfect accessory"
+                        },
+                        {
+                            id: "VH012D",
+                            name: "Pink Formal Shoes", 
+                            category: "Statement Piece", 
+                            price: 3400,
+                            size: "9",
+                            reasoning: "Complete the pink ensemble - bold and elegant",
+                            socialProof: "Stand out at celebrations"
+                        },
+                        {
+                            id: "VH014D",
+                            name: "Pink Formal Socks", 
+                            category: "Final Detail", 
+                            price: 300,
+                            reasoning: "Perfect finishing touch for the complete look!",
+                            socialProof: "Attention to detail"
+                        }
+                    ];
+                    
+                    pastelProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 250);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("Complete pink ensemble - perfect for weddings and celebrations! Want to add all items?");
+                        addSuggestions([
+                            "Add all to cart",
+                            "Show complete outfit",
+                            "Modify selections",
+                            "See in-store"
+                        ]);
+                    }, 1800);
+                }, 100);
+                return "Curating elegant pastel options for you...";
+            }
+            
+            else if (msg.includes('dark') || msg.includes('black') || msg.includes('charcoal') ||
+                     msg.includes('show me dark') || msg.includes('want black') || msg.includes('grey')) {
+                setTimeout(() => {
+                    addBotMessage("Sophisticated choice! Dark colors exude elegance.\n\nHere's my curated selection:");
+
+                    const darkProducts = [
+                        {
+                            id: "VH010",
+                            name: "Black Formal Blazer", 
+                            category: "Power Dressing", 
+                            price: 5500,
+                            size: "40",
+                            reasoning: "Commands attention and respect - perfect for formal events and leadership roles",
+                            socialProof: "Executives' favorite choice",
+                            urgency: "Premium collection - limited availability"
+                        },
+                        {
+                            id: "VH002",
+                            name: "White Premium Formal Shirt", 
+                            category: "Classic Pair", 
+                            price: 2800,
+                            size: "40",
+                            reasoning: "Perfect contrast with black - timeless elegance",
+                            socialProof: "Classic combination"
+                        },
+                        {
+                            id: "VH008C",
+                            name: "Black Formal Trousers", 
+                            category: "Complete the Look", 
+                            price: 2300,
+                            size: "32",
+                            reasoning: "Complete all-black power suit - sophisticated and commanding",
+                            socialProof: "Essential for formal occasions"
+                        }
+                    ];
+                    
+                    darkProducts.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("Perfect for formal occasions! Want to complete the look?");
+                        addSuggestions([
+                            "Show complete outfit",
+                            "Add matching accessories",
+                            "Add to cart",
+                            "See in-store"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Curating dark formal collection...";
+            }
+            
+            // COMPLETE OUTFIT / ACCESSORIES (Level 4) - Enhanced
+            // First check if user needs help choosing an occasion
+            else if ((msg.includes('need outfit') || msg.includes('want outfit')) && msg.includes('occasion')) {
+                setTimeout(() => {
+                    addBotMessage("I'd be happy to help! Let me understand what you need.\n\nWhat's the occasion?");
+                    addSuggestions([
+                        "Office/Work",
+                        "Wedding/Party",
+                        "Interview/Meeting",
+                        "Just updating wardrobe"
+                    ]);
+                }, 100);
+                return "Let me help you find the perfect outfit! 👔";
+            }
+            
+            else if ((msg.includes('complete') && !msg.includes('payment')) || msg.includes('show complete outfit') || 
+                     msg.includes('show outfit') || msg.includes('full set') || msg.includes('show everything') || msg.includes('entire look')) {
+                setTimeout(() => {
+                    addBotMessage("Perfect! Here's a complete coordinated outfit:");
+                    
+                    // Determine which color outfit to show based on conversation context
+                    let completeOutfit = [];
+                    const conversationText = document.getElementById('chatMessages').innerText.toLowerCase();
+                    
+                    // Check for color preferences in order (most specific first)
+                    if (conversationText.includes('dark color') || conversationText.includes('black') || conversationText.includes('charcoal')) {
+                        completeOutfit = [
+                            {id: "VH010", name: "Black Formal Blazer", category: "Power Dressing", price: 5500, size: "40"},
+                            {id: "VH008C", name: "Black Formal Trousers", category: "Complete the Look", price: 2300, size: "32"},
+                            {id: "VH007", name: "Black Leather Belt", category: "Finishing Touch", price: 1300, size: "34"}
+                        ];
+                    } else if (conversationText.includes('light blue')) {
+                        completeOutfit = [
+                            {id: "VH001B", name: "Light Blue Formal Shirt", category: "Foundation Piece", price: 2450, size: "40"},
+                            {id: "VH008D", name: "Light Blue Formal Trousers", category: "Complete the Look", price: 2250, size: "32"},
+                            {id: "VH006B", name: "Light Blue Leather Belt", category: "Finishing Touch", price: 1250, size: "34"}
+                        ];
+                    } else if (conversationText.includes('pink')) {
+                        completeOutfit = [
+                            {id: "VH003", name: "Light Pink Formal Shirt", category: "Foundation Piece", price: 2600, size: "40"},
+                            {id: "VH008F", name: "Pink Formal Trousers", category: "Complete the Look", price: 2350, size: "32"},
+                            {id: "VH006D", name: "Pink Leather Belt", category: "Finishing Touch", price: 1200, size: "34"}
+                        ];
+                    } else if (conversationText.includes('white')) {
+                        completeOutfit = [
+                            {id: "VH002", name: "White Premium Formal Shirt", category: "Foundation Piece", price: 2800, size: "40"},
+                            {id: "VH008E", name: "White Formal Trousers", category: "Complete the Look", price: 2400, size: "32"},
+                            {id: "VH006C", name: "White Leather Belt", category: "Finishing Touch", price: 1250, size: "34"}
+                        ];
+                    } else {
+                        // Default blue outfit
+                        completeOutfit = [
+                            {id: "VH001", name: "Classic Blue Formal Shirt", category: "Foundation Piece", price: 2500, size: "40"},
+                            {id: "VH008", name: "Blue Formal Trousers", category: "Complete the Look", price: 2200, size: "32"},
+                            {id: "VH006A", name: "Blue Leather Belt", category: "Finishing Touch", price: 1250, size: "34"}
+                        ];
+                    }
+                    
+                    const totalPrice = completeOutfit.reduce((sum, item) => sum + item.price, 0);
+                    const bundlePrice = Math.round(totalPrice * 0.8);
+                    const savings = totalPrice - bundlePrice;
+                    
+                    completeOutfit.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage(`🎁 Bundle Offer: Get all 3 items with 20% off!\n\nOriginal: ₹${totalPrice.toLocaleString()}\nWith Bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${savings.toLocaleString()}!)\n\n✨ Why customers love this combo:\n👥 143 people bought this exact set last week\n⭐ 4.8/5 rating from verified buyers\n🏆 Most popular 3-piece outfit this month`);
+                        addSuggestions([
+                            "Add bundle to cart",
+                            "See styling tips",
+                            "Check store availability",
+                            "Show alternatives"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Building your complete outfit...";
+            }
+            
+            else if (msg.includes('accessor') || msg.includes('tie') || msg.includes('belt') ||
+                     msg.includes('wallet') || msg.includes('add accessories') || msg.includes('matching items')) {
+                setTimeout(() => {
+                    addBotMessage("Great! Here are accessories to complete your look:");
+                    
+                    const accessories = [
+                        {id: "VH004", name: "Navy Blue Silk Tie", category: "Premium Finish", price: 800},
+                        {id: "VH005", name: "Brown Leather Belt", category: "Elegant Touch", price: 1200},
+                        {id: "VH007", name: "Premium Wallet", category: "Final Touch", price: 1500}
+                    ];
+                    
+                    accessories.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    setTimeout(() => {
+                        addBotMessage("💡 Add 2+ accessories for 15% combo discount!");
+                        addSuggestions([
+                            "Add to cart",
+                            "See in-store",
+                            "Show more accessories",
+                            "Continue shopping"
+                        ]);
+                    }, 1200);
+                }, 100);
+                return "Finding perfect accessories...";
+            }
+            
+            // STORE ACTIONS (Level 5)
+            else if (msg.includes('see in') || msg.includes('see in-store') || (msg.includes('in') && msg.includes('store'))) {
+                return "Great! Here are stores where you can see and try these items:\n\n" +
+                       "📍 *Stores near you:*\n\n" +
+                       "🏪 *Bandra Store* (2km away)\n" +
+                       "Shop 23, Linking Road, Bandra West\n" +
+                       "⏰ Open until 10 PM\n" +
+                       "📦 All items in stock\n\n" +
+                       "🏪 *Powai Store* (5km away)\n" +
+                       "Phoenix Market City, Powai\n" +
+                       "⏰ Open until 11 PM\n" +
+                       "📦 Limited stock\n\n" +
+                       "🏪 *Andheri Store* (3km away)\n" +
+                       "Infinity Mall, Andheri West\n" +
+                       "⏰ Open until 10 PM\n" +
+                       "❌ Out of stock";
+            }
+            
+            // Handle store selection - redirect to kiosk
+            else if (msg.includes('bandra store') || msg === 'bandra store (2km)') {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                localStorage.setItem('current_step', '3');
+                localStorage.setItem('selected_store', 'bandra');
+                setTimeout(() => {
+                    addBotMessage("🏪 Taking you to Bandra Store kiosk...");
+                    setTimeout(() => {
+                        window.location.href = `kiosk.html?session=${sessionId}&store=bandra&source=chat&auto=true`;
+                    }, 800);
+                }, 300);
+                return "✅ *Bandra Store Selected!*\n\n" +
+                       "📍 Shop 23, Linking Road, Bandra West\n" +
+                       "⏰ Open until 10 PM\n" +
+                       "📦 All items in stock\n\n" +
+                       "Redirecting to store kiosk experience...";
+            }
+            
+            else if (msg.includes('powai store') || msg === 'powai store (5km)') {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                localStorage.setItem('current_step', '3');
+                localStorage.setItem('selected_store', 'powai');
+                setTimeout(() => {
+                    addBotMessage("🏪 Taking you to Powai Store kiosk...");
+                    setTimeout(() => {
+                        window.location.href = `kiosk.html?session=${sessionId}&store=powai&source=chat&auto=true`;
+                    }, 800);
+                }, 300);
+                return "✅ *Powai Store Selected!*\n\n" +
+                       "📍 Phoenix Market City, Powai\n" +
+                       "⏰ Open until 11 PM\n" +
+                       "📦 Limited stock\n\n" +
+                       "Redirecting to store kiosk experience...";
+            }
+            
+            else if (msg.includes('reserve at bandra') || msg === 'reserve at bandra (2km)') {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                localStorage.setItem('current_step', '3');
+                localStorage.setItem('selected_store', 'bandra');
+                setTimeout(() => {
+                    addBotMessage("Great! Redirecting you to Bandra Store kiosk...");
+                }, 500);
+                setTimeout(() => {
+                    window.location.href = `kiosk.html?session=${sessionId}&store=bandra&auto=true`;
+                }, 1500);
+                return "✅ *Reserved at Bandra Store!*\n\n" +
+                       "📍 Shop 23, Linking Road, Bandra West\n" +
+                       "📦 Your items will be ready when you arrive\n" +
+                       "⏰ Reserved for 24 hours\n\n" +
+                       "Redirecting to in-store kiosk experience...";
+            }
+            
+            else if (msg.includes('reserve at powai') || msg === 'reserve at powai (5km)') {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                localStorage.setItem('current_step', '3');
+                localStorage.setItem('selected_store', 'powai');
+                setTimeout(() => {
+                    addBotMessage("Great! Redirecting you to Powai Store kiosk...");
+                }, 500);
+                setTimeout(() => {
+                    window.location.href = `kiosk.html?session=${sessionId}&store=powai&auto=true`;
+                }, 1500);
+                return "✅ *Reserved at Powai Store!*\n\n" +
+                       "📍 Phoenix Market City, Powai\n" +
+                       "📦 Limited stock - please visit soon\n" +
+                       "⏰ Reserved for 24 hours\n\n" +
+                       "Redirecting to in-store kiosk experience...";
+            }
+            
+            else if (msg.includes('direction')) {
+                return "🗺️ *Directions to Bandra Store:*\n\n" +
+                       "📍 From your location (Bandra area):\n" +
+                       "• 2km away, 8-10 mins drive\n" +
+                       "• Via Linking Road\n\n" +
+                       "📞 Call for guidance: +91 22 1234 5678\n" +
+                       "🚗 Opening Google Maps...\n\n" +
+                       "💡 Your reserved items will be ready!";
+            }
+            
+            else if (msg.includes('call store')) {
+                return "📞 *Bandra Store Contact:*\n\n" +
+                       "+91 22 1234 5678\n" +
+                       "Open now until 10 PM\n\n" +
+                       "Our team can help with:\n" +
+                       "• Product availability\n" +
+                       "• Sizing guidance\n" +
+                       "• Reservation details\n" +
+                       "• Store directions";
+            }
+            
+            else if (msg.includes('cart') || msg.includes('my bag') || msg.includes('what did i add') ||
+                     msg.includes('show my items') || msg.includes('check my order')) {
+                setTimeout(() => {
+                    showCartWithModifyOption();
+                    const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    if (cartItems.length > 0) {
+                        setTimeout(() => {
+                            if (totalQty < 3) {
+                                addBotMessage("💡 Tip: Click + or - to modify quantities. Add more items to unlock 20% bundle discount!");
+                            } else {
+                                addBotMessage("✅ You've unlocked the 20% bundle discount!");
+                            }
+                            addSuggestions([
+                                "Proceed to checkout",
+                                "Add more items",
+                                "Apply discount code",
+                                "See delivery options"
+                            ]);
+                        }, 300);
+                    } else {
+                        setTimeout(() => {
+                            addSuggestions([
+                                "Show recommendations",
+                                "Browse formal wear",
+                                "See trending items"
+                            ]);
+                        }, 300);
+                    }
+                }, 300);
+                return "Let me show you your cart with modify options:";
+            }
+            
+            else if (msg.includes('proceed') || msg.includes('checkout') || msg.includes('buy now') ||
+                     msg.includes('complete order') || msg.includes('place order') || msg.includes('pay now')) {
+                setTimeout(() => {
+                    addBotMessage("You can complete your purchase in two ways:");
+                }, 300);
+                setTimeout(() => {
+                    addBotMessage("🏪 Visit our stores to try items:");
+                    addSuggestions([
+                        "Reserve at Bandra (2km)",
+                        "Reserve at Powai (5km)",
+                        "Get directions",
+                        "Call store for details"
+                    ]);
+                }, 600);
+                setTimeout(() => {
+                    addBotMessage("📦 Or get home delivery:");
+                    addSuggestions([
+                        "Express delivery (Tomorrow)",
+                        "Standard delivery (2-3 days)",
+                        "Continue shopping"
+                    ]);
+                }, 1200);
+                return "💳 *Ready to checkout!*\n\n" +
+                       "Cart Total: ₹2,970\n" +
+                       "Loyalty Points Available: 500 (₹200 value)\n\n" +
+                       "Choose how you'd like to proceed...";
+            }
+            
+            // ADD TO CART Intent
+            else if (msg.includes('add to cart') || msg.includes('add this') || msg.includes('i want this') ||
+                     msg.includes('buy this') || msg.includes('i\'ll take') || msg.includes('add it')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Proceed to checkout",
+                        "View cart",
+                        "Continue shopping",
+                        "See in-store"
+                    ]);
+                }, 500);
+                return "✅ *Added to cart!*\n\n" +
+                       "Your cart now has 3 items\n" +
+                       "🎁 Bundle discount applied: 20% off\n" +
+                       "New total: ₹3,600 (saved ₹900!)\n\n" +
+                       "Ready to checkout?";
+            }
+            
+            // PAYMENT & LOYALTY - Enhanced
+            else if (msg.includes('apply loyalty') || msg.includes('loyalty points') || msg.includes('use points') ||
+                     msg.includes('redeem points') || msg.includes('apply my points')) {
+                setTimeout(() => {
+                    addBotMessage("Points applied successfully! Ready to complete your order:");
+                    addSuggestions([
+                        "Complete payment",
+                        "Apply discount code",
+                        "Change delivery option",
+                        "Continue shopping"
+                    ]);
+                }, 500);
+                return "✨ *Loyalty Points Applied!*\n\n" +
+                       "Used: 500 points (-₹200)\n\n" +
+                       "*Updated Order Summary:*\n" +
+                       "Cart: ₹2,970\n" +
+                       "Loyalty Discount: -₹200\n" +
+                       "Delivery: ₹99\n" +
+                       "Final Total: ₹2,869\n\n" +
+                       "💰 You saved ₹530 on this order!";
+            }
+            
+            else if (msg.includes('complete payment') || msg.includes('pay now')) {
+                setTimeout(() => {
+                    addBotMessage("Payment methods available:");
+                    addSuggestions([
+                        "Credit/Debit Card",
+                        "UPI",
+                        "Net Banking",
+                        "Cash on Delivery"
+                    ]);
+                }, 500);
+                return "💳 *Select Payment Method*\n\n" +
+                       "Final Amount: ₹2,869\n\n" +
+                       "Available payment options:\n" +
+                       "💳 Cards (Instant discount available)\n" +
+                       "📱 UPI (5% cashback)\n" +
+                       "🏦 Net Banking\n" +
+                       "💵 Cash on Delivery (+₹50)";
+            }
+            
+            else if (msg.includes('credit') || msg.includes('debit') || msg.includes('card') || msg.includes('upi') || msg.includes('net banking')) {
+                setTimeout(() => {
+                    addBotMessage("Processing payment...");
+                }, 300);
+                setTimeout(() => {
+                    addBotMessage("✅ Payment Successful!\n\nRedirecting to order confirmation...");
+                }, 1000);
+                setTimeout(() => {
+                    // Save cart and redirect to post-purchase
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    localStorage.setItem('orderTotal', cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0));
+                    window.location.href = 'post-purchase.html';
+                }, 2000);
+                return "💳 *Payment Processing...*\n\nPlease wait while we confirm your payment...";
+            }
+            
+            else if (msg.includes('upi')) {
+                return "📱 *UPI Payment*\n\n" +
+                       "Scan QR code or use UPI ID:\n" +
+                       "vanheusen@paytm\n\n" +
+                       "Amount: ₹2,869\n" +
+                       "🎁 Get 5% cashback (₹143)\n\n" +
+                       "Waiting for payment confirmation...";
+            }
+            
+            // DISCOUNT CODE
+            else if (msg.includes('apply discount') || msg.includes('discount code') || msg.includes('promo code')) {
+                setTimeout(() => {
+                    addBotMessage("Enter your code or try these:");
+                    addSuggestions([
+                        "FIRST20 (20% off)",
+                        "WEDDING15 (15% off)",
+                        "LOYALTY10 (10% off)",
+                        "Skip and continue"
+                    ]);
+                }, 300);
+                return "🎁 *Apply Discount Code*\n\n" +
+                       "Available offers:\n" +
+                       "• FIRST20 - 20% off first order\n" +
+                       "• WEDDING15 - 15% off formal wear\n" +
+                       "• LOYALTY10 - 10% off (auto-applied)\n\n" +
+                       "Current discount: 10% (₹330)";
+            }
+            
+            else if (msg.includes('first20') || msg.includes('wedding15') || msg.includes('loyalty10')) {
+                // Calculate cart totals dynamically
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const discountPercent = msg.includes('first20') ? 20 : msg.includes('wedding15') ? 15 : 10;
+                const discountAmount = Math.round(subtotal * discountPercent / 100);
+                const total = subtotal - discountAmount;
+                const codeName = msg.includes('first20') ? 'FIRST20' : msg.includes('wedding15') ? 'WEDDING15' : 'LOYALTY10';
+                
+                setTimeout(() => {
+                    addBotMessage("What would you like to do next?");
+                    addSuggestions([
+                        "Continue shopping",
+                        "Check store availability",
+                        "Visit store dashboard"
+                    ]);
+                }, 500);
+                
+                return `✅ *Discount Applied!*\n\n` +
+                       `Code: ${codeName}\n` +
+                       `Discount: ${discountPercent}% off\n\n` +
+                       `*Updated Cart:*\n` +
+                       `Subtotal: ₹${subtotal.toLocaleString()}\n` +
+                       `Discount (${discountPercent}%): -₹${discountAmount.toLocaleString()}\n` +
+                       `New Total: ₹${total.toLocaleString()}\n\n` +
+                       `💰 You're saving ₹${discountAmount.toLocaleString()}!`;
+            }
+            
+            else if (msg.includes('add') && (msg.includes('cart') || msg.includes('bundle'))) {
+                return "✅ *Added to cart!*\n\n" +
+                       "Your cart now has 3 items\n" +
+                       "🎁 Bundle discount applied: 20% off\n" +
+                       "New total: ₹3,600 (saved ₹900!)\n\n" +
+                       "Ready to checkout?";
+            }
+            
+            // VISIT STORE - Route to Kiosk
+            else if (msg.includes('visit store') || msg.includes('store dashboard') || msg.includes('go to store')) {
+                // Save cart to localStorage and redirect to kiosk
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                localStorage.setItem('current_step', '3');
+                setTimeout(() => {
+                    window.location.href = `kiosk.html?session=${sessionId}&auto=true`;
+                }, 500);
+                return "🏪 *Great! Let's continue at our store kiosk...*\n\n" +
+                       "I'm redirecting you to our in-store kiosk experience where you can:\n" +
+                       "• Scan products with barcode\n" +
+                       "• Reserve items for try-on\n" +
+                       "• Complete payment at POS terminal\n\n" +
+                       "Your cart and preferences are being transferred...";
+            }
+            
+            // STORES & LOCATION - Enhanced with natural language
+            else if (msg.includes('store') || msg.includes('location') || msg.includes('where can i') ||
+                     msg.includes('near me') || msg.includes('nearest store') || msg.includes('shop location')) {
+                // Track activity
+                trackActivity('Web Chat', 'Checked store availability');
+                
+                return "📍 *Stores near you:*\n\n" +
+                       "🏪 *Bandra Store* (2km away)\n" +
+                       "Shop 23, Linking Road, Bandra West\n" +
+                       "⏰ Open until 10 PM\n\n" +
+                       "🏪 *Powai Store* (5km away)\n" +
+                       "Phoenix Market City, Powai\n" +
+                       "⏰ Open until 11 PM";
+            }
+            
+            // DELIVERY OPTIONS - Enhanced with natural variations
+            else if (msg.includes('express') || msg.includes('fast delivery') || msg.includes('tomorrow') ||
+                     msg.includes('quick delivery') || msg.includes('urgent')) {
+                // Calculate real cart total
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const deliveryCharge = 99;
+                const total = subtotal + deliveryCharge;
+                
+                setTimeout(() => {
+                    addBotMessage("Great choice! Let's finalize your order:");
+                    addSuggestions([
+                        "Complete payment",
+                        "Use loyalty points",
+                        "Change delivery",
+                        "Apply discount code"
+                    ]);
+                }, 500);
+                return "✅ *Express Delivery Selected!*\n\n" +
+                       "📦 Delivery by Tomorrow, 10 AM\n" +
+                       "💰 Delivery charge: ₹99\n\n" +
+                       "*Order Summary:*\n" +
+                       `Cart: ₹${subtotal.toLocaleString()}\n` +
+                       "Delivery: ₹99\n" +
+                       `Total: ₹${total.toLocaleString()}\n\n` +
+                       "💡 Use 500 loyalty points to save ₹200!";
+            }
+            
+            else if (msg.includes('standard delivery') || msg === 'standard delivery (2-3 days)') {
+                // Calculate real cart total
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const deliveryCharge = subtotal >= 2500 ? 0 : 49;
+                const total = subtotal + deliveryCharge;
+                
+                setTimeout(() => {
+                    addBotMessage("Perfect! Let's finalize your order:");
+                    addSuggestions([
+                        "Complete payment",
+                        "Use loyalty points",
+                        "Change delivery",
+                        "Apply discount code"
+                    ]);
+                }, 500);
+                return "✅ *Standard Delivery Selected!*\n\n" +
+                       "📦 Delivery in 2-3 business days\n" +
+                       `💰 Delivery: ${deliveryCharge === 0 ? 'FREE (order above ₹2,500)' : '₹49'}\n\n` +
+                       "*Order Summary:*\n" +
+                       `Cart: ₹${subtotal.toLocaleString()}\n` +
+                       `Delivery: ${deliveryCharge === 0 ? 'FREE' : '₹49'}\n` +
+                       `Total: ₹${total.toLocaleString()}\n\n` +
+                       "💡 Use 500 loyalty points to save ₹200!";
+            }
+            
+            else if (msg.includes('store pickup') || msg === 'store pickup (today)') {
+                // Calculate real cart total
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                setTimeout(() => {
+                    addBotMessage("You can pick up from:");
+                    addSuggestions([
+                        "Bandra Store",
+                        "Powai Store",
+                        "Change to delivery",
+                        "Complete order"
+                    ]);
+                }, 500);
+                return "✅ *Store Pickup Selected!*\n\n" +
+                       "📍 Pick up today after 6 PM\n" +
+                       "💰 Pickup: FREE\n\n" +
+                       "*Order Summary:*\n" +
+                       `Cart: ₹${subtotal.toLocaleString()}\n` +
+                       "Pickup: FREE\n" +
+                       `Total: ₹${subtotal.toLocaleString()}\n\n` +
+                       "Select your preferred store...";
+            }
+            
+            // DELIVERY - Enhanced with customer questions
+            else if (msg.includes('delivery') || msg.includes('shipping') || msg.includes('how will') ||
+                     msg.includes('when will i get') || msg.includes('delivery time') || msg.includes('ship')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Express (Tomorrow)",
+                        "Standard (2-3 days)",
+                        "Store Pickup (Today)",
+                        "View more details"
+                    ]);
+                }, 500);
+                return "📦 *Delivery Options:*\n\n" +
+                       "⚡ *Express Delivery*\n" +
+                       "Tomorrow by 10 AM - ₹99\n\n" +
+                       "📦 *Standard Delivery*\n" +
+                       "2-3 business days - FREE (orders above ₹2,500)\n\n" +
+                       "🏪 *Store Pickup*\n" +
+                       "Today after 6 PM - FREE";
+            }
+            
+            // PRICE & OFFERS - Enhanced
+            else if (msg.includes('price') || msg.includes('cost') || msg.includes('how much') ||
+                     msg.includes('what is the price') || msg.includes('rate')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Show formal shirts",
+                        "View all offers",
+                        "Check my cart",
+                        "Continue shopping"
+                    ]);
+                }, 500);
+                return "💰 *Price Ranges:*\n\n" +
+                       "👔 Formal Shirts: ₹2,000 - ₹3,500\n" +
+                       "👔 Ties: ₹700 - ₹1,200\n" +
+                       "👔 Belts: ₹1,000 - ₹1,500\n" +
+                       "👖 Trousers: ₹2,000 - ₹3,000\n\n" +
+                       "🎁 *Active Offers:*\n" +
+                       "• 3+ items: 20% off\n" +
+                       "• Shirt + Tie: 15% off";
+            }
+            
+            else if (msg.includes('offer') || msg.includes('discount') || msg.includes('deal')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Add 3 items (20% off)",
+                        "Buy Shirt + Tie (15% off)",
+                        "Use loyalty points",
+                        "Start shopping"
+                    ]);
+                }, 500);
+                return "🎁 *Current Offers:*\n\n" +
+                       "1️⃣ *Bundle Bonanza*\n" +
+                       "Buy 3+ items → 20% OFF\n\n" +
+                       "2️⃣ *Perfect Pair*\n" +
+                       "Shirt + Tie → 15% OFF\n\n" +
+                       "3️⃣ *Loyalty Reward*\n" +
+                       "You have 500 points = ₹200 discount\n\n" +
+                       "4️⃣ *Free Delivery*\n" +
+                       "Orders above ₹2,500";
+            }
+            
+            // SIZE
+            else if (msg.includes('size') || msg.includes('fit')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Show size 40 shirts",
+                        "View size chart",
+                        "I need help with sizing",
+                        "Continue browsing"
+                    ]);
+                }, 500);
+                return "📏 *Size Guide:*\n\n" +
+                       "*Shirts:* 38, 40, 42, 44, 46\n" +
+                       "*Trousers:* 30, 32, 34, 36, 38\n" +
+                       "*Belts:* 32, 34, 36, 38\n\n" +
+                       "💡 *Based on your profile:*\n" +
+                       "Size 40 fits you perfectly!";
+            }
+            
+            // SHIRTS & FORMAL WEAR
+            else if (msg.includes('shirt') || msg.includes('formal')) {
+                setTimeout(() => {
+                    addBotMessage("Let me show you our formal shirt collection:");
+                    
+                    const shirts = [
+                        {id: "VH001", name: "Classic Blue Formal Shirt", category: "Formal Shirts", price: 2500, size: "40"},
+                        {id: "VH002", name: "White Premium Formal Shirt", category: "Formal Shirts", price: 2800, size: "40"},
+                        {id: "VH008", name: "Light Pink Formal Shirt", category: "Formal Shirts", price: 2600, size: "40"}
+                    ];
+                    
+                    shirts.forEach((shirt, i) => {
+                        setTimeout(() => addProductCard(shirt), i * 300);
+                    });
+                    
+                    // Add suggestions after products load
+                    setTimeout(() => {
+                        addSuggestions([
+                            "Add to cart",
+                            "View more colors",
+                            "Check size guide",
+                            "See matching ties"
+                        ]);
+                    }, 1000);
+                }, 100);
+                
+                return "Looking at our formal shirt collection...";
+            }
+            
+            // RECOMMENDATIONS
+            else if (msg.includes('recommend') || msg.includes('suggest') || msg.includes('match') || msg.includes('goes with')) {
+                setTimeout(() => {
+                    addBotMessage("Based on your browsing history and preferences, here's what I recommend:");
+                    
+                    const recommendations = [
+                        {id: "VH004", name: "Navy Blue Silk Tie", category: "Perfect match for formal shirts", price: 800},
+                        {id: "VH005", name: "Brown Leather Belt", category: "Completes the formal look", price: 1200},
+                        {id: "VH003", name: "Navy Formal Trousers", category: "Complete your outfit", price: 2200, size: "32"}
+                    ];
+                    
+                    recommendations.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    // Add suggestions after products load
+                    setTimeout(() => {
+                        addSuggestions([
+                            "Add bundle to cart",
+                            "View more recommendations",
+                            "Check my cart",
+                            "Start from scratch"
+                        ]);
+                    }, 1000);
+                }, 100);
+                
+                return "Analyzing your style preferences...";
+            }
+            
+            // NEW ARRIVALS
+            else if (msg.includes('new') || msg.includes('arrival') || msg.includes('latest')) {
+                setTimeout(() => {
+                    addBotMessage("Here are our latest additions to the collection:");
+                    
+                    const newArrivals = [
+                        {id: "VH012", name: "Premium Linen Shirt", category: "New Arrival - Summer Collection", price: 3200, size: "40"},
+                        {id: "VH013", name: "Silk Blend Tie", category: "New Arrival - Premium", price: 1100},
+                        {id: "VH014", name: "Italian Leather Belt", category: "New Arrival - Luxury", price: 1800}
+                    ];
+                    
+                    newArrivals.forEach((item, i) => {
+                        setTimeout(() => addProductCard(item), i * 300);
+                    });
+                    
+                    // Add suggestions after products load
+                    setTimeout(() => {
+                        addSuggestions([
+                            "Add to cart",
+                            "View entire collection",
+                            "Check availability",
+                            "See more new items"
+                        ]);
+                    }, 1000);
+                }, 100);
+                
+                return "Let me show you what just arrived! ✨";
+            }
+            
+            // STOCK CHECK
+            else if (msg.includes('stock') || msg.includes('available') || msg.includes('in stock')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Reserve these items",
+                        "Check other sizes",
+                        "See similar products",
+                        "Add to cart"
+                    ]);
+                }, 500);
+                return "📦 *Stock Status:*\n\n" +
+                       "All your cart items are in stock:\n" +
+                       "• Blue Formal Shirt (Size 40) - 3 available at Bandra\n" +
+                       "• Navy Blue Tie - 5 available at Bandra\n\n" +
+                       "Would you like to:\n" +
+                       "• Reserve these items?\n" +
+                       "• Check other sizes?\n" +
+                       "• See similar products?";
+            }
+            
+            // GREETING - Only show full welcome if it's a new conversation
+            else if (msg.includes('hi') || msg.includes('hello') || msg.includes('hey') || msg === 'hie' || msg === 'hye') {
+                const convo = findConversation(currentConversationId);
+                const messageCount = convo ? convo.messages.length : 0;
+                
+                // If already chatting, just acknowledge
+                if (messageCount > 2) {
+                    setTimeout(() => {
+                        addSuggestions([
+                            "Show me formal shirts",
+                            "View my cart",
+                            "Check offers",
+                            "Find store near me"
+                        ]);
+                    }, 500);
+                    return "Yes, I'm here! How can I help you? 😊";
+                }
+                
+                // First time greeting
+                setTimeout(() => {
+                    addBotMessage("How can I assist you today?");
+                }, 100);
+                return "Hello! 👋 Great to see you!";
+            }
+            
+            // HELP
+            else if (msg.includes('help')) {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Find formal wear",
+                        "Check store locations",
+                        "View my cart",
+                        "See current offers"
+                    ]);
+                }, 500);
+                return "I'm here to help! 🤝\n\n" +
+                       "*I can assist you with:*\n" +
+                       "• Finding formal wear\n" +
+                       "• Understanding your preferences\n" +
+                       "• Checking store locations\n" +
+                       "• Your cart and orders\n" +
+                       "• Recommendations & offers\n\n" +
+                       "What would you like help with?";
+            }
+            
+            // DEFAULT
+            else {
+                setTimeout(() => {
+                    addSuggestions([
+                        "Looking for formal wear",
+                        "Show recommendations",
+                        "View current offers",
+                        "Find nearest store"
+                    ]);
+                }, 500);
+                return "Let me help you find what you need! 🎯\n\nTry: 'Looking for formal wear' or 'Show recommendations'";
+            }
+        }
+
+        function addContextualSuggestions(message) {
+            const msg = message.toLowerCase();
+            let suggestions = [];
+            
+            // Note: Most suggestions are now added inline in getSmartFallback, so this function
+            // only handles a few legacy cases to avoid duplicates
+            
+            // After complete outfit shown
+            if (msg.includes('complete outfit') || (msg.includes('outfit') && !msg.includes('need') && !msg.includes('looking'))) {
+                suggestions = ["Add bundle to cart", "See in-store", "Modify selections", "Add formal trousers"];
+            }
+            // After "see in-store" 
+            else if (msg.includes('see in-store') || msg.includes('see in store')) {
+                suggestions = ["Reserve at Bandra (2km)", "Reserve at Powai (5km)", "Get directions", "Call store for details"];
+            }
+            // After store reservation
+            else if (msg.includes('reserve at')) {
+                suggestions = ["Get directions to Bandra", "Call store", "Proceed to checkout", "Continue shopping"];
+            }
+            // Default helpful suggestions (only if no specific match and early in conversation)
+            else if (!msg.includes('accessor') && !msg.includes('shirt') && !msg.includes('recommend') && !msg.includes('new') && !msg.includes('stock') && !msg.includes('direction') && !msg.includes('call')) {
+                const convo = findConversation(currentConversationId);
+                const messageCount = convo ? convo.messages.length : 0;
+                
+                // Only show default suggestions if conversation just started
+                if (messageCount <= 2) {
+                    suggestions = ["Looking for formal wear", "Need outfit suggestions", "Check my cart", "Store locations"];
+                }
+            }
+            
+            // Add suggestions if we found any
+            if (suggestions.length > 0) {
+                setTimeout(() => addSuggestions(suggestions), 300);
+            }
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        }
+
+        // Enter key to send
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isProcessing) {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

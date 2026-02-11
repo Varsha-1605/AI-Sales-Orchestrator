@@ -1,0 +1,1029 @@
+<!-- STORE-DASHBOARD.HTML - PREMIUM VERSION -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Associate Dashboard - Van Heusen Bandra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            animation: slideDown 0.6s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .customer-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 0 0 20px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease 0.1s backwards;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .customer-profile {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            animation: scaleIn 0.6s ease 0.2s backwards;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .avatar img {
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+            object-position: center 20%;
+            transition: transform 0.3s ease;
+        }
+        .avatar:hover img {
+            transform: scale(1.1);
+        }
+        /* Image Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+        .image-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+        .modal-content img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .close-modal {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .customer-info h2 { 
+            margin-bottom: 8px;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        .customer-info p { 
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+        .loyalty-badge {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1a1a1a;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            animation: shine 2s infinite;
+        }
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            animation: slideUp 0.6s ease 0.3s backwards;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        .activity-container {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .activity-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .activity-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        .activity-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 3px;
+        }
+        .activity-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+        .activity-container {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .activity-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .activity-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        .activity-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 3px;
+        }
+        .activity-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+        .activity-item {
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .activity-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+        .activity-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #667eea;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .product-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .cart-qty-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .cart-qty-btn:hover {
+            background: #5568d3;
+        }
+        .cart-qty {
+            min-width: 25px;
+            text-align: center;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+        .cart-remove {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: auto;
+            transition: all 0.3s;
+        }
+        .cart-remove:hover {
+            background: #ee5a6f;
+        }
+        .recommendation {
+            padding: 18px;
+            margin: 12px 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .recommendation:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .notification-item {
+            padding: 20px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+            color: #2c3e50;
+            animation: slideInRight 0.5s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .notification-item strong {
+            display: block;
+            font-size: 1.2em;
+            color: #ff6b6b;
+            margin-bottom: 8px;
+        }
+        
+        .notification-item .details {
+            color: #555;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .notification-item .timestamp {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .notification-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .notification-actions .acknowledge {
+            background: #38ef7d;
+            color: white;
+        }
+        
+        .notification-actions .acknowledge:hover {
+            background: #2dd66b;
+        }
+        
+        .notification-actions .dismiss {
+            background: rgba(255,255,255,0.3);
+            color: #2c3e50;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            animation: slideUp 0.6s ease 0.5s backwards;
+        }
+        .btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .sections { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div>
+                <h1>🏪 Store Associate Dashboard</h1>
+                <p>Bandra Store | Associate: Priya Sharma | Real-time Customer Insights</p>
+            </div>
+            <button onclick="loadCartFromSession()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🔄 Refresh Cart</button>
+        </div>
+        
+        <div class="customer-card">
+            <div class="customer-profile">
+                <div class="avatar" onclick="openImageModal('images/rahul.jpg', 'Rahul Sharma')" title="Click to view full image">
+                    <img src="images/rahul.jpg" alt="Rahul Sharma" />
+                </div>
+                <div class="customer-info">
+                    <h2>Rahul Sharma</h2>
+                    <p>📞 +91 98765 43210</p>
+                    <p>📍 Bandra, Mumbai (2km away)</p>
+                    <span class="loyalty-badge">⭐ Gold Member • 500 Points</span>
+                </div>
+            </div>
+            
+            <div class="sections">
+                <!-- Kiosk Notifications -->
+                <div class="section" id="notificationsSection" style="display: none; grid-column: 1 / -1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); animation: slideIn 0.5s ease;">
+                    <h3>🔔 Kiosk Notifications</h3>
+                    <div id="kioskNotifications"></div>
+                </div>
+                
+                <div class="section">
+                    <h3>📱 Recent Online Activity</h3>
+                    <div class="activity-container" id="recentActivityContainer">
+                        <!-- Dynamic activity items will be rendered here -->
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>🛒 Cart Contents</h3>
+                    <div id="dashboardCartItems">
+                        <!-- Dynamic cart items will be rendered here -->
+                    </div>
+                    <div id="dashboardCartTotals" style="margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.1);">
+                        <!-- Dynamic totals will be rendered here -->
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>💡 AI Recommendations</h3>
+                    <div class="recommendation">
+                        <strong style="color: #667eea; font-size: 1.1em;">Brown Leather Belt</strong><br>
+                        78% match with customer's style<br>
+                        <small style="color: rgba(255,255,255,0.7);">💡 Complete the formal look • ₹1,200</small>
+                    </div>
+                    <div class="recommendation">
+                        <strong style="color: #667eea; font-size: 1.1em;">Navy Formal Trousers</strong><br>
+                        72% match rate<br>
+                        <small style="color: rgba(255,255,255,0.7);">🎁 Bundle offer available • ₹2,200</small>
+                    </div>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(56, 239, 125, 0.1); border-radius: 12px; border: 1px solid rgba(56, 239, 125, 0.3);">
+                        <strong style="color: #38ef7d;">💰 Upsell Opportunity</strong><br>
+                        <small>Add belt to unlock 20% bundle discount<br>
+                        Potential AOV increase: +35%</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="processCheckout()">
+                    💳 Process Checkout
+                </button>
+                <button class="btn btn-success" onclick="applyOffers()">
+                    🎁 Apply Bundle Offer (20% off)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        // Load recent activity from localStorage
+        function loadRecentActivity() {
+            const activities = JSON.parse(localStorage.getItem('recentActivity') || '[]');
+            const container = document.getElementById('recentActivityContainer');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">No recent activity</div>';
+                return;
+            }
+            
+            // Show latest activities (most recent first)
+            const sortedActivities = activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            container.innerHTML = sortedActivities.map(activity => {
+                const timeAgo = getTimeAgo(new Date(activity.timestamp));
+                return `
+                    <div class="activity-item">
+                        <strong>${activity.channel}</strong>
+                        ${activity.action}<br>
+                        <small style="color: rgba(255,255,255,0.6);">${timeAgo}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Load recent activity from localStorage
+        function loadRecentActivity() {
+            const activities = JSON.parse(localStorage.getItem('recentActivity') || '[]');
+            const container = document.getElementById('recentActivityContainer');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">No recent activity</div>';
+                return;
+            }
+            
+            // Show latest activities (most recent first)
+            const sortedActivities = activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            container.innerHTML = sortedActivities.map(activity => {
+                const timeAgo = getTimeAgo(new Date(activity.timestamp));
+                return `
+                    <div class="activity-item">
+                        <strong>${activity.channel}</strong>
+                        ${activity.action}<br>
+                        <small style="color: rgba(255,255,255,0.6);">${timeAgo}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+        const sessionId = localStorage.getItem('session_id');
+        let cartItems = [];
+
+        async function loadCartFromSession() {
+            // Load cart from shared localStorage (synced from chat/whatsapp)
+            const savedCart = localStorage.getItem('cartItems');
+            console.log('Loading cart from localStorage:', savedCart);
+            
+            if (savedCart) {
+                try {
+                    cartItems = JSON.parse(savedCart);
+                    console.log('Parsed cartItems:', cartItems);
+                } catch (e) {
+                    console.error('Error parsing cart:', e);
+                    cartItems = [];
+                }
+            } else {
+                console.log('No cart found in localStorage, fetching from backend...');
+                
+                // Fetch from backend as fallback
+                try {
+                    const response = await fetch(`${API_URL}/api/session/${sessionId}`);
+                    if (response.ok) {
+                        const sessionData = await response.json();
+                        console.log('Session data from backend:', sessionData);
+                        
+                        if (sessionData.cart && sessionData.cart.length > 0) {
+                            cartItems = sessionData.cart.map(item => ({
+                                id: item.product_id,
+                                name: item.product_name || 'Product',
+                                price: item.price || 0,
+                                size: item.size,
+                                quantity: item.quantity || 1
+                            }));
+                            console.log('Cart loaded from backend:', cartItems);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching cart from backend:', error);
+                }
+                
+                cartItems = cartItems || [];
+            }
+            
+            renderDashboardCart();
+            checkKioskNotifications();
+            
+            // Auto-refresh every 2 seconds to show real-time updates
+            setInterval(() => {
+                const updatedCart = localStorage.getItem('cartItems');
+                if (updatedCart) {
+                    const newCartItems = JSON.parse(updatedCart);
+                    // Only re-render if cart changed
+                    if (JSON.stringify(newCartItems) !== JSON.stringify(cartItems)) {
+                        console.log('Cart updated, re-rendering...');
+                        cartItems = newCartItems;
+                        renderDashboardCart();
+                    }
+                }
+                
+                // Check for new notifications
+                checkKioskNotifications();
+            }, 2000);
+        }
+
+        function renderDashboardCart() {
+            const itemsContainer = document.getElementById('dashboardCartItems');
+            const totalsContainer = document.getElementById('dashboardCartTotals');
+            
+            if (cartItems.length === 0) {
+                itemsContainer.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">🛒 Cart is empty</div>';
+                totalsContainer.innerHTML = '';
+                return;
+            }
+            
+            let itemsHtml = '';
+            let subtotal = 0;
+            
+            cartItems.forEach(item => {
+                const itemTotal = item.price * (item.quantity || 1);
+                subtotal += itemTotal;
+                itemsHtml += `
+                    <div class="product-item">
+                        <div style="flex: 1;">
+                            <strong>${item.name}</strong><br>
+                            ${item.size ? `Size: ${item.size} | ` : 'One Size | '}Qty: <span id="dash-qty-${item.id}">${item.quantity || 1}</span>
+                            <div class="cart-controls">
+                                <button class="cart-qty-btn" onclick="updateDashboardQuantity('${item.id}', ${item.price}, -1)">−</button>
+                                <span class="cart-qty" id="dash-qty-display-${item.id}">${item.quantity || 1}</span>
+                                <button class="cart-qty-btn" onclick="updateDashboardQuantity('${item.id}', ${item.price}, 1)">+</button>
+                                <button class="cart-remove" onclick="removeFromDashboardCart('${item.id}', '${item.name}')">× Remove</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <strong style="color: #667eea; font-size: 1.2em;" id="dash-price-${item.id}">₹${itemTotal.toLocaleString()}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const discount = totalQty >= 3 ? 0.2 : 0.1;
+            const discountAmount = Math.round(subtotal * discount);
+            const total = subtotal - discountAmount;
+            
+            itemsContainer.innerHTML = itemsHtml;
+            
+            const upsellHtml = totalQty < 3 ? `
+                <div style="margin-top: 15px; padding: 12px; background: rgba(255, 215, 0, 0.1); border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                    <div style="font-size: 0.9em; color: rgba(255, 215, 0, 0.9); margin-bottom: 5px;">
+                        💡 <strong>Add ${3 - totalQty} more item${3 - totalQty > 1 ? 's' : ''} to unlock:</strong>
+                    </div>
+                    <div style="font-size: 0.85em; color: rgba(255,255,255,0.8);">
+                        • 20% Bundle Discount (instead of ${discount * 100}%)<br>
+                        • Additional ₹${Math.round(subtotal * 0.1)} savings!<br>
+                        • Recommended: Brown Leather Belt (₹1,200)
+                    </div>
+                </div>
+            ` : '';
+            
+            totalsContainer.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Subtotal:</span>
+                    <strong id="dash-subtotal">₹${subtotal.toLocaleString()}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; color: #38ef7d; margin-bottom: 8px;">
+                    <span>Discount (<span id="dash-discount-pct">${discount * 100}%</span> - ${totalQty} items):</span>
+                    <strong id="dash-discount">-₹${discountAmount.toLocaleString()}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 1.3em;">
+                    <strong>Current Total:</strong>
+                    <strong style="color: #667eea;" id="dash-total">₹${total.toLocaleString()}</strong>
+                </div>
+                ${upsellHtml}
+            `;
+        }
+
+        async function updateDashboardQuantity(productId, price, change) {
+            const item = cartItems.find(item => item.id === productId);
+            if (!item) return;
+
+            const newQty = (item.quantity || 1) + change;
+            if (newQty <= 0) {
+                removeFromDashboardCart(productId, item.name);
+                return;
+            }
+            
+            item.quantity = newQty;
+            
+            // Save to shared localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Re-render entire cart
+            renderDashboardCart();
+            
+            // Update backend
+            try {
+                await fetch(`${API_URL}/api/cart/update`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: newQty
+                    })
+                });
+            } catch (error) {
+                console.error('Cart update error:', error);
+            }
+        }
+
+        async function removeFromDashboardCart(productId, productName) {
+            console.log('Removing from dashboard cart:', productId, productName);
+            
+            // Remove from cartItems array
+            cartItems = cartItems.filter(item => item.id !== productId);
+            
+            // Save to shared localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Re-render cart
+            renderDashboardCart();
+            
+            // Show toast
+            const toast = document.createElement('div');
+            toast.innerHTML = `✗ Removed ${productName}`;
+            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff4757; color: white; padding: 12px 24px; border-radius: 12px; font-weight: 600; z-index: 3000; animation: slideInRight 0.3s ease;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+            
+            // Call backend
+            try {
+                await fetch(`${API_URL}/api/cart/remove`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId
+                    })
+                });
+            } catch (error) {
+                console.error('Cart remove error:', error);
+            }
+        }
+
+        function processCheckout() {
+            if (cartItems.length === 0) {
+                alert('🛒 Cart is empty! Please add items to checkout.');
+                return;
+            }
+            
+            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const discount = totalQty >= 3 ? 0.2 : 0.1;
+            const total = Math.round(subtotal * (1 - discount));
+            
+            // Save checkout info for agent-monitor
+            localStorage.setItem('checkoutTotal', total);
+            localStorage.setItem('checkoutItems', totalQty);
+            
+            localStorage.setItem('current_step', '5');
+            window.location.href = `agent-monitor.html?session=${sessionId}&demo=payment`;
+        }
+
+        async function applyOffers() {
+            if (cartItems.length === 0) {
+                alert('🛒 Cart is empty! Please add items first.');
+                return;
+            }
+            
+            const currentQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const currentSubtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const currentDiscount = currentQty >= 3 ? 0.2 : 0.1;
+            const currentTotal = Math.round(currentSubtotal * (1 - currentDiscount));
+            
+            // Build current cart list
+            let cartList = '';
+            cartItems.forEach(item => {
+                cartList += `• ${item.name}: ₹${item.price.toLocaleString()} (Qty: ${item.quantity || 1})\n`;
+            });
+            
+            // If already have 3+ items (20% discount)
+            if (currentQty >= 3) {
+                alert(`🎉 You already have the maximum bundle discount!\n\n` +
+                      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+                      `CURRENT CART (${currentQty} items):\n${cartList}\n` +
+                      `Subtotal: ₹${currentSubtotal.toLocaleString()}\n` +
+                      `✨ Bundle Discount (20%): -₹${Math.round(currentSubtotal * 0.2).toLocaleString()}\n\n` +
+                      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+                      `💰 FINAL TOTAL: ₹${currentTotal.toLocaleString()}\n` +
+                      `🎁 YOU SAVE: ₹${Math.round(currentSubtotal * 0.2).toLocaleString()}`);
+                return;
+            }
+            
+            // Calculate with belt added
+            const beltPrice = 1200;
+            const newSubtotal = currentSubtotal + beltPrice;
+            const newQty = currentQty + 1;
+            const newTotal = Math.round(newSubtotal * 0.8); // 20% discount
+            const currentSavings = Math.round(currentSubtotal * currentDiscount);
+            const newSavings = Math.round(newSubtotal * 0.2);
+            const extraSavings = newSavings - currentSavings;
+            
+            const confirmed = confirm(`🎁 Bundle Offer Available!\n\n` +
+                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
+                  `CURRENT CART (${currentQty} items):\n${cartList}` +
+                  `Subtotal: ₹${currentSubtotal.toLocaleString()}\n` +
+                  `Discount (${currentDiscount * 100}%): -₹${currentSavings.toLocaleString()}\n` +
+                  `Total: ₹${currentTotal.toLocaleString()}\n\n` +
+                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
+                  `ADD RECOMMENDED ITEM:\n` +
+                  `• Brown Leather Belt: ₹${beltPrice.toLocaleString()}\n\n` +
+                  `NEW TOTAL (${newQty} items):\n` +
+                  `Subtotal: ₹${newSubtotal.toLocaleString()}\n` +
+                  `✨ Bundle Discount (20%): -₹${newSavings.toLocaleString()}\n\n` +
+                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
+                  `💰 FINAL TOTAL: ₹${newTotal.toLocaleString()}\n` +
+                  `🎉 EXTRA SAVINGS: ₹${extraSavings.toLocaleString()}\n` +
+                  `💵 Actual Cost for Belt: Only ₹${beltPrice - extraSavings} (${Math.round((beltPrice - extraSavings) / beltPrice * 100)}% off!)\n\n` +
+                  `Add Brown Leather Belt to cart?`);
+            
+            if (confirmed) {
+                // Add belt to cart
+                const existing = cartItems.find(item => item.id === 'VH005');
+                if (existing) {
+                    existing.quantity = (existing.quantity || 1) + 1;
+                } else {
+                    cartItems.push({id: 'VH005', name: 'Brown Leather Belt', price: 1200, quantity: 1});
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                
+                // Re-render cart
+                renderDashboardCart();
+                
+                // Update backend
+                try {
+                    await fetch(`${API_URL}/api/cart/add`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            product_id: 'VH005',
+                            quantity: 1
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error adding belt:', error);
+                }
+            }
+        }
+
+        function checkKioskNotifications() {
+            const notification = localStorage.getItem('kioskNotification');
+            
+            if (notification) {
+                const notif = JSON.parse(notification);
+                const section = document.getElementById('notificationsSection');
+                const container = document.getElementById('kioskNotifications');
+                
+                // Check if we've already shown this notification
+                const lastShown = localStorage.getItem('lastNotificationShown');
+                if (lastShown === notif.timestamp) {
+                    return; // Already displayed
+                }
+                
+                // Mark as shown
+                localStorage.setItem('lastNotificationShown', notif.timestamp);
+                
+                // Show notification section
+                section.style.display = 'block';
+                
+                let notificationHTML = '';
+                const timeAgo = getTimeAgo(new Date(notif.timestamp));
+                
+                if (notif.type === 'try-on') {
+                    notificationHTML = `
+                        <div class="notification-item">
+                            <strong>🛍️ Try-On Room Requested</strong>
+                            <div class="details">
+                                <div>👤 Customer: ${notif.customer}</div>
+                                <div>🏪 Kiosk: ${notif.kiosk}</div>
+                                <div>🚪 Assigned Room: #${notif.room}</div>
+                                <div>📦 Items to try: ${notif.items}</div>
+                            </div>
+                            <div class="timestamp">${timeAgo}</div>
+                            <div class="notification-actions">
+                                <button class="acknowledge" onclick="acknowledgeNotification('try-on')">✓ Assist Customer</button>
+                                <button class="dismiss" onclick="dismissNotification()">Dismiss</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (notif.type === 'assistance') {
+                    notificationHTML = `
+                        <div class="notification-item">
+                            <strong>🔔 Customer Needs Assistance</strong>
+                            <div class="details">
+                                <div>👤 Customer: ${notif.customer}</div>
+                                <div>🏪 Location: Kiosk ${notif.kiosk}</div>
+                                <div>🛒 Cart Items: ${notif.cart_items}</div>
+                            </div>
+                            <div class="timestamp">${timeAgo}</div>
+                            <div class="notification-actions">
+                                <button class="acknowledge" onclick="acknowledgeNotification('assistance')">✓ On My Way</button>
+                                <button class="dismiss" onclick="dismissNotification()">Dismiss</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = notificationHTML;
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+            return `${Math.floor(seconds / 3600)} hours ago`;
+        }
+        
+        function acknowledgeNotification(type) {
+            if (type === 'try-on') {
+                alert('✅ Try-On Assistance Confirmed\n\n' +
+                      'You are assigned to help Rahul in Try-On Room.\n\n' +
+                      'Actions to take:\n' +
+                      '• Guide customer to the room\n' +
+                      '• Bring requested items\n' +
+                      '• Offer size alternatives if needed\n' +
+                      '• Assist with styling suggestions');
+            } else {
+                alert('✅ Assistance Confirmed\n\n' +
+                      'Walking to Kiosk #2 to assist Rahul.\n\n' +
+                      'Customer Context:\n' +
+                      '• Has items in cart\n' +
+                      '• Viewing products on kiosk\n' +
+                      '• May need size/style guidance');
+            }
+            dismissNotification();
+        }
+        
+        function dismissNotification() {
+            document.getElementById('notificationsSection').style.display = 'none';
+            localStorage.removeItem('kioskNotification');
+        }
+
+        window.onload = () => {
+            localStorage.setItem('current_step', '4');
+            loadCartFromSession();
+            loadRecentActivity();
+            
+            // Auto-refresh every 2 seconds
+            setInterval(() => {
+                loadRecentActivity();
+            }, 2000);
+        };
+
+        // Image Modal Functions
+        function openImageModal(imageSrc, altText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = imageSrc;
+            modalImg.alt = altText;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeImageModal()">&times;</span>
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+</body>
+</html>

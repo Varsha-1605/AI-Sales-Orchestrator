@@ -1,0 +1,4006 @@
+{
+  "SESSION_a16585a8": {
+    "session_id": "SESSION_a16585a8",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-13T00:19:41.103209",
+    "last_activity": "2025-12-13T00:20:02.846421",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6a36a230": {
+    "session_id": "SESSION_6a36a230",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-13T00:26:11.052707",
+    "last_activity": "2025-12-13T00:26:27.193912",
+    "channel": "web",
+    "liked_products": [
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e41f47fe": {
+    "session_id": "SESSION_e41f47fe",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-13T11:42:28.033784",
+    "last_activity": "2025-12-13T11:42:28.033784",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_86fafba3": {
+    "session_id": "SESSION_86fafba3",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-13T11:45:43.232389",
+    "last_activity": "2025-12-13T11:46:46.663032",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH004",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [
+      {
+        "role": "user",
+        "content": "hey",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "assistant",
+        "content": "Hi! I'm your AI shopping assistant. How can I help you today?\n\nBased on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "whatsapp"
+      }
+    ],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_92db300c": {
+    "session_id": "SESSION_92db300c",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T18:50:36.464374",
+    "last_activity": "2025-12-16T18:56:41.749544",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003",
+      "VH004"
+    ],
+    "cart": [],
+    "conversation_history": [
+      {
+        "role": "user",
+        "content": "hey",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "assistant",
+        "content": "Hi! I'm your AI shopping assistant. How can I help you today?\n\nBased on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "user",
+        "content": "Add navy tie",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "user",
+        "content": "Add Blue Tie",
+        "channel": "whatsapp"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "whatsapp"
+      }
+    ],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_37227be4": {
+    "session_id": "SESSION_37227be4",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T19:01:08.124842",
+    "last_activity": "2025-12-16T19:01:08.124842",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a85999cc": {
+    "session_id": "SESSION_a85999cc",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T19:01:11.311792",
+    "last_activity": "2025-12-16T19:01:11.311792",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_beb535f0": {
+    "session_id": "SESSION_beb535f0",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T19:01:12.185678",
+    "last_activity": "2025-12-16T19:01:12.185678",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_54689fe0": {
+    "session_id": "SESSION_54689fe0",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T19:01:12.971007",
+    "last_activity": "2025-12-16T19:01:12.971007",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4c53264c": {
+    "session_id": "SESSION_4c53264c",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T19:01:13.556853",
+    "last_activity": "2025-12-16T20:00:02.593235",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [
+      {
+        "role": "user",
+        "content": "Recommend matching accessories",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Hi! I'm your AI shopping assistant. How can I help you today?\n\nBased on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "hey M Varsha !",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "hey",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "Yes, show me formal shirts",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "What's in my cart?",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "I need outfit for wedding",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "hey",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Navy Blue Silk Tie - \u20b9800\n\n\u2022 Striped Blue Tie - \u20b9750\n\n\u2022 Brown Leather Belt - \u20b91200",
+        "channel": "web"
+      }
+    ],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a2f838b9": {
+    "session_id": "SESSION_a2f838b9",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T20:00:43.843932",
+    "last_activity": "2025-12-16T20:00:43.843932",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fa9fb094": {
+    "session_id": "SESSION_fa9fb094",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T20:00:49.907459",
+    "last_activity": "2025-12-16T20:02:12.540049",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [
+      {
+        "role": "user",
+        "content": "Yes, show me formal shirts",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Hi! I'm your AI shopping assistant. How can I help you today?\n\nBased on your preferences, I found 5 items you might love:\n\n\u2022 Classic Blue Formal Shirt - \u20b92500\n\n\u2022 White Premium Formal Shirt - \u20b92800\n\n\u2022 Light Pink Formal Shirt - \u20b92600",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "What's in my cart?",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "I'm here to help! You can ask me about products, check availability, or place an order.",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "I need outfit for wedding",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "I'm here to help! You can ask me about products, check availability, or place an order.",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "hey",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "I'm here to help! You can ask me about products, check availability, or place an order.",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "What's in my cart?",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "I'm here to help! You can ask me about products, check availability, or place an order.",
+        "channel": "web"
+      },
+      {
+        "role": "user",
+        "content": "Add matching accessories",
+        "channel": "web"
+      },
+      {
+        "role": "assistant",
+        "content": "Based on your preferences, I found 5 items you might love:\n\n\u2022 Classic Blue Formal Shirt - \u20b92500\n\n\u2022 White Premium Formal Shirt - \u20b92800\n\n\u2022 Light Pink Formal Shirt - \u20b92600",
+        "channel": "web"
+      }
+    ],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ace9d01f": {
+    "session_id": "SESSION_ace9d01f",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T21:29:13.404902",
+    "last_activity": "2025-12-16T21:30:56.070362",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a351f326": {
+    "session_id": "SESSION_a351f326",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T21:38:43.391493",
+    "last_activity": "2025-12-16T21:38:43.391493",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_bec9db01": {
+    "session_id": "SESSION_bec9db01",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T23:10:03.204257",
+    "last_activity": "2025-12-16T23:10:41.799953",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ecef3098": {
+    "session_id": "SESSION_ecef3098",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-16T23:29:21.797309",
+    "last_activity": "2025-12-16T23:49:04.602039",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH006",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_01f907b5": {
+    "session_id": "SESSION_01f907b5",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T00:52:00.418398",
+    "last_activity": "2025-12-17T00:52:00.418398",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ae5b0d48": {
+    "session_id": "SESSION_ae5b0d48",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T10:27:26.116543",
+    "last_activity": "2025-12-17T10:27:26.116543",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_5ec1114a": {
+    "session_id": "SESSION_5ec1114a",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T10:29:44.111538",
+    "last_activity": "2025-12-17T10:29:44.111538",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_97d1d9a0": {
+    "session_id": "SESSION_97d1d9a0",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T10:30:14.970509",
+    "last_activity": "2025-12-17T10:37:56.859542",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_027e6b11": {
+    "session_id": "SESSION_027e6b11",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T10:38:17.888382",
+    "last_activity": "2025-12-17T10:42:33.432338",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9452b6f9": {
+    "session_id": "SESSION_9452b6f9",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T10:47:06.306340",
+    "last_activity": "2025-12-17T10:50:15.064341",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_09cbf9a3": {
+    "session_id": "SESSION_09cbf9a3",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T13:53:03.791318",
+    "last_activity": "2025-12-17T13:54:53.060076",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_206d9dfc": {
+    "session_id": "SESSION_206d9dfc",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T14:13:23.722539",
+    "last_activity": "2025-12-17T14:21:24.584925",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_8be00a15": {
+    "session_id": "SESSION_8be00a15",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T14:54:46.328352",
+    "last_activity": "2025-12-17T15:04:21.397474",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_07e7fdc3": {
+    "session_id": "SESSION_07e7fdc3",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T16:39:04.625795",
+    "last_activity": "2025-12-17T16:39:04.625795",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_860f83f4": {
+    "session_id": "SESSION_860f83f4",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T20:09:16.582801",
+    "last_activity": "2025-12-17T20:33:37.545495",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_5e4dd781": {
+    "session_id": "SESSION_5e4dd781",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T20:37:01.716098",
+    "last_activity": "2025-12-17T20:41:59.385810",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a17b7761": {
+    "session_id": "SESSION_a17b7761",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T20:54:12.168408",
+    "last_activity": "2025-12-17T21:32:38.107547",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b2357b6e": {
+    "session_id": "SESSION_b2357b6e",
+    "customer_id": "CUST001",
+    "created_at": "2025-12-17T21:48:15.525918",
+    "last_activity": "2025-12-17T21:48:15.525918",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0c591ee8": {
+    "session_id": "SESSION_0c591ee8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-24T17:50:56.112108",
+    "last_activity": "2026-01-24T17:50:56.112108",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a9c2e7f7": {
+    "session_id": "SESSION_a9c2e7f7",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-24T17:50:57.013652",
+    "last_activity": "2026-01-24T17:51:57.114290",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3c256c0c": {
+    "session_id": "SESSION_3c256c0c",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-24T20:05:19.976660",
+    "last_activity": "2026-01-24T20:05:19.976660",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e327677d": {
+    "session_id": "SESSION_e327677d",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T15:21:01.793397",
+    "last_activity": "2026-01-25T15:21:01.793397",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e581f5d7": {
+    "session_id": "SESSION_e581f5d7",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T15:38:57.833249",
+    "last_activity": "2026-01-25T15:38:57.833249",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ff982ac6": {
+    "session_id": "SESSION_ff982ac6",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T16:02:32.974828",
+    "last_activity": "2026-01-25T16:02:32.974828",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_36c161f3": {
+    "session_id": "SESSION_36c161f3",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T16:42:37.401946",
+    "last_activity": "2026-01-25T16:42:37.401946",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fc25beea": {
+    "session_id": "SESSION_fc25beea",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T17:16:29.379066",
+    "last_activity": "2026-01-25T17:16:29.379066",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4d8b441d": {
+    "session_id": "SESSION_4d8b441d",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T17:27:47.523506",
+    "last_activity": "2026-01-25T17:27:47.523506",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4e451b06": {
+    "session_id": "SESSION_4e451b06",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T17:54:52.235315",
+    "last_activity": "2026-01-25T17:54:52.235315",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a72431d5": {
+    "session_id": "SESSION_a72431d5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T19:03:08.687237",
+    "last_activity": "2026-01-25T19:03:08.687237",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_d82fb6f1": {
+    "session_id": "SESSION_d82fb6f1",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T19:11:39.439618",
+    "last_activity": "2026-01-25T19:11:39.439618",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_37e19b98": {
+    "session_id": "SESSION_37e19b98",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T19:23:00.449544",
+    "last_activity": "2026-01-25T19:28:05.691808",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH006",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_8c8bed36": {
+    "session_id": "SESSION_8c8bed36",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T21:29:38.447585",
+    "last_activity": "2026-01-25T21:34:56.904962",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 3,
+        "size": "40"
+      },
+      {
+        "product_id": "VH006",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9a95e815": {
+    "session_id": "SESSION_9a95e815",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T21:39:15.760250",
+    "last_activity": "2026-01-25T21:39:30.771627",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e34efbee": {
+    "session_id": "SESSION_e34efbee",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T21:43:31.224329",
+    "last_activity": "2026-01-25T22:00:44.394404",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "undefined",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "undefined",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "undefined",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "undefined",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_cf7e47d8": {
+    "session_id": "SESSION_cf7e47d8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:17:46.753880",
+    "last_activity": "2026-01-25T22:17:46.753880",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2b25acf8": {
+    "session_id": "SESSION_2b25acf8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:20:10.545755",
+    "last_activity": "2026-01-25T22:20:10.546764",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4fb3c783": {
+    "session_id": "SESSION_4fb3c783",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:26:06.044725",
+    "last_activity": "2026-01-25T22:27:38.228455",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH004",
+      "VH005",
+      "VH002"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_217efd8b": {
+    "session_id": "SESSION_217efd8b",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:33:15.363075",
+    "last_activity": "2026-01-25T22:40:00.361776",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH005"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6341d5ce": {
+    "session_id": "SESSION_6341d5ce",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:42:12.739152",
+    "last_activity": "2026-01-25T22:42:12.739152",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3f63bac5": {
+    "session_id": "SESSION_3f63bac5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:42:19.131685",
+    "last_activity": "2026-01-25T22:42:31.315667",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH005"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6e922da3": {
+    "session_id": "SESSION_6e922da3",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T22:55:29.983153",
+    "last_activity": "2026-01-25T22:55:40.228078",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b88e096b": {
+    "session_id": "SESSION_b88e096b",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T23:40:10.656107",
+    "last_activity": "2026-01-25T23:40:56.031048",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH005"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ec4455ff": {
+    "session_id": "SESSION_ec4455ff",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-25T23:44:53.004889",
+    "last_activity": "2026-01-25T23:51:08.495287",
+    "channel": "web",
+    "liked_products": [
+      "VH002",
+      "VH003",
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH006",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e523b652": {
+    "session_id": "SESSION_e523b652",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T00:00:46.378514",
+    "last_activity": "2026-01-26T01:01:07.169731",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      },
+      {
+        "product_id": "VH006",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c08bf3ea": {
+    "session_id": "SESSION_c08bf3ea",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T15:49:19.428866",
+    "last_activity": "2026-01-26T15:49:19.428866",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fa1149b1": {
+    "session_id": "SESSION_fa1149b1",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T15:49:21.174945",
+    "last_activity": "2026-01-26T15:49:21.174945",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_246a7acb": {
+    "session_id": "SESSION_246a7acb",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T15:49:34.088921",
+    "last_activity": "2026-01-26T15:49:34.088921",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f94fb65a": {
+    "session_id": "SESSION_f94fb65a",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T16:36:18.933413",
+    "last_activity": "2026-01-26T16:36:18.933413",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0143ced8": {
+    "session_id": "SESSION_0143ced8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T16:38:24.826897",
+    "last_activity": "2026-01-26T16:38:24.826897",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b5def7c8": {
+    "session_id": "SESSION_b5def7c8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T16:43:40.159160",
+    "last_activity": "2026-01-26T16:49:21.431429",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6c6b0a7f": {
+    "session_id": "SESSION_6c6b0a7f",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T17:09:20.565297",
+    "last_activity": "2026-01-26T17:09:45.807289",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3b955f94": {
+    "session_id": "SESSION_3b955f94",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T17:15:05.692049",
+    "last_activity": "2026-01-26T17:15:05.692049",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ae59aa36": {
+    "session_id": "SESSION_ae59aa36",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T17:15:10.110605",
+    "last_activity": "2026-01-26T17:16:11.356493",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a1384e15": {
+    "session_id": "SESSION_a1384e15",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T17:26:17.792249",
+    "last_activity": "2026-01-26T17:26:31.726040",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH004",
+      "VH005",
+      "VH006"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_14e93fd1": {
+    "session_id": "SESSION_14e93fd1",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T17:34:04.699947",
+    "last_activity": "2026-01-26T17:34:13.279844",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b51f1d5b": {
+    "session_id": "SESSION_b51f1d5b",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T18:44:37.171751",
+    "last_activity": "2026-01-26T18:44:37.171751",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_70edfc35": {
+    "session_id": "SESSION_70edfc35",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:08:51.052302",
+    "last_activity": "2026-01-26T19:08:51.052302",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_662ff265": {
+    "session_id": "SESSION_662ff265",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:12:08.617605",
+    "last_activity": "2026-01-26T19:12:08.617605",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_808d4e80": {
+    "session_id": "SESSION_808d4e80",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:12:14.105112",
+    "last_activity": "2026-01-26T19:12:14.105112",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ddce8f47": {
+    "session_id": "SESSION_ddce8f47",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:12:55.318574",
+    "last_activity": "2026-01-26T19:13:05.695569",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ba1ed9d3": {
+    "session_id": "SESSION_ba1ed9d3",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:15:32.269481",
+    "last_activity": "2026-01-26T19:15:32.269481",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e055ecd1": {
+    "session_id": "SESSION_e055ecd1",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:18:19.453813",
+    "last_activity": "2026-01-26T19:18:19.453813",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_40a83c8a": {
+    "session_id": "SESSION_40a83c8a",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:18:21.277631",
+    "last_activity": "2026-01-26T19:18:21.277631",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c8df17a0": {
+    "session_id": "SESSION_c8df17a0",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T19:54:28.275330",
+    "last_activity": "2026-01-26T19:55:31.885566",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9addfe7a": {
+    "session_id": "SESSION_9addfe7a",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T20:03:25.773284",
+    "last_activity": "2026-01-26T20:08:14.361204",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_497272b5": {
+    "session_id": "SESSION_497272b5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:35:46.552637",
+    "last_activity": "2026-01-26T23:35:46.552637",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_eade5f6c": {
+    "session_id": "SESSION_eade5f6c",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:52:37.582649",
+    "last_activity": "2026-01-26T23:52:46.924864",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_42477d5d": {
+    "session_id": "SESSION_42477d5d",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:29.146562",
+    "last_activity": "2026-01-26T23:53:29.146562",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_dcaff1a0": {
+    "session_id": "SESSION_dcaff1a0",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:30.539505",
+    "last_activity": "2026-01-26T23:53:30.539505",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9ffae1c4": {
+    "session_id": "SESSION_9ffae1c4",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:31.181049",
+    "last_activity": "2026-01-26T23:53:31.181049",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_daa74fbd": {
+    "session_id": "SESSION_daa74fbd",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:31.367333",
+    "last_activity": "2026-01-26T23:53:31.367333",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f9be50e0": {
+    "session_id": "SESSION_f9be50e0",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:31.544561",
+    "last_activity": "2026-01-26T23:53:31.544561",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_83140752": {
+    "session_id": "SESSION_83140752",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:31.724867",
+    "last_activity": "2026-01-26T23:53:31.724867",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_03b8d6c2": {
+    "session_id": "SESSION_03b8d6c2",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:31.907622",
+    "last_activity": "2026-01-26T23:53:31.907622",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_567db5e7": {
+    "session_id": "SESSION_567db5e7",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:32.064399",
+    "last_activity": "2026-01-26T23:53:32.064399",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ae521efa": {
+    "session_id": "SESSION_ae521efa",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:32.232428",
+    "last_activity": "2026-01-26T23:53:32.232428",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_56b4e938": {
+    "session_id": "SESSION_56b4e938",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:32.393121",
+    "last_activity": "2026-01-26T23:53:32.393121",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ce7cb470": {
+    "session_id": "SESSION_ce7cb470",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:32.583666",
+    "last_activity": "2026-01-26T23:53:32.583666",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2c2494cd": {
+    "session_id": "SESSION_2c2494cd",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:32.792415",
+    "last_activity": "2026-01-26T23:53:32.792415",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a71bb4a9": {
+    "session_id": "SESSION_a71bb4a9",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:53:36.960974",
+    "last_activity": "2026-01-26T23:53:36.960974",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0ba173f8": {
+    "session_id": "SESSION_0ba173f8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-26T23:56:14.990872",
+    "last_activity": "2026-01-27T00:09:05.075727",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_8a6092f5": {
+    "session_id": "SESSION_8a6092f5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:10:52.603318",
+    "last_activity": "2026-01-27T00:11:22.234316",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_59b5e8d7": {
+    "session_id": "SESSION_59b5e8d7",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:17:52.270253",
+    "last_activity": "2026-01-27T00:17:52.270253",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e6049893": {
+    "session_id": "SESSION_e6049893",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:17:53.574607",
+    "last_activity": "2026-01-27T00:17:53.574607",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_54eb68e5": {
+    "session_id": "SESSION_54eb68e5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:17:54.391998",
+    "last_activity": "2026-01-27T00:17:54.391998",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a74f8386": {
+    "session_id": "SESSION_a74f8386",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:27:17.619858",
+    "last_activity": "2026-01-27T00:27:17.619858",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2abfe66c": {
+    "session_id": "SESSION_2abfe66c",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T00:30:15.911718",
+    "last_activity": "2026-01-27T00:50:55.374373",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_43c76f74": {
+    "session_id": "SESSION_43c76f74",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T01:04:03.702233",
+    "last_activity": "2026-01-27T01:04:24.612745",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_775fce53": {
+    "session_id": "SESSION_775fce53",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T01:07:42.903298",
+    "last_activity": "2026-01-27T01:08:42.172185",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ae8bf46f": {
+    "session_id": "SESSION_ae8bf46f",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T12:53:23.458049",
+    "last_activity": "2026-01-27T12:53:23.458049",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_1d22ee69": {
+    "session_id": "SESSION_1d22ee69",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T12:53:27.145480",
+    "last_activity": "2026-01-27T12:55:52.458270",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b195e1cb": {
+    "session_id": "SESSION_b195e1cb",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T13:14:09.141903",
+    "last_activity": "2026-01-27T13:23:51.539159",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "32"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3c5413e6": {
+    "session_id": "SESSION_3c5413e6",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T13:37:03.090392",
+    "last_activity": "2026-01-27T13:38:29.230509",
+    "channel": "web",
+    "liked_products": [
+      "VH003",
+      "VH002"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9b8d95e2": {
+    "session_id": "SESSION_9b8d95e2",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-27T13:39:22.485886",
+    "last_activity": "2026-01-27T13:39:22.485886",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_de4be745": {
+    "session_id": "SESSION_de4be745",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:14:57.329910",
+    "last_activity": "2026-01-28T01:21:17.108183",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_7b880696": {
+    "session_id": "SESSION_7b880696",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:21:32.503301",
+    "last_activity": "2026-01-28T01:30:57.872572",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_40997df5": {
+    "session_id": "SESSION_40997df5",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:32:24.093397",
+    "last_activity": "2026-01-28T01:37:39.522240",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH003",
+      "VH002"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9148eca0": {
+    "session_id": "SESSION_9148eca0",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:37:46.499044",
+    "last_activity": "2026-01-28T01:38:05.822797",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2017e331": {
+    "session_id": "SESSION_2017e331",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:38:49.977600",
+    "last_activity": "2026-01-28T01:38:49.977600",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0b6bf1a9": {
+    "session_id": "SESSION_0b6bf1a9",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:38:54.966658",
+    "last_activity": "2026-01-28T01:39:33.368346",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_58379bc6": {
+    "session_id": "SESSION_58379bc6",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:45:50.986725",
+    "last_activity": "2026-01-28T01:45:50.986725",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6a5d2394": {
+    "session_id": "SESSION_6a5d2394",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:46:04.972381",
+    "last_activity": "2026-01-28T01:48:58.633678",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_282fc214": {
+    "session_id": "SESSION_282fc214",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:50:51.747184",
+    "last_activity": "2026-01-28T01:50:51.747184",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_eb513b0c": {
+    "session_id": "SESSION_eb513b0c",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:51:24.897697",
+    "last_activity": "2026-01-28T01:54:08.083965",
+    "channel": "web",
+    "liked_products": [
+      "VH004",
+      "VH003",
+      "VH006"
+    ],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 2,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_76fbd0bd": {
+    "session_id": "SESSION_76fbd0bd",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T01:55:16.723518",
+    "last_activity": "2026-01-28T02:10:34.899987",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_7a0879cf": {
+    "session_id": "SESSION_7a0879cf",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T02:10:16.346334",
+    "last_activity": "2026-01-28T02:21:50.647902",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ca5e0846": {
+    "session_id": "SESSION_ca5e0846",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T22:08:03.972996",
+    "last_activity": "2026-01-28T22:08:03.972996",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e171058e": {
+    "session_id": "SESSION_e171058e",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T22:09:09.335832",
+    "last_activity": "2026-01-28T22:09:09.335832",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_63dcaedf": {
+    "session_id": "SESSION_63dcaedf",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T22:18:30.834126",
+    "last_activity": "2026-01-28T22:18:30.834126",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0b1662ba": {
+    "session_id": "SESSION_0b1662ba",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T22:19:34.385123",
+    "last_activity": "2026-01-28T22:19:34.385123",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2ef65f87": {
+    "session_id": "SESSION_2ef65f87",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T22:19:36.849877",
+    "last_activity": "2026-01-28T22:19:36.849877",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_88c416d3": {
+    "session_id": "SESSION_88c416d3",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T23:07:24.353883",
+    "last_activity": "2026-01-28T23:07:24.353883",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ce007d75": {
+    "session_id": "SESSION_ce007d75",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-28T23:07:26.748436",
+    "last_activity": "2026-01-28T23:53:06.871282",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH002",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ea50c4bd": {
+    "session_id": "SESSION_ea50c4bd",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-29T10:54:40.797408",
+    "last_activity": "2026-01-29T10:54:40.797408",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e6edebfe": {
+    "session_id": "SESSION_e6edebfe",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T15:27:02.165374",
+    "last_activity": "2026-01-31T15:27:02.165374",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_d22b9b3a": {
+    "session_id": "SESSION_d22b9b3a",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T16:09:01.339850",
+    "last_activity": "2026-01-31T16:12:55.300704",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3096898c": {
+    "session_id": "SESSION_3096898c",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T18:56:27.604896",
+    "last_activity": "2026-01-31T18:58:00.147418",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_32af9cd4": {
+    "session_id": "SESSION_32af9cd4",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T18:58:47.979756",
+    "last_activity": "2026-01-31T19:05:22.346317",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_934064fe": {
+    "session_id": "SESSION_934064fe",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T19:01:23.041754",
+    "last_activity": "2026-01-31T19:27:00.381120",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6b016994": {
+    "session_id": "SESSION_6b016994",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T19:27:05.356686",
+    "last_activity": "2026-01-31T19:27:44.735767",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_cfccc548": {
+    "session_id": "SESSION_cfccc548",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T19:30:42.281578",
+    "last_activity": "2026-01-31T19:31:24.704933",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_45e2c1e1": {
+    "session_id": "SESSION_45e2c1e1",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T19:35:00.596672",
+    "last_activity": "2026-01-31T19:47:49.563847",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ff4ee8b0": {
+    "session_id": "SESSION_ff4ee8b0",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T19:54:29.251312",
+    "last_activity": "2026-01-31T19:58:22.343427",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c2442a62": {
+    "session_id": "SESSION_c2442a62",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T20:01:37.541773",
+    "last_activity": "2026-01-31T20:01:37.541773",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_901a9878": {
+    "session_id": "SESSION_901a9878",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T20:05:10.727228",
+    "last_activity": "2026-01-31T20:05:10.727228",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_290598e7": {
+    "session_id": "SESSION_290598e7",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T20:06:45.076926",
+    "last_activity": "2026-01-31T20:07:11.656309",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4a986197": {
+    "session_id": "SESSION_4a986197",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T20:34:00.434068",
+    "last_activity": "2026-01-31T20:34:00.434068",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c939422a": {
+    "session_id": "SESSION_c939422a",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T20:36:06.702101",
+    "last_activity": "2026-01-31T20:45:27.952291",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2d9148b8": {
+    "session_id": "SESSION_2d9148b8",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T21:44:37.845370",
+    "last_activity": "2026-01-31T21:44:37.847410",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6b856dc3": {
+    "session_id": "SESSION_6b856dc3",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T21:44:41.975182",
+    "last_activity": "2026-01-31T21:44:41.975182",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4bca35ed": {
+    "session_id": "SESSION_4bca35ed",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T22:05:32.944607",
+    "last_activity": "2026-01-31T22:05:32.944607",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a5beb24e": {
+    "session_id": "SESSION_a5beb24e",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T22:05:45.240807",
+    "last_activity": "2026-01-31T22:16:03.855107",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f3530b33": {
+    "session_id": "SESSION_f3530b33",
+    "customer_id": "CUST001",
+    "created_at": "2026-01-31T22:43:03.084280",
+    "last_activity": "2026-01-31T22:43:03.084280",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_604ea3d0": {
+    "session_id": "SESSION_604ea3d0",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T12:09:23.452991",
+    "last_activity": "2026-02-01T12:09:23.452991",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e3bcfcc6": {
+    "session_id": "SESSION_e3bcfcc6",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T12:09:25.850409",
+    "last_activity": "2026-02-01T12:09:25.850409",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_66c5203b": {
+    "session_id": "SESSION_66c5203b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T12:09:28.212631",
+    "last_activity": "2026-02-01T12:09:28.212631",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6a2b677c": {
+    "session_id": "SESSION_6a2b677c",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T12:09:28.555394",
+    "last_activity": "2026-02-01T12:09:28.555394",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fe1d9bc3": {
+    "session_id": "SESSION_fe1d9bc3",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T12:10:02.176483",
+    "last_activity": "2026-02-01T13:05:12.053006",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0e3059ab": {
+    "session_id": "SESSION_0e3059ab",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T13:18:00.477413",
+    "last_activity": "2026-02-01T13:23:09.680854",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_51ca3f25": {
+    "session_id": "SESSION_51ca3f25",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T17:50:02.035375",
+    "last_activity": "2026-02-01T17:50:02.035375",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_3c079f05": {
+    "session_id": "SESSION_3c079f05",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T18:06:42.045169",
+    "last_activity": "2026-02-01T18:06:51.845574",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e209ef4f": {
+    "session_id": "SESSION_e209ef4f",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T18:07:01.207846",
+    "last_activity": "2026-02-01T18:07:01.207846",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c60ec21d": {
+    "session_id": "SESSION_c60ec21d",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T18:07:01.608009",
+    "last_activity": "2026-02-01T18:07:01.608009",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9df81194": {
+    "session_id": "SESSION_9df81194",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T18:07:01.879114",
+    "last_activity": "2026-02-01T18:38:30.123322",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fb0d6ec5": {
+    "session_id": "SESSION_fb0d6ec5",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T19:22:43.162554",
+    "last_activity": "2026-02-01T19:22:51.992959",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b6049747": {
+    "session_id": "SESSION_b6049747",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T19:28:45.211826",
+    "last_activity": "2026-02-01T19:30:37.996997",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_69eab531": {
+    "session_id": "SESSION_69eab531",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T19:31:44.648578",
+    "last_activity": "2026-02-01T19:34:55.921145",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c7fa2347": {
+    "session_id": "SESSION_c7fa2347",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:15:59.834751",
+    "last_activity": "2026-02-01T21:15:59.834751",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_20ca28d5": {
+    "session_id": "SESSION_20ca28d5",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:27:53.626561",
+    "last_activity": "2026-02-01T21:44:23.418846",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f32af4eb": {
+    "session_id": "SESSION_f32af4eb",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:47:55.906215",
+    "last_activity": "2026-02-01T21:47:55.906215",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_1fc786db": {
+    "session_id": "SESSION_1fc786db",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:47.419335",
+    "last_activity": "2026-02-01T21:55:47.419335",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9250e368": {
+    "session_id": "SESSION_9250e368",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:48.204395",
+    "last_activity": "2026-02-01T21:55:48.204395",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_265de69b": {
+    "session_id": "SESSION_265de69b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:48.377622",
+    "last_activity": "2026-02-01T21:55:48.377622",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_dde70d0b": {
+    "session_id": "SESSION_dde70d0b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:48.548838",
+    "last_activity": "2026-02-01T21:55:48.548838",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_5039f6d3": {
+    "session_id": "SESSION_5039f6d3",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:48.708730",
+    "last_activity": "2026-02-01T21:55:48.709833",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_96801231": {
+    "session_id": "SESSION_96801231",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:48.885652",
+    "last_activity": "2026-02-01T21:55:48.885652",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2b39619b": {
+    "session_id": "SESSION_2b39619b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:49.040275",
+    "last_activity": "2026-02-01T21:55:49.040275",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_567ba23b": {
+    "session_id": "SESSION_567ba23b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:49.218000",
+    "last_activity": "2026-02-01T21:55:49.218000",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6409c5c2": {
+    "session_id": "SESSION_6409c5c2",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:49.411337",
+    "last_activity": "2026-02-01T21:55:49.411337",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_07867811": {
+    "session_id": "SESSION_07867811",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:49.588690",
+    "last_activity": "2026-02-01T21:55:49.588690",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_770bba75": {
+    "session_id": "SESSION_770bba75",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-01T21:55:49.794580",
+    "last_activity": "2026-02-01T21:59:30.765076",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a4fbbcd7": {
+    "session_id": "SESSION_a4fbbcd7",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-03T23:43:24.216687",
+    "last_activity": "2026-02-03T23:56:00.610502",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_88b07dc4": {
+    "session_id": "SESSION_88b07dc4",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-03T23:56:06.513233",
+    "last_activity": "2026-02-03T23:56:12.617192",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_9e7c02ac": {
+    "session_id": "SESSION_9e7c02ac",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-03T23:56:19.056360",
+    "last_activity": "2026-02-03T23:56:42.208292",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c3da69a6": {
+    "session_id": "SESSION_c3da69a6",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T10:46:05.032421",
+    "last_activity": "2026-02-04T10:46:49.801123",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f379796b": {
+    "session_id": "SESSION_f379796b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T10:46:55.731360",
+    "last_activity": "2026-02-04T10:46:55.731360",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0789980d": {
+    "session_id": "SESSION_0789980d",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T10:46:55.825838",
+    "last_activity": "2026-02-04T10:46:55.825838",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ab27ce53": {
+    "session_id": "SESSION_ab27ce53",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T10:46:55.943644",
+    "last_activity": "2026-02-04T11:16:24.402571",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_63d1dd27": {
+    "session_id": "SESSION_63d1dd27",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:03:06.231378",
+    "last_activity": "2026-02-04T11:16:37.642216",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_bc27a8df": {
+    "session_id": "SESSION_bc27a8df",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:16:56.558860",
+    "last_activity": "2026-02-04T11:17:19.235912",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_21ccbc6a": {
+    "session_id": "SESSION_21ccbc6a",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:24:35.064575",
+    "last_activity": "2026-02-04T11:27:42.560812",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b6ea1db8": {
+    "session_id": "SESSION_b6ea1db8",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:28:10.481581",
+    "last_activity": "2026-02-04T11:28:15.398766",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f9180424": {
+    "session_id": "SESSION_f9180424",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:28:31.212222",
+    "last_activity": "2026-02-04T11:32:23.630877",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_78535022": {
+    "session_id": "SESSION_78535022",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:33:35.635946",
+    "last_activity": "2026-02-04T11:34:28.624808",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_8d76515c": {
+    "session_id": "SESSION_8d76515c",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:34:33.603951",
+    "last_activity": "2026-02-04T11:34:33.603951",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_1a3a11f4": {
+    "session_id": "SESSION_1a3a11f4",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:34:33.800169",
+    "last_activity": "2026-02-04T11:34:33.800169",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_753d6e84": {
+    "session_id": "SESSION_753d6e84",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:34:33.957363",
+    "last_activity": "2026-02-04T11:34:33.957363",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_edceb2d1": {
+    "session_id": "SESSION_edceb2d1",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:34:34.073714",
+    "last_activity": "2026-02-04T11:38:36.156833",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_74678989": {
+    "session_id": "SESSION_74678989",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:23.745286",
+    "last_activity": "2026-02-04T11:39:23.745286",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_a8186fe6": {
+    "session_id": "SESSION_a8186fe6",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:23.863052",
+    "last_activity": "2026-02-04T11:39:49.915049",
+    "channel": "web",
+    "liked_products": [
+      "VH001"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_8af3906e": {
+    "session_id": "SESSION_8af3906e",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:55.924203",
+    "last_activity": "2026-02-04T11:39:55.924203",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fcffeb46": {
+    "session_id": "SESSION_fcffeb46",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.093322",
+    "last_activity": "2026-02-04T11:39:56.093322",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_cce91d8b": {
+    "session_id": "SESSION_cce91d8b",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.197726",
+    "last_activity": "2026-02-04T11:39:56.197726",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e52bf4a6": {
+    "session_id": "SESSION_e52bf4a6",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.268367",
+    "last_activity": "2026-02-04T11:39:56.268367",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_f8602315": {
+    "session_id": "SESSION_f8602315",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.404628",
+    "last_activity": "2026-02-04T11:39:56.404628",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_66b8a507": {
+    "session_id": "SESSION_66b8a507",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.576999",
+    "last_activity": "2026-02-04T11:39:56.576999",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b4b37490": {
+    "session_id": "SESSION_b4b37490",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:56.763644",
+    "last_activity": "2026-02-04T11:39:56.763644",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_d5526c99": {
+    "session_id": "SESSION_d5526c99",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.003231",
+    "last_activity": "2026-02-04T11:39:57.003231",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_00c04014": {
+    "session_id": "SESSION_00c04014",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.174142",
+    "last_activity": "2026-02-04T11:39:57.174142",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_b6eeb551": {
+    "session_id": "SESSION_b6eeb551",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.335513",
+    "last_activity": "2026-02-04T11:39:57.335513",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2979f3d2": {
+    "session_id": "SESSION_2979f3d2",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.511897",
+    "last_activity": "2026-02-04T11:39:57.511897",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_2068c988": {
+    "session_id": "SESSION_2068c988",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.804685",
+    "last_activity": "2026-02-04T11:39:57.804685",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_ed2d3ff4": {
+    "session_id": "SESSION_ed2d3ff4",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:57.874586",
+    "last_activity": "2026-02-04T11:39:57.874586",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_77f2014a": {
+    "session_id": "SESSION_77f2014a",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:58.031698",
+    "last_activity": "2026-02-04T11:39:58.031698",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_109e1749": {
+    "session_id": "SESSION_109e1749",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:58.157984",
+    "last_activity": "2026-02-04T11:39:58.157984",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_33ce3f08": {
+    "session_id": "SESSION_33ce3f08",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:58.494306",
+    "last_activity": "2026-02-04T11:39:58.494306",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_c9a30fed": {
+    "session_id": "SESSION_c9a30fed",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:58.804823",
+    "last_activity": "2026-02-04T11:39:58.804823",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_4d7b3466": {
+    "session_id": "SESSION_4d7b3466",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:58.979393",
+    "last_activity": "2026-02-04T11:39:58.979393",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_54c6f356": {
+    "session_id": "SESSION_54c6f356",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:59.115936",
+    "last_activity": "2026-02-04T11:39:59.115936",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_e71e066c": {
+    "session_id": "SESSION_e71e066c",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:59.463368",
+    "last_activity": "2026-02-04T11:39:59.463368",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_fd0dae26": {
+    "session_id": "SESSION_fd0dae26",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:39:59.752889",
+    "last_activity": "2026-02-04T11:39:59.752889",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_656622c7": {
+    "session_id": "SESSION_656622c7",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:41:57.555072",
+    "last_activity": "2026-02-04T11:43:57.789363",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH003",
+      "VH002"
+    ],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_6f9680b9": {
+    "session_id": "SESSION_6f9680b9",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-04T11:58:55.825210",
+    "last_activity": "2026-02-04T11:58:55.825210",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_0e3f415d": {
+    "session_id": "SESSION_0e3f415d",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-10T11:35:29.949718",
+    "last_activity": "2026-02-10T11:35:29.949718",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_095c3df2": {
+    "session_id": "SESSION_095c3df2",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-10T11:43:15.304590",
+    "last_activity": "2026-02-10T11:55:12.962221",
+    "channel": "web",
+    "liked_products": [
+      "VH001",
+      "VH002",
+      "VH003"
+    ],
+    "cart": [
+      {
+        "product_id": "VH001",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH004",
+        "quantity": 1,
+        "size": "40"
+      },
+      {
+        "product_id": "VH005",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_055f79fb": {
+    "session_id": "SESSION_055f79fb",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-10T11:45:22.190321",
+    "last_activity": "2026-02-10T11:50:05.861233",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  },
+  "SESSION_decec2ab": {
+    "session_id": "SESSION_decec2ab",
+    "customer_id": "CUST001",
+    "created_at": "2026-02-10T11:55:21.864986",
+    "last_activity": "2026-02-10T11:57:08.674618",
+    "channel": "web",
+    "liked_products": [],
+    "cart": [
+      {
+        "product_id": "VH003",
+        "quantity": 1,
+        "size": "40"
+      }
+    ],
+    "conversation_history": [],
+    "location": "Mumbai",
+    "reserved_store": null,
+    "status": "active"
+  }
+}

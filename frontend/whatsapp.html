@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp - Van Heusen AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .whatsapp-container {
+            width: 400px;
+            height: 700px;
+            background: #0a0a0a;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .wa-header {
+            background: #1f2c34;
+            padding: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .wa-chat {
+            flex: 1;
+            background: #0b141a;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.bot { text-align: left; }
+        .message.user { text-align: right; }
+        .message-bubble {
+            display: inline-block;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 5px 0;
+            word-wrap: break-word;
+        }
+        .bot .message-bubble {
+            background: #1f2c34;
+            color: white;
+        }
+        .user .message-bubble {
+            background: #005c4b;
+            color: white;
+        }
+        .product-card {
+            background: #1f2c34;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: white;
+        }
+        .product-card strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #25d366;
+        }
+        .product-card .reasoning {
+            background: #0b5345;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #a8dadc;
+            border-left: 3px solid #25d366;
+        }
+        .product-card .confidence-badge {
+            background: #128c7e;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        .product-card .social-proof {
+            color: #25d366;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+        .cart-display {
+            background: #1f2c34;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #2a3942;
+        }
+        .cart-display h3 {
+            margin: 0 0 12px 0;
+            color: #25d366;
+            font-size: 16px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a3942;
+            gap: 8px;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item-name {
+            flex: 1;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+        .cart-item-remove {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cart-item-remove:hover {
+            background: #ee5a6f;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 10px;
+        }
+        .quantity-control button {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #25d366;
+            background: transparent;
+            color: #25d366;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quantity-control button:hover {
+            background: #25d366;
+            color: #0d1418;
+        }
+        .quantity-control button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .quantity-control span {
+            font-size: 13px;
+            font-weight: bold;
+            color: #25d366;
+            min-width: 20px;
+            text-align: center;
+        }
+        .cart-item-price {
+            font-size: 13px;
+            font-weight: bold;
+            color: #25d366;
+        }
+        .cart-total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid #25d366;
+            text-align: right;
+        }
+        .cart-total strong {
+            font-size: 16px;
+            color: #e0e0e0;
+        }
+        .cart-total .discount-badge {
+            background: #128c7e;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+        .quick-reply {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .quick-reply button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .quick-reply button:hover {
+            background: #1ea952;
+            transform: scale(1.05);
+        }
+        .wa-input {
+            background: #1f2c34;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .wa-input input {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            outline: none;
+        }
+        .wa-input input::placeholder {
+            color: #8696a0;
+        }
+        .wa-input button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #voiceBtn {
+            background: #128c7e;
+        }
+        #voiceBtn.listening {
+            animation: pulse-voice 1s infinite;
+        }
+        @keyframes pulse-voice {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(18, 140, 126, 0.7); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(18, 140, 126, 0); }
+        }
+        .typing-indicator {
+            display: inline-block;
+            background: #1f2c34;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #8696a0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        .tts-toggle {
+            background: #2a3942;
+            border: none;
+            color: #8696a0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: auto;
+            transition: all 0.3s;
+        }
+        .tts-toggle.enabled {
+            background: #25d366;
+            color: white;
+        }
+        .tts-toggle:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <div class="wa-header">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                👔
+            </div>
+            <div>
+                <div style="font-weight: bold;">Van Heusen AI</div>
+                <div style="font-size: 12px; color: #8696a0;">Online</div>
+            </div>
+            <button class="tts-toggle" id="ttsToggle" onclick="toggleTTS()" title="Toggle Voice Responses">
+                🔇 Voice Off
+            </button>
+        </div>
+        
+        <div class="wa-chat" id="chatContainer">
+            <!-- Messages will be added here -->
+        </div>
+        
+        <div class="wa-input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const sessionId = localStorage.getItem('session_id');
+        let conversationState = 'initial'; // Track conversation flow
+        let cartItems = [];
+        
+        // Track activity for store dashboard
+        function trackActivity(channel, action) {
+            const activities = JSON.parse(localStorage.getItem('recentActivity') || '[]');
+            activities.push({
+                channel: channel,
+                action: action,
+                timestamp: new Date().toISOString()
+            });
+            // Keep only last 10 activities
+            if (activities.length > 10) {
+                activities.splice(0, activities.length - 10);
+            }
+            localStorage.setItem('recentActivity', JSON.stringify(activities));
+        }
+        
+        // Voice Recognition
+        let recognition = null;
+        let isListening = false;
+        let voiceEnabled = false;
+        let ttsEnabled = false; // TTS permission flag
+
+        // Initialize conversation
+        window.onload = () => {
+            // Load cart from localStorage for cross-interface sync
+            const savedCart = localStorage.getItem('cartItems');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+            
+            // Load liked products from mobile app
+            const savedLikes = localStorage.getItem('likedProducts');
+            let likedCount = 0;
+            let likedProductNames = [];
+            
+            if (savedLikes) {
+                const likedIds = JSON.parse(savedLikes);
+                likedCount = likedIds.length;
+                
+                // Get product names from IDs
+                const allProducts = [
+                    {id: 'VH001', name: 'Classic Blue Formal Shirt', category: 'shirt'},
+                    {id: 'VH002', name: 'White Premium Shirt', category: 'shirt'},
+                    {id: 'VH003', name: 'Light Pink Shirt', category: 'shirt'},
+                    {id: 'VH004', name: 'Navy Blue Tie', category: 'tie'},
+                    {id: 'VH005', name: 'Striped Tie', category: 'tie'},
+                    {id: 'VH006', name: 'Brown Leather Belt', category: 'belt'}
+                ];
+                
+                likedProductNames = likedIds.map(id => {
+                    const product = allProducts.find(p => p.id === id);
+                    return product ? product.name : null;
+                }).filter(name => name !== null);
+            }
+            
+            localStorage.setItem('current_step', '2');
+            
+            // Load TTS preference
+            const savedTTS = localStorage.getItem('ttsEnabled');
+            if (savedTTS === 'true') {
+                ttsEnabled = true;
+                document.getElementById('ttsToggle').textContent = '🔊 Voice On';
+                document.getElementById('ttsToggle').classList.add('enabled');
+            }
+            
+            initVoiceRecognition();
+            setTimeout(() => {
+                let greetingMessage = 'Hi Rahul! 👋 ';
+                
+                if (likedCount === 0) {
+                    greetingMessage += 'Welcome to Van Heusen! What are you looking for today?';
+                } else if (likedCount === 1) {
+                    greetingMessage += `I see you liked ${likedProductNames[0]} on our app. Would you like to see it again?`;
+                } else if (likedCount === 2) {
+                    greetingMessage += `I see you liked ${likedProductNames[0]} and ${likedProductNames[1]} on our app. Would you like to see them?`;
+                } else {
+                    greetingMessage += `I see you liked ${likedCount} items on our app (${likedProductNames.slice(0, 2).join(', ')}${likedCount > 2 ? ', and more' : ''}). Would you like to see them?`;
+                }
+                
+                addMessage(greetingMessage, false);
+                addQuickReplies([
+                    {text: '👍 Yes, show that!', action: 'show_products'},
+                    {text: '📦 Check availability', action: 'check_stores'}
+                ]);
+            }, 500);
+        };
+
+        function addMessage(text, isUser = false) {
+            const chat = document.getElementById('chatContainer');
+            const msg = document.createElement('div');
+            msg.className = `message ${isUser ? 'user' : 'bot'}`;
+            msg.innerHTML = `<div class="message-bubble">${text}</div>`;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+            
+            // Text-to-Speech for bot messages (only if enabled)
+            if (!isUser && ttsEnabled) {
+                speakResponse(text);
+            }
+        }
+
+        function addTypingIndicator() {
+            const chat = document.getElementById('chatContainer');
+            const typing = document.createElement('div');
+            typing.className = 'message bot';
+            typing.id = 'typing';
+            typing.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+            chat.appendChild(typing);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        // ============ VOICE RECOGNITION FUNCTIONS ============
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                recognition.lang = 'en-IN';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => {
+                    isListening = true;
+                    document.getElementById('voiceBtn').classList.add('listening');
+                    document.getElementById('messageInput').placeholder = '🎤 Listening...';
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('messageInput').value = transcript;
+                    stopListening();
+                    setTimeout(() => sendMessage(), 500);
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    stopListening();
+                    if (event.error !== 'no-speech') {
+                        addMessage('⚠️ Voice recognition error. Please try again.', false);
+                    }
+                };
+
+                recognition.onend = () => {
+                    stopListening();
+                };
+
+                voiceEnabled = true;
+                console.log('Voice recognition initialized (en-IN)');
+            } else {
+                console.warn('Speech recognition not supported');
+                document.getElementById('voiceBtn').style.display = 'none';
+            }
+        }
+
+        function toggleVoice() {
+            if (!voiceEnabled) {
+                addMessage('⚠️ Voice input is not supported in your browser.', false);
+                return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (recognition && !isListening) {
+                recognition.start();
+            }
+        }
+
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+                isListening = false;
+                document.getElementById('voiceBtn').classList.remove('listening');
+                document.getElementById('messageInput').placeholder = 'Type a message...';
+            }
+        }
+
+        // Toggle TTS Permission
+        function toggleTTS() {
+            ttsEnabled = !ttsEnabled;
+            const toggleBtn = document.getElementById('ttsToggle');
+            
+            if (ttsEnabled) {
+                toggleBtn.textContent = '🔊 Voice On';
+                toggleBtn.classList.add('enabled');
+                // Announce the change
+                speakResponse('Voice responses enabled');
+            } else {
+                // Stop any ongoing speech
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                }
+                toggleBtn.textContent = '🔇 Voice Off';
+                toggleBtn.classList.remove('enabled');
+            }
+            
+            // Save preference
+            localStorage.setItem('ttsEnabled', ttsEnabled);
+        }
+
+        // Text-to-Speech Function
+        function speakResponse(text) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('Text-to-speech not supported');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const cleanText = text
+                .replace(/\*\*(.+?)\*\*/g, '$1')
+                .replace(/\*(.+?)\*\*/g, '$1')
+                .replace(/[🎉💝🎁✨🌟💎🛍️🎊👔💼🎯📦🏪🚚💰⭐🔥💯✅❌🎤➤👋📍🔔👍]/g, '')
+                .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+                .replace(/\n/g, '. ');
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-IN';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.9;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function addQuickReplies(buttons) {
+            const chat = document.getElementById('chatContainer');
+            const qr = document.createElement('div');
+            qr.className = 'quick-reply';
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.textContent = btn.text;
+                button.onclick = () => handleQuickReply(btn.action);
+                qr.appendChild(button);
+            });
+            chat.appendChild(qr);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showProductCard(product, showConfidence = false) {
+            const chat = document.getElementById('chatContainer');
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const confidenceBadge = (showConfidence && product.confidence) ? `<span class="confidence-badge">${product.confidence}% match</span>` : '';
+            const reasoningSection = product.reasoning ? `<div class="reasoning">💡 ${product.reasoning}</div>` : '';
+            const socialProof = product.similar_customers ? `<div class="social-proof">👥 ${product.similar_customers} customers like you bought this</div>` : '';
+            
+            card.innerHTML = `
+                <strong>${product.name}${confidenceBadge}</strong>
+                ₹${product.price} | ${product.size ? `Size: ${product.size} | ` : ''}Available
+                ${reasoningSection}
+                ${socialProof}
+                <div class="quick-reply" style="margin-top: 10px;">
+                    <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>
+                    <button onclick="checkInStore('${product.id}')">Check in Store</button>
+                </div>
+            `;
+            chat.appendChild(card);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function handleQuickReply(action) {
+            // Remove previous quick reply buttons
+            document.querySelectorAll('.quick-reply').forEach(qr => qr.remove());
+
+            switch(action) {
+                case 'show_products':
+                    // Load liked products from localStorage
+                    const savedLikes = localStorage.getItem('likedProducts');
+                    let likedProductsData = [];
+                    
+                    if (savedLikes) {
+                        const likedIds = JSON.parse(savedLikes);
+                        
+                        // All available products with full details
+                        const allProducts = [
+                            {id: 'VH001', name: 'Classic Blue Formal Shirt', price: 2500, size: '40', reasoning: "You liked this earlier - our #1 bestseller for formal occasions", confidence: 95, similar_customers: 127},
+                            {id: 'VH002', name: 'White Premium Shirt', price: 2800, size: '40', reasoning: "Premium collection - perfect for important meetings", confidence: 93, similar_customers: 104},
+                            {id: 'VH003', name: 'Light Pink Shirt', price: 2600, size: '40', reasoning: "Trending this season - modern professional look", confidence: 88, similar_customers: 92},
+                            {id: 'VH004', name: 'Navy Blue Tie', price: 800, reasoning: "Classic accessory - pairs with any formal shirt", confidence: 91, similar_customers: 156},
+                            {id: 'VH005', name: 'Striped Tie', price: 750, reasoning: "Versatile pattern - adds personality to formal wear", confidence: 85, similar_customers: 78},
+                            {id: 'VH006', name: 'Brown Leather Belt', price: 1200, reasoning: "Premium leather - completes any formal outfit", confidence: 89, similar_customers: 134}
+                        ];
+                        
+                        likedProductsData = likedIds.map(id => allProducts.find(p => p.id === id)).filter(p => p !== undefined);
+                    }
+                    
+                    // If no likes or couldn't find products, show default
+                    if (likedProductsData.length === 0) {
+                        likedProductsData = [{
+                            id: 'VH001',
+                            name: 'Classic Blue Formal Shirt',
+                            price: 2500,
+                            size: '40',
+                            reasoning: "Our #1 bestseller for formal occasions",
+                            confidence: 95,
+                            similar_customers: 127
+                        }];
+                    }
+                    
+                    const itemText = likedProductsData.length === 1 ? 'the item' : `${likedProductsData.length} items`;
+                    addMessage(`Show me ${itemText}`, true);
+                    addTypingIndicator();
+                    await sleep(800);
+                    removeTypingIndicator();
+                    
+                    if (likedProductsData.length === 1) {
+                        addMessage('Here is the item you liked:', false);
+                    } else {
+                        addMessage(`Here are the ${likedProductsData.length} items you liked:`, false);
+                    }
+                    
+                    // Show all liked products
+                    for (const product of likedProductsData) {
+                        await sleep(300);
+                        showProductCard(product);
+                    }
+                    
+                    conversationState = 'products_shown';
+                    break;
+
+                case 'check_stores':
+                    addMessage('Check availability near me', true);
+                    trackActivity('WhatsApp', 'Checked store availability');
+                    addTypingIndicator();
+                    await sleep(600);
+                    removeTypingIndicator();
+                    addMessage('Checking nearby stores...', false);
+                    await sleep(400);
+                    addMessage('Here are stores near you with stock availability:', false);
+                    await sleep(200);
+                    addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
+                    await sleep(200);
+                    addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
+                    await sleep(200);
+                    addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
+                    addQuickReplies([
+                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                        {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
+                        {text: '👕 Show products', action: 'show_products'}
+                    ]);
+                    break;
+
+                case 'show_recommendations':
+                    addMessage('Show matching items', true);
+                    addTypingIndicator();
+                    await sleep(600);
+                    removeTypingIndicator();
+                    addMessage('Great! Here are items that match perfectly:', false);
+                    
+                    showProductCard({
+                        id: 'VH004',
+                        name: 'Navy Blue Silk Tie',
+                        price: 800,
+                        reasoning: "Pairs perfectly with your blue shirt - 85% of customers bought both together",
+                        confidence: 92,
+                        similar_customers: 89
+                    }, false);
+                    
+                    showProductCard({
+                        id: 'VH006',
+                        name: 'Brown Leather Belt',
+                        price: 1200,
+                        reasoning: "Complete your professional look - matches both shirt and tie",
+                        confidence: 88,
+                        similar_customers: 64
+                    }, false);
+                    
+                    addMessage('💡 Bundle offer: Buy 3+ items, get 20% off!', false);
+                    conversationState = 'recommendations_shown';
+                    break;
+
+                case 'reserve_bandra':
+                    addMessage('Reserve at Bandra store', true);
+                    trackActivity('WhatsApp', 'Reserved items at Bandra Store');
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    localStorage.setItem('selected_store', 'bandra'); // Save selected store
+                    addMessage('✅ Items reserved at Bandra Store for 24 hours!\n\n📍 Shop 23, Linking Road, Bandra West\n⏰ Open until 10 PM\n📦 3 items ready for you\n\nYour shopping history is shared with our store team for faster service! 🚀', false);
+                    addQuickReplies([
+                        {text: '🏪 Visit Store Now', action: 'visit_store'},
+                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
+                    ]);
+                    break;
+
+                case 'reserve_powai':
+                    addMessage('Reserve at Powai store', true);
+                    trackActivity('WhatsApp', 'Reserved items at Powai Store');
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    localStorage.setItem('selected_store', 'powai'); // Save selected store
+                    addMessage('✅ Items reserved at Powai Store for 24 hours!\n\n📍 Phoenix Market City, Powai\n⏰ Open until 11 PM\n📦 1 item ready for you\n\n💡 Note: Limited stock - we recommend visiting soon!', false);
+                    addQuickReplies([
+                        {text: '🏪 Visit Store Now', action: 'visit_store'},
+                        {text: '🗺️ Get Directions', action: 'get_directions_powai'},
+                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
+                    ]);
+                    break;
+
+                case 'notify_andheri':
+                    addMessage('Notify when Andheri restocks', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    addMessage('🔔 Restock Alert Set!\n\nWe\'ll notify you on WhatsApp when your items are back in stock at Andheri Store.\n\n📅 Expected restock: 2-3 days\n📍 Infinity Mall, Andheri West\n\nMeanwhile, would you like to:\n• Reserve at Bandra (2km) - 3 in stock\n• Reserve at Powai (5km) - 1 in stock', false);
+                    addQuickReplies([
+                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                        {text: '👕 Browse More', action: 'show_products'}
+                    ]);
+                    break;
+
+                case 'get_directions_powai':
+                    addMessage('Get directions to Powai', true);
+                    await sleep(300);
+                    addMessage('📍 Powai Store - Phoenix Market City\n\n🚗 5km from your location\n⏱️ 15-20 mins via Western Express Highway\n\n[Opening Google Maps...]\n\nStore Contact: +91 22 6789 0123\n\nYour reserved items will be ready when you arrive! 🎉', false);
+                    addQuickReplies([
+                        {text: '📞 Call Store', action: 'call_store_powai'},
+                        {text: '🏪 Visit Store', action: 'visit_store'}
+                    ]);
+                    break;
+
+                case 'call_store_powai':
+                    addMessage('Call Powai store', true);
+                    await sleep(300);
+                    addMessage('📞 Calling Powai Store...\n\n+91 22 6789 0123\n\nOur team is ready to assist you!\n⏰ Open now until 11 PM', false);
+                    break;
+
+                case 'add_tie':
+                    await addToCart('VH004', 'Navy Blue Silk Tie', 800);
+                    break;
+
+                case 'add_belt':
+                    await addToCart('VH006', 'Brown Leather Belt', 1200);
+                    break;
+
+                case 'add_shirt':
+                    await addToCart('VH001', 'Classic Blue Formal Shirt', 2500);
+                    break;
+
+                case 'visit_store':
+                    addMessage('Take me to store', true);
+                    await sleep(500);
+                    addMessage('🏪 Great! Let me redirect you to our in-store kiosk experience.\n\nYou can scan products, reserve items for try-on, and complete your purchase at the store!', false);
+                    await sleep(1000);
+                    // Get selected store from localStorage, default to bandra
+                    const selectedStore = localStorage.getItem('selected_store') || 'bandra';
+                    window.location.href = `kiosk.html?session=${sessionId}&store=${selectedStore}&auto=true`;
+                    break;
+                
+                case 'checkout':
+                    addMessage('Checkout', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    
+                    const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                    const discount = totalItems >= 3 ? 0.2 : 0.1;
+                    const total = Math.round(subtotal * (1 - discount));
+                    
+                    addMessage(`🛒 Your Cart Summary:\n\nItems: ${totalItems}\nSubtotal: ₹${subtotal.toLocaleString()}\nDiscount (${discount * 100}%): -₹${Math.round(subtotal * discount).toLocaleString()}\n\nTotal: ₹${total.toLocaleString()}`, false);
+                    
+                    await sleep(400);
+                    addMessage('How would you like to proceed?', false);
+                    
+                    addQuickReplies([
+                        {text: '🏪 Complete at Store', action: 'visit_store'},
+                        {text: '🚚 Home Delivery', action: 'delivery_options'},
+                        {text: '🎁 Apply Coupon', action: 'apply_coupon'}
+                    ]);
+                    break;
+                
+                case 'delivery_options':
+                    addMessage('Home delivery', true);
+                    addTypingIndicator();
+                    await sleep(500);
+                    removeTypingIndicator();
+                    addMessage('📦 Delivery Options:\n\n⚡ Express - Tomorrow by 10 AM (₹99)\n📦 Standard - 2-3 days (FREE)\n\nWhich would you prefer?', false);
+                    addQuickReplies([
+                        {text: '⚡ Express (₹99)', action: 'express_delivery'},
+                        {text: '📦 Standard (FREE)', action: 'standard_delivery'}
+                    ]);
+                    break;
+                
+                case 'apply_coupon':
+                    addMessage('Apply coupon', true);
+                    await sleep(300);
+                    addMessage('🎁 Available Coupons:\n\n• FIRST20 - 20% off first order\n• WEDDING15 - 15% off formal wear\n• LOYALTY10 - 10% off (auto-applied)', false);
+                    break;
+                
+                case 'express_delivery':
+                    addMessage('Express delivery', true);
+                    await sleep(400);
+                    const expressTotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) + 99;
+                    addMessage(`✅ Express Delivery Selected!\n\n📦 Delivery tomorrow by 10 AM\n💰 Total: ₹${expressTotal.toLocaleString()}\n\nRedirecting to payment...`, false);
+                    await sleep(1500);
+                    window.location.href = 'post-purchase.html';
+                    break;
+                
+                case 'standard_delivery':
+                    addMessage('Standard delivery', true);
+                    await sleep(400);
+                    const standardTotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                    addMessage(`✅ Standard Delivery Selected!\n\n📦 Delivery in 2-3 days\n💰 Total: ₹${standardTotal.toLocaleString()} (FREE delivery)\n\nRedirecting to payment...`, false);
+                    await sleep(1500);
+                    window.location.href = 'post-purchase.html';
+                    break;
+            }
+        }
+
+        async function addToCart(productId, productName, price) {
+            // Check if item already in cart
+            const existing = cartItems.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+                cartItems.push({id: productId, name: productName, price: price, quantity: 1});
+            }
+            
+            // Sync to localStorage for cross-interface access
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Track activity
+            trackActivity('WhatsApp Chat', `Added ${productName} to cart`);
+            
+            addMessage(`Add ${productName} to cart`, true);
+            
+            addTypingIndicator();
+            await sleep(500);
+            removeTypingIndicator();
+            
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const discount = totalItems >= 3 ? 0.2 : 0.1;
+            const total = Math.round(subtotal * (1 - discount));
+            
+            addMessage(`✅ Added to cart! 🛒\n\nTotal items: ${totalItems}\nTotal: ₹${total.toLocaleString()}`, false);
+            
+            await sleep(300);
+            addMessage('Would you like matching accessories?', false);
+            
+            addQuickReplies([
+                {text: '👔 Show Ties & Belts', action: 'show_recommendations'},
+                {text: '🏪 Visit Store', action: 'check_stores'},
+                {text: '💳 Checkout', action: 'checkout'}
+            ]);
+
+            // Send to backend
+            try {
+                await fetch(`${API_URL}/api/cart/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: 1,
+                        size: '40'
+                    })
+                });
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
+        }
+
+        function showCart() {
+            console.log('showCart called, cartItems:', cartItems); // Debug log
+            console.log('localStorage cartItems:', localStorage.getItem('cartItems'));
+            
+            if (cartItems.length === 0) {
+                addMessage('🛒 Your cart is empty. Start shopping to add items!', false);
+                addMessage(`Debug: Cart has ${cartItems.length} items. Did you add items in this session?`, false);
+                setTimeout(() => {
+                    addQuickReplies([
+                        {text: '👕 Browse Products', action: 'show_products'},
+                        {text: '💡 Get Recommendations', action: 'show_recommendations'}
+                    ]);
+                }, 300);
+                return;
+            }
+
+            let subtotal = 0;
+            let itemsHtml = '';
+
+            cartItems.forEach(item => {
+                const itemTotal = item.price * (item.quantity || 1);
+                subtotal += itemTotal;
+                itemsHtml += `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2a3942; gap: 8px;">
+                        <span style="flex: 1; font-size: 13px; color: #e0e0e0;">${item.name}</span>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <button onclick="updateQuantity('${item.id}', ${item.price}, -1)" style="background: #2a3942; color: #25d366; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">−</button>
+                            <span id="qty-${item.id}" style="min-width: 20px; text-align: center; color: #e0e0e0;">${item.quantity || 1}</span>
+                            <button onclick="updateQuantity('${item.id}', ${item.price}, 1)" style="background: #2a3942; color: #25d366; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">+</button>
+                        </div>
+                        <span style="min-width: 70px; text-align: right; color: #e0e0e0; font-weight: 500;" id="price-${item.id}">₹${itemTotal.toLocaleString()}</span>
+                        <button onclick="removeFromCart('${item.id}', '${item.name}')" style="background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;">×</button>
+                    </div>
+                `;
+            });
+
+            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const discount = totalQty >= 3 ? 0.2 : 0.1;
+            const discountAmount = Math.round(subtotal * discount);
+            const total = subtotal - discountAmount;
+
+            const cartHtml = `
+                <div style="background: #1f2c34; border: 1px solid #2a3942; border-radius: 12px; padding: 16px; margin: 10px 0;">
+                    <div style="font-weight: 600; margin-bottom: 12px; color: #25d366; font-size: 15px;">🛒 Your Cart (${cartItems.length} items)</div>
+                    ${itemsHtml}
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 2px solid #2a3942;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #8696a0; font-size: 13px;">
+                            <span>Subtotal:</span>
+                            <span id="cart-subtotal">₹${subtotal.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #25d366; font-size: 13px;">
+                            <span>Bundle Discount (${discount * 100}%):</span>
+                            <span id="cart-discount">-₹${discountAmount.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 16px; color: #e0e0e0;">
+                            <span>Total:</span>
+                            <span id="cart-total">₹${total.toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Create a message wrapper (bot message style)
+            const chatDiv = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `<div class="message-bubble" style="max-width: 90%;">${cartHtml}</div>`;
+            chatDiv.appendChild(messageDiv);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+
+            setTimeout(() => {
+                addQuickReplies([
+                    {text: '💳 Proceed to Checkout', action: 'checkout'},
+                    {text: '👕 Add More Items', action: 'show_products'},
+                    {text: '🏪 Visit Store', action: 'check_stores'}
+                ]);
+            }, 300);
+        }
+
+        async function updateQuantity(productId, price, change) {
+            const item = cartItems.find(item => item.id === productId);
+            if (!item) return;
+
+            const newQty = (item.quantity || 1) + change;
+            if (newQty <= 0) {
+                cartItems = cartItems.filter(i => i.id !== productId);
+            } else {
+                item.quantity = newQty;
+            }
+            
+            // Sync to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Update display
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            const priceElement = document.getElementById(`price-${productId}`);
+            
+            if (newQty <= 0) {
+                qtyElement.closest('[style*="display: flex"]').remove();
+            } else {
+                qtyElement.textContent = newQty;
+                priceElement.textContent = `₹${(price * newQty).toLocaleString()}`;
+            }
+
+            // Recalculate totals
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const discount = totalQty >= 3 ? 0.2 : 0.1;
+            const discountAmount = Math.round(subtotal * discount);
+            const total = subtotal - discountAmount;
+
+            document.getElementById('cart-subtotal').textContent = `₹${subtotal.toLocaleString()}`;
+            document.getElementById('cart-discount').textContent = `-₹${discountAmount.toLocaleString()}`;
+            document.getElementById('cart-discount').previousElementSibling.textContent = `Bundle Discount (${discount * 100}%):`;
+            document.getElementById('cart-total').textContent = `₹${total.toLocaleString()}`;
+
+            // Update backend
+            try {
+                await fetch(`${API_URL}/api/cart/update`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId,
+                        quantity: newQty
+                    })
+                });
+            } catch (error) {
+                console.error('Cart update error:', error);
+            }
+        }
+
+        async function removeFromCart(productId, productName) {
+            console.log('Removing from cart:', productId, productName);
+            
+            // Remove from cartItems array
+            cartItems = cartItems.filter(item => item.id !== productId);
+            
+            // Sync to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            console.log('Cart after removal:', JSON.stringify(cartItems, null, 2));
+            
+            addMessage(`✗ Removed ${productName}`, false);
+            
+            // Refresh cart display
+            setTimeout(() => {
+                // Remove old cart display
+                const chatDiv = document.getElementById('chat');
+                const cartDisplays = chatDiv.querySelectorAll('div[style*="background: #1f2c34"]');
+                cartDisplays.forEach(display => {
+                    if (display.textContent.includes('🛒 Cart')) {
+                        display.remove();
+                    }
+                });
+                
+                // Show updated cart
+                if (cartItems.length > 0) {
+                    showCart();
+                } else {
+                    addMessage('🛒 Your cart is now empty', false);
+                }
+            }, 500);
+            
+            // Call backend
+            try {
+                await fetch(`${API_URL}/api/cart/remove`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        product_id: productId
+                    })
+                });
+            } catch (error) {
+                console.error('Cart remove error:', error);
+            }
+        }
+
+        async function checkInStore(productId) {
+            addMessage('Check in store', true);
+            
+            addTypingIndicator();
+            await sleep(600);
+            removeTypingIndicator();
+            
+            addMessage('Checking store availability...', false);
+            
+            await sleep(400);
+            addMessage('✅ Available at Bandra Store (2km)\n📦 3 pieces in stock\n⏰ Open until 10 PM', false);
+            
+            addQuickReplies([
+                {text: '📍 Reserve Now', action: 'reserve_bandra'},
+                {text: '🛒 Add to Cart', action: 'add_this'}
+            ]);
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim().toLowerCase();
+            if (!message) return;
+            
+            addMessage(input.value.trim(), true);
+            input.value = '';
+            
+            addTypingIndicator();
+            await sleep(800);
+            removeTypingIndicator();
+            
+            // Smart response based on keywords
+            if (message.includes('store') || message.includes('shop') || message.includes('where')) {
+                addMessage('Here are stores near you with stock availability:', false);
+                await sleep(300);
+                addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
+                await sleep(200);
+                addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
+                await sleep(200);
+                addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
+                addQuickReplies([
+                    {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
+                    {text: '📍 Reserve at Powai', action: 'reserve_powai'},
+                    {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
+                    {text: '👕 Show products', action: 'show_products'}
+                ]);
+            }
+            // Cart viewing - check this FIRST before other cart operations
+            else if (message.includes('view cart') || message.includes('show cart') || 
+                     message.includes('my cart') || message.includes('see cart') ||
+                     message.includes('cart items') || message === 'cart') {
+                // Refresh cart from localStorage to ensure we have latest
+                const savedCart = localStorage.getItem('cartItems');
+                if (savedCart) {
+                    cartItems = JSON.parse(savedCart);
+                }
+                console.log('Cart view requested, cartItems:', cartItems);
+                showCart();
+            }
+            // Adding items to cart - more specific checks
+            else if (message.includes('add to cart') || (message.includes('add') && message.includes('cart'))) {
+                if (message.includes('tie')) {
+                    await addToCart('VH004', 'Navy Blue Silk Tie', 800);
+                } else if (message.includes('belt')) {
+                    await addToCart('VH006', 'Brown Leather Belt', 1200);
+                } else if (message.includes('shirt')) {
+                    await addToCart('VH001', 'Classic Blue Formal Shirt', 2500);
+                } else {
+                    addMessage('Which item would you like to add?', false);
+                    addQuickReplies([
+                        {text: '👔 Navy Tie', action: 'add_tie'},
+                        {text: '👔 Brown Belt', action: 'add_belt'},
+                        {text: '👕 Blue Shirt', action: 'add_shirt'}
+                    ]);
+                }
+            }
+            // Handle standalone item names (navy tie, belt, etc.) - assume add to cart intent
+            else if ((message.includes('navy') && message.includes('tie')) || 
+                     (message.includes('blue') && message.includes('tie'))) {
+                await addToCart('VH004', 'Navy Blue Silk Tie', 800);
+            }
+            else if ((message.includes('brown') && message.includes('belt')) || 
+                     (message.includes('leather') && message.includes('belt'))) {
+                await addToCart('VH006', 'Brown Leather Belt', 1200);
+            }
+            else if ((message.includes('blue') && message.includes('shirt')) || 
+                     (message.includes('formal') && message.includes('shirt'))) {
+                await addToCart('VH001', 'Classic Blue Formal Shirt', 2500);
+            }
+            // Generic keywords for showing recommendations
+            else if (message.includes('match') || message.includes('accessory') || message.includes('recommend')) {
+                handleQuickReply('show_recommendations');
+            }
+            else if (message.includes('reserve') || message.includes('book')) {
+                handleQuickReply('reserve_bandra');
+            }
+            else if (message.includes('visit') || message.includes('go')) {
+                handleQuickReply('visit_store');
+            }
+            else if (message.includes('help')) {
+                addMessage('I can help you with:\n• Finding products\n• Checking store availability\n• Adding items to cart\n• Reserving items\n• Getting recommendations\n\nWhat would you like to do?', false);
+                addQuickReplies([
+                    {text: '👕 Show Products', action: 'show_products'},
+                    {text: '🏪 Check Stores', action: 'check_stores'},
+                    {text: '💡 Recommendations', action: 'show_recommendations'}
+                ]);
+            }
+            else {
+                // Default smart response
+                addMessage('I can help you with that! Would you like to:', false);
+                addQuickReplies([
+                    {text: '👕 See Products', action: 'show_products'},
+                    {text: '🏪 Check Stores', action: 'check_stores'},
+                    {text: '💡 Get Recommendations', action: 'show_recommendations'}
+                ]);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Enter key to send
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
