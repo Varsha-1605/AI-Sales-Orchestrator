@@ -121,6 +121,8 @@ Sessions persist likes, cart, conversation history and the active channel, so a 
 
 The application was deployed on **AWS EC2**, with product catalog and inventory data stored in **Amazon S3**. For local development, the same data is read from `backend/data/`.
 
+See **[AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md)** for the full setup: S3 data sync, IAM role, systemd service and Nginx with WebSocket support.
+
 ---
 
 ## Quick start (local)
