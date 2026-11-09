@@ -4,333 +4,316 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp - Van Heusen AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Page: WhatsApp conversation. It keeps WhatsApp's own dark look so it reads as WhatsApp;
+           the cart markup built by the script uses these exact dark colours inline. */
+        :root {
+            --wa-outer: #070D11;
+            --wa-bg: #0B141A;
+            --wa-panel: #1F2C34;
+            --wa-line: #2A3942;
+            --wa-text: #E9EDEF;
+            --wa-muted: #8696A0;
+            --wa-green: #25D366;
+            --wa-sent: #005C4B;
+            --wa-send-button: #00A884;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0a0a0a;
-            height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-        }
-        .whatsapp-container {
-            width: 400px;
-            height: 700px;
-            background: #0a0a0a;
-            border-radius: 30px;
+            height: 100vh;
+            height: 100dvh;
+            background: var(--wa-outer);
+            color: var(--wa-text);
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .whatsapp-container {
             display: flex;
             flex-direction: column;
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background: var(--wa-bg);
+            border-left: 1px solid var(--wa-panel);
+            border-right: 1px solid var(--wa-panel);
         }
+
         .wa-header {
-            background: #1f2c34;
-            padding: 15px;
-            color: white;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--wa-panel);
+            border-bottom: 1px solid var(--wa-line);
         }
+
+        .wa-avatar {
+            display: grid;
+            place-items: center;
+            flex: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--wa-line);
+            color: var(--wa-green);
+        }
+
+        .wa-title { min-width: 0; }
+        .wa-name { font-size: var(--text-md); font-weight: 600; }
+        .wa-status { font-size: var(--text-xs); color: var(--wa-muted); }
+
+        .tts-toggle {
+            margin-left: auto;
+            min-height: 32px;
+            padding: 0 var(--space-3);
+            border: 1px solid var(--wa-line);
+            border-radius: 16px;
+            background: transparent;
+            color: var(--wa-muted);
+            font-family: var(--font-text);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 120ms ease, color 120ms ease;
+        }
+        .tts-toggle:hover { background: var(--wa-line); color: var(--wa-text); }
+        .tts-toggle.enabled { background: var(--wa-green); border-color: var(--wa-green); color: #0B141A; }
+        .tts-toggle:focus-visible,
+        .quick-reply button:focus-visible,
+        .wa-input button:focus-visible { outline: 2px solid var(--wa-green); outline-offset: 2px; }
+
+        /* The script looks up #chat when it refreshes the cart, so the scrolling area sits inside it */
+        #chat { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
         .wa-chat {
             flex: 1;
-            background: #0b141a;
-            padding: 20px;
+            padding: var(--space-4);
             overflow-y: auto;
+            background-color: var(--wa-bg);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 20v8M20 24h8' stroke='%23ffffff' stroke-opacity='0.035' stroke-width='1'/%3E%3C/svg%3E");
+            scrollbar-width: thin;
+            scrollbar-color: var(--wa-line) transparent;
         }
-        .message {
-            margin-bottom: 15px;
-            animation: slideIn 0.3s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .message { margin-bottom: var(--space-2); animation: message-in 160ms ease; }
+        @keyframes message-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .message.bot { text-align: left; }
         .message.user { text-align: right; }
+
         .message-bubble {
+            position: relative;
             display: inline-block;
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin: 5px 0;
+            max-width: 82%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.45;
+            text-align: left;
+            white-space: pre-line;
             word-wrap: break-word;
         }
-        .bot .message-bubble {
-            background: #1f2c34;
-            color: white;
+        /* Bubbles that hold built markup (the cart) must not keep source line breaks */
+        .message-bubble[style] { white-space: normal; }
+
+        .bot .message-bubble { background: var(--wa-panel); color: var(--wa-text); border-top-left-radius: 0; }
+        .bot .message-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -8px;
+            width: 8px;
+            height: 13px;
+            background: var(--wa-panel);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
         }
-        .user .message-bubble {
-            background: #005c4b;
-            color: white;
+
+        .user .message-bubble { background: var(--wa-sent); color: var(--wa-text); border-top-right-radius: 0; }
+        .user .message-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -8px;
+            width: 8px;
+            height: 13px;
+            background: var(--wa-sent);
+            clip-path: polygon(0 0, 100% 0, 0 100%);
         }
+
+        /* Product card */
         .product-card {
-            background: #1f2c34;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            color: white;
+            max-width: 82%;
+            margin: var(--space-2) 0 var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--wa-panel);
+            border: 1px solid var(--wa-line);
+            border-radius: 8px;
+            font-size: var(--text-sm);
+            color: var(--wa-text);
         }
         .product-card strong {
             display: block;
-            margin-bottom: 5px;
-            color: #25d366;
+            margin-bottom: var(--space-1);
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--wa-text);
         }
         .product-card .reasoning {
-            background: #0b5345;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 12px;
-            color: #a8dadc;
-            border-left: 3px solid #25d366;
+            margin-top: var(--space-3);
+            padding: var(--space-2) var(--space-3);
+            border-left: 2px solid var(--wa-green);
+            background: var(--wa-bg);
+            font-size: var(--text-xs);
+            color: var(--wa-muted);
         }
         .product-card .confidence-badge {
-            background: #128c7e;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
+            margin-left: var(--space-2);
+            padding: 2px 6px;
+            border: 1px solid var(--wa-green);
+            border-radius: 2px;
+            font-family: var(--font-mono);
             font-size: 11px;
-            margin-left: 8px;
-            font-weight: bold;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--wa-green);
         }
-        .product-card .social-proof {
-            color: #25d366;
-            font-size: 11px;
-            margin-top: 8px;
-        }
-        .cart-display {
-            background: #1f2c34;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 10px 0;
-            border: 1px solid #2a3942;
-        }
-        .cart-display h3 {
-            margin: 0 0 12px 0;
-            color: #25d366;
-            font-size: 16px;
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #2a3942;
-            gap: 8px;
-        }
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        .cart-item-name {
-            flex: 1;
-            font-size: 13px;
-            color: #e0e0e0;
-        }
-        .cart-item-remove {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cart-item-remove:hover {
-            background: #ee5a6f;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0 10px;
-        }
-        .quantity-control button {
-            width: 28px;
-            height: 28px;
-            border: 2px solid #25d366;
-            background: transparent;
-            color: #25d366;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .quantity-control button:hover {
-            background: #25d366;
-            color: #0d1418;
-        }
-        .quantity-control button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .quantity-control span {
-            font-size: 13px;
-            font-weight: bold;
-            color: #25d366;
-            min-width: 20px;
-            text-align: center;
-        }
-        .cart-item-price {
-            font-size: 13px;
-            font-weight: bold;
-            color: #25d366;
-        }
-        .cart-total {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 2px solid #25d366;
-            text-align: right;
-        }
-        .cart-total strong {
-            font-size: 16px;
-            color: #e0e0e0;
-        }
-        .cart-total .discount-badge {
-            background: #128c7e;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            margin-left: 8px;
-        }
-        .quick-reply {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
+        .product-card .social-proof { margin-top: var(--space-2); font-size: var(--text-xs); color: var(--wa-green); }
+
+        /* Quick replies */
+        .quick-reply { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 var(--space-3); }
         .quick-reply button {
-            background: #25d366;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+            flex: 1 1 calc(50% - 8px);
+            min-height: 44px;
+            padding: 0 var(--space-3);
+            border: 1px solid var(--wa-line);
+            border-radius: 8px;
+            background: var(--wa-panel);
+            color: var(--wa-green);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
+            font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
+            transition: background-color 120ms ease;
         }
-        .quick-reply button:hover {
-            background: #1ea952;
-            transform: scale(1.05);
-        }
+        .quick-reply button:hover { background: var(--wa-line); }
+        .product-card .quick-reply { margin-bottom: 0; }
+
+        /* Input bar */
         .wa-input {
-            background: #1f2c34;
-            padding: 15px;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: var(--wa-panel);
+            border-top: 1px solid var(--wa-line);
         }
         .wa-input input {
             flex: 1;
-            background: #2a3942;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 25px;
-            outline: none;
+            min-width: 0;
+            min-height: 44px;
+            padding: 0 var(--space-4);
+            border: 1px solid transparent;
+            border-radius: 22px;
+            background: var(--wa-line);
+            color: var(--wa-text);
+            font-family: var(--font-text);
+            font-size: 15px;
         }
-        .wa-input input::placeholder {
-            color: #8696a0;
-        }
+        .wa-input input::placeholder { color: var(--wa-muted); }
+        .wa-input input:focus-visible { outline: none; border-color: var(--wa-green); }
         .wa-input button {
-            background: #25d366;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+            display: grid;
+            place-items: center;
+            flex: none;
+            width: 44px;
+            height: 44px;
+            border: 0;
             border-radius: 50%;
+            background: var(--wa-send-button);
+            color: #0B141A;
             cursor: pointer;
-            font-size: 18px;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        #voiceBtn {
-            background: #128c7e;
+        #voiceBtn { background: var(--wa-line); color: var(--wa-text); }
+        #voiceBtn.listening { background: var(--wa-green); color: #0B141A; animation: listening 1s ease-in-out infinite; }
+        @keyframes listening {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
-        #voiceBtn.listening {
-            animation: pulse-voice 1s infinite;
-        }
-        @keyframes pulse-voice {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(18, 140, 126, 0.7); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(18, 140, 126, 0); }
-        }
+
         .typing-indicator {
-            display: inline-block;
-            background: #1f2c34;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: white;
+            position: relative;
+            display: inline-flex;
+            gap: 5px;
+            padding: 12px 14px;
+            background: var(--wa-panel);
+            border-radius: 8px;
+            border-top-left-radius: 0;
         }
         .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #8696a0;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            margin: 0 2px;
-            animation: typing 1.4s infinite;
+            background: var(--wa-muted);
+            animation: typing 1.2s infinite;
         }
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+            0%, 60%, 100% { opacity: 0.25; }
+            30% { opacity: 1; }
         }
-        .tts-toggle {
-            background: #2a3942;
-            border: none;
-            color: #8696a0;
-            padding: 5px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: auto;
-            transition: all 0.3s;
-        }
-        .tts-toggle.enabled {
-            background: #25d366;
-            color: white;
-        }
-        .tts-toggle:hover {
-            opacity: 0.8;
+
+        @media (max-width: 480px) {
+            .whatsapp-container { border-left: 0; border-right: 0; }
+            .quick-reply button { flex-basis: 100%; }
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
     <div class="whatsapp-container">
-        <div class="wa-header">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                👔
-            </div>
-            <div>
-                <div style="font-weight: bold;">Van Heusen AI</div>
-                <div style="font-size: 12px; color: #8696a0;">Online</div>
+        <header class="wa-header">
+            <div class="wa-avatar"><svg class="icon" aria-hidden="true"><use href="icons.svg#store"/></svg></div>
+            <div class="wa-title">
+                <div class="wa-name">Van Heusen AI</div>
+                <div class="wa-status">Online</div>
             </div>
             <button class="tts-toggle" id="ttsToggle" onclick="toggleTTS()" title="Toggle Voice Responses">
-                🔇 Voice Off
+                Voice Off
             </button>
+        </header>
+
+        <div id="chat">
+            <div class="wa-chat" id="chatContainer" role="log" aria-live="polite" aria-label="Conversation">
+                <!-- Messages will be added here -->
+            </div>
         </div>
-        
-        <div class="wa-chat" id="chatContainer">
-            <!-- Messages will be added here -->
-        </div>
-        
+
         <div class="wa-input">
-            <input type="text" id="messageInput" placeholder="Type a message...">
-            <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
-            <button onclick="sendMessage()">➤</button>
+            <input type="text" id="messageInput" placeholder="Type a message" aria-label="Message" autocomplete="off">
+            <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input" aria-label="Voice input"><svg class="icon" aria-hidden="true"><use href="icons.svg#mic"/></svg></button>
+            <button onclick="sendMessage()" title="Send" aria-label="Send message"><svg class="icon" aria-hidden="true"><use href="icons.svg#send"/></svg></button>
         </div>
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8000';
         const sessionId = localStorage.getItem('session_id');
         let conversationState = 'initial'; // Track conversation flow
         let cartItems = [];
+        let shownProducts = {};          // products shown as cards, by id (used by "Add to Cart" after a store check)
+        let lastCheckedProductId = null; // the product the customer last checked in a store
+        let lastOrderId = null;          // the last confirmed order, for the rating
+        let storeAlertTimer = null;      // waits for the store associate to answer
+        let lastBackendRequest = null;   // the last request sent to the backend, so it can be retried
         
         // Track activity for store dashboard
         function trackActivity(channel, action) {
@@ -354,12 +337,15 @@
         let ttsEnabled = false; // TTS permission flag
 
         // Initialize conversation
-        window.onload = () => {
+        window.onload = async () => {
+            await loadAvailability();
             // Load cart from localStorage for cross-interface sync
             const savedCart = localStorage.getItem('cartItems');
             if (savedCart) {
                 cartItems = JSON.parse(savedCart);
             }
+            // The backend session holds the real shared cart (same one the web chat uses)
+            await syncCartFromBackend();
             
             // Load liked products from mobile app
             const savedLikes = localStorage.getItem('likedProducts');
@@ -376,7 +362,7 @@
                     {id: 'VH002', name: 'White Premium Shirt', category: 'shirt'},
                     {id: 'VH003', name: 'Light Pink Shirt', category: 'shirt'},
                     {id: 'VH004', name: 'Navy Blue Tie', category: 'tie'},
-                    {id: 'VH005', name: 'Striped Tie', category: 'tie'},
+                    {id: 'VH005B', name: 'Striped Tie', category: 'tie'},
                     {id: 'VH006', name: 'Brown Leather Belt', category: 'belt'}
                 ];
                 
@@ -392,7 +378,7 @@
             const savedTTS = localStorage.getItem('ttsEnabled');
             if (savedTTS === 'true') {
                 ttsEnabled = true;
-                document.getElementById('ttsToggle').textContent = '🔊 Voice On';
+                document.getElementById('ttsToggle').textContent = 'Voice On';
                 document.getElementById('ttsToggle').classList.add('enabled');
             }
             
@@ -410,13 +396,230 @@
                     greetingMessage += `I see you liked ${likedCount} items on our app (${likedProductNames.slice(0, 2).join(', ')}${likedCount > 2 ? ', and more' : ''}). Would you like to see them?`;
                 }
                 
+                if (cartItems.length > 0) {
+                    const cartNames = cartItems.map(item => `${item.name} x${item.quantity}`).join(', ');
+                    greetingMessage += `\n\nYour cart from the web is here too: ${cartNames}. Say "checkout" to pay.`;
+                }
                 addMessage(greetingMessage, false);
                 addQuickReplies([
-                    {text: '👍 Yes, show that!', action: 'show_products'},
-                    {text: '📦 Check availability', action: 'check_stores'}
+                    {text: 'Yes, show that!', action: 'show_products'},
+                    {text: 'Check availability', action: 'check_stores'}
                 ]);
             }, 500);
         };
+
+        // Replace the local cart with the backend cart (shared with the web chat)
+        async function syncCartFromBackend() {
+            try {
+                const response = await fetch(`${API_URL}/api/cart/${sessionId}`);
+                if (!response.ok) return;
+                const data = await response.json();
+                cartItems = data.items.map(item => ({
+                    id: item.product_id, name: item.name, price: item.price, quantity: item.quantity
+                }));
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                cartPricing = data.pricing;
+            } catch (error) {
+                console.error('Could not load the cart from the backend:', error);
+            }
+        }
+
+        // The offer and loyalty points rows for the cart message
+        function pricingRows() {
+            if (!cartPricing) return {offerLabel: 'Bundle Discount', offer: 0, points: 0};
+            return {
+                offerLabel: cartPricing.offers.length ? cartPricing.offers[0] : 'Offer',
+                offer: Math.round(cartPricing.discount_amount),
+                points: Math.round(cartPricing.points_used)
+            };
+        }
+
+        // Send a message to the real backend (supervisor, agents, guardrail, approval)
+        async function askBackend(text) {
+            addTypingIndicator();
+            try {
+                await showBackendReply('/api/chat/stream', {session_id: sessionId, message: text, channel: 'whatsapp'});
+            } catch (error) {
+                console.error(error);
+                removeTypingIndicator();
+                addMessage('Cannot reach the backend. Start it with: uv run python main.py', false);
+                addQuickReplies([{text: 'Try again', action: 'retry_backend'}]);
+            }
+        }
+
+        async function answerApproval(approved) {
+            addTypingIndicator();
+            try {
+                await showBackendReply('/api/chat/approve/stream', {session_id: sessionId, approved: approved});
+            } catch (error) {
+                console.error(error);
+                removeTypingIndicator();
+                addMessage('Cannot reach the backend. Start it with: uv run python main.py', false);
+                addQuickReplies([{text: 'Try again', action: 'retry_backend'}]);
+            }
+        }
+
+        // The backend streams its reply as server-sent events: "progress" (agent and payment
+        // steps), "token" (the next few words) and "done" (the full reply).
+        async function readEventStream(response, onEvent) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+                const {value, done} = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, {stream: true});
+                let boundary;
+                while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+                    const block = buffer.slice(0, boundary);
+                    buffer = buffer.slice(boundary + 2);
+                    const name = /^event: (.*)$/m.exec(block)[1];
+                    const data = JSON.parse(/^data: (.*)$/m.exec(block)[1]);
+                    onEvent(name, data);
+                }
+            }
+        }
+
+        // POST to a streaming endpoint and show the reply as it arrives
+        async function showBackendReply(path, body) {
+            lastBackendRequest = {path, body};
+            const response = await fetch(`${API_URL}${path}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            if (!response.ok || !response.body) {
+                throw new Error(`Stream request failed: ${response.status}`);
+            }
+
+            const chat = document.getElementById('chatContainer');
+            let bubble = null;
+            let text = '';
+            let reply = null;
+            await readEventStream(response, (name, data) => {
+                if (name === 'progress') {
+                    if (data.type === 'input_blocked') {
+                        addMessage('Message blocked by the prompt-injection guard.', false);
+                    }
+                } else if (name === 'token') {
+                    if (!bubble) {
+                        removeTypingIndicator();
+                        const msg = document.createElement('div');
+                        msg.className = 'message bot';
+                        msg.innerHTML = '<div class="message-bubble"></div>';
+                        chat.appendChild(msg);
+                        bubble = msg.firstChild;
+                    }
+                    text += data.text;
+                    bubble.textContent = text;
+                    chat.scrollTop = chat.scrollHeight;
+                } else if (name === 'done') {
+                    reply = data;
+                }
+            });
+
+            removeTypingIndicator();
+            if (!reply) {
+                throw new Error('The reply stream ended early');
+            }
+            if (bubble && ttsEnabled) {
+                speakResponse(text);
+            }
+            if (reply.pending_approval) {
+                addQuickReplies([
+                    {text: 'Yes, place order', action: 'approve_yes'},
+                    {text: 'No, keep cart', action: 'approve_no'}
+                ]);
+            }
+            if (reply.order_id) {
+                lastOrderId = reply.order_id;
+                await announcePickup();
+                askForRating();
+            }
+            await syncCartFromBackend();
+            if (!reply.pending_approval && !reply.order_id) {
+                addQuickReplies(cartItems.length > 0
+                    ? [{text: 'View cart', action: 'view_cart'}, {text: 'Checkout', action: 'checkout'}, {text: 'Browse products', action: 'show_products'}]
+                    : [{text: 'Browse products', action: 'show_products'}, {text: 'Get recommendations', action: 'show_recommendations'}]);
+            }
+        }
+
+        // After payment, tell the customer the store has been told they will come for pickup
+        async function announcePickup() {
+            try {
+                const session = await (await fetch(`${API_URL}/api/session/${sessionId}`)).json();
+                const alert = session.store_alert;
+                if (!alert || alert.kind !== 'pickup') return;
+                addMessage(`${alert.store} has been told your order is paid and you will come to pick it up. I will let you know when they confirm.`, false);
+                watchStoreAlert('pickup');
+            } catch (error) {
+                console.error('Could not check the pickup:', error);
+            }
+        }
+
+        // Check every few seconds until the associate accepts or rejects, then tell the customer
+        function watchStoreAlert(kind) {
+            clearInterval(storeAlertTimer);
+            let tries = 0;
+            storeAlertTimer = setInterval(async () => {
+                tries++;
+                if (tries > 40) {
+                    clearInterval(storeAlertTimer);
+                    return;
+                }
+                try {
+                    const session = await (await fetch(`${API_URL}/api/session/${sessionId}`)).json();
+                    const alert = session.store_alert;
+                    if (!alert || alert.kind !== kind || alert.status === 'pending') return;
+                    clearInterval(storeAlertTimer);
+                    if (alert.status === 'accepted') {
+                        addMessage(kind === 'pickup'
+                            ? `${alert.store} confirmed your order will be ready when you arrive.`
+                            : `${alert.store} confirmed your items are held for you for 24 hours.`, false);
+                        addQuickReplies([{text: 'Checkout', action: 'checkout'}, {text: 'Track my order', action: 'track_order'}]);
+                    } else {
+                        addMessage(`${alert.store} cannot hold your items right now. Would you like to try another store?`, false);
+                        addQuickReplies([{text: 'Other stores', action: 'check_stores'}, {text: 'Checkout', action: 'checkout'}]);
+                    }
+                } catch (error) {
+                    console.error('Could not check the store:', error);
+                }
+            }, 3000);
+        }
+
+        // Ask how the shopping process was, once an order is confirmed
+        async function askForRating() {
+            await sleep(600);
+            addMessage('Your order is placed. How was your shopping experience with us? Please rate it.', false);
+            addQuickReplies([
+                {text: '5 - Excellent', action: 'rate_5'},
+                {text: '4 - Good', action: 'rate_4'},
+                {text: '3 - Average', action: 'rate_3'},
+                {text: '2 - Poor', action: 'rate_2'},
+                {text: '1 - Very poor', action: 'rate_1'}
+            ]);
+        }
+
+        async function sendRating(rating) {
+            addMessage(`${rating} out of 5`, true);
+            try {
+                await fetch(`${API_URL}/api/feedback/rating`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: sessionId, rating: rating, order_id: lastOrderId})
+                });
+            } catch (error) {
+                console.error('Error sending rating:', error);
+            }
+            await sleep(400);
+            addMessage(rating >= 4
+                ? 'Thank you, we are glad you enjoyed it. Is there anything else you need today?'
+                : 'Thank you for telling us. We will use it to do better. Is there anything we can fix for you now?', false);
+            addQuickReplies([
+                {text: 'Browse more', action: 'show_products'},
+                {text: 'Track my order', action: 'track_order'}
+            ]);
+        }
 
         function addMessage(text, isUser = false) {
             const chat = document.getElementById('chatContainer');
@@ -461,7 +664,7 @@
                 recognition.onstart = () => {
                     isListening = true;
                     document.getElementById('voiceBtn').classList.add('listening');
-                    document.getElementById('messageInput').placeholder = '🎤 Listening...';
+                    document.getElementById('messageInput').placeholder = 'Listening...';
                 };
 
                 recognition.onresult = (event) => {
@@ -475,7 +678,7 @@
                     console.error('Speech recognition error:', event.error);
                     stopListening();
                     if (event.error !== 'no-speech') {
-                        addMessage('⚠️ Voice recognition error. Please try again.', false);
+                        addMessage('Voice recognition error. Please try again.', false);
                     }
                 };
 
@@ -493,7 +696,7 @@
 
         function toggleVoice() {
             if (!voiceEnabled) {
-                addMessage('⚠️ Voice input is not supported in your browser.', false);
+                addMessage('Voice input is not supported in your browser.', false);
                 return;
             }
 
@@ -525,7 +728,7 @@
             const toggleBtn = document.getElementById('ttsToggle');
             
             if (ttsEnabled) {
-                toggleBtn.textContent = '🔊 Voice On';
+                toggleBtn.textContent = 'Voice On';
                 toggleBtn.classList.add('enabled');
                 // Announce the change
                 speakResponse('Voice responses enabled');
@@ -534,7 +737,7 @@
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                 }
-                toggleBtn.textContent = '🔇 Voice Off';
+                toggleBtn.textContent = 'Voice Off';
                 toggleBtn.classList.remove('enabled');
             }
             
@@ -582,21 +785,25 @@
         }
 
         function showProductCard(product, showConfidence = false) {
+            shownProducts[product.id] = product;
             const chat = document.getElementById('chatContainer');
             const card = document.createElement('div');
             card.className = 'product-card';
             
             const confidenceBadge = (showConfidence && product.confidence) ? `<span class="confidence-badge">${product.confidence}% match</span>` : '';
-            const reasoningSection = product.reasoning ? `<div class="reasoning">💡 ${product.reasoning}</div>` : '';
-            const socialProof = product.similar_customers ? `<div class="social-proof">👥 ${product.similar_customers} customers like you bought this</div>` : '';
+            const reasoningSection = product.reasoning ? `<div class="reasoning">${product.reasoning}</div>` : '';
+            const socialProof = product.similar_customers ? `<div class="social-proof">${product.similar_customers} customers like you bought this</div>` : '';
             
+            const inStock = isInStock(product.id);
             card.innerHTML = `
                 <strong>${product.name}${confidenceBadge}</strong>
-                ₹${product.price} | ${product.size ? `Size: ${product.size} | ` : ''}Available
+                ₹${product.price} | ${product.size ? `Size: ${product.size} | ` : ''}${inStock ? 'Available' : 'Out of stock'}
                 ${reasoningSection}
                 ${socialProof}
                 <div class="quick-reply" style="margin-top: 10px;">
-                    <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>
+                    ${inStock
+                        ? `<button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>`
+                        : `<button onclick="handleQuickReply('show_recommendations')">Similar items</button>`}
                     <button onclick="checkInStore('${product.id}')">Check in Store</button>
                 </div>
             `;
@@ -607,6 +814,15 @@
         async function handleQuickReply(action) {
             // Remove previous quick reply buttons
             document.querySelectorAll('.quick-reply').forEach(qr => qr.remove());
+
+            if (action.startsWith('rate_')) {
+                await sendRating(Number(action.slice('rate_'.length)));
+                return;
+            }
+            if (action.startsWith('reserve_store:')) {
+                await reserveAtStore(action.slice('reserve_store:'.length));
+                return;
+            }
 
             switch(action) {
                 case 'show_products':
@@ -623,7 +839,7 @@
                             {id: 'VH002', name: 'White Premium Shirt', price: 2800, size: '40', reasoning: "Premium collection - perfect for important meetings", confidence: 93, similar_customers: 104},
                             {id: 'VH003', name: 'Light Pink Shirt', price: 2600, size: '40', reasoning: "Trending this season - modern professional look", confidence: 88, similar_customers: 92},
                             {id: 'VH004', name: 'Navy Blue Tie', price: 800, reasoning: "Classic accessory - pairs with any formal shirt", confidence: 91, similar_customers: 156},
-                            {id: 'VH005', name: 'Striped Tie', price: 750, reasoning: "Versatile pattern - adds personality to formal wear", confidence: 85, similar_customers: 78},
+                            {id: 'VH005B', name: 'Striped Tie', price: 750, reasoning: "Versatile pattern - adds personality to formal wear", confidence: 85, similar_customers: 78},
                             {id: 'VH006', name: 'Brown Leather Belt', price: 1200, reasoning: "Premium leather - completes any formal outfit", confidence: 89, similar_customers: 134}
                         ];
                         
@@ -662,29 +878,57 @@
                     }
                     
                     conversationState = 'products_shown';
+                    await sleep(300);
+                    addMessage('Tap Add to Cart on anything you like, or choose what to do next.', false);
+                    addQuickReplies([
+                        {text: 'Check in store', action: 'check_stores'},
+                        {text: 'Matching accessories', action: 'show_recommendations'},
+                        {text: 'View cart', action: 'view_cart'},
+                        {text: 'Checkout', action: 'checkout'}
+                    ]);
+                    break;
+
+                case 'use_points': {
+                    addMessage('Use my loyalty points', true);
+                    await setUsePoints(true);
+                    const itemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    const itemSubtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                    addMessage(`Your loyalty points are applied.\n\n${cartSummaryText(itemSubtotal, itemCount)}`, false);
+                    addQuickReplies([
+                        {text: 'Checkout', action: 'checkout'},
+                        {text: 'Keep my points', action: 'skip_points'},
+                        {text: 'Reserve for try-on', action: 'reserve_try_on'},
+                        {text: 'Show Ties & Belts', action: 'show_recommendations'}
+                    ]);
+                    break;
+                }
+
+                case 'skip_points': {
+                    addMessage('Keep my points', true);
+                    await setUsePoints(false);
+                    const itemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    const itemSubtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                    addMessage(`Your loyalty points are not used, so they stay in your account.\n\n${cartSummaryText(itemSubtotal, itemCount)}`, false);
+                    addQuickReplies([
+                        {text: 'Use my loyalty points', action: 'use_points'},
+                        {text: 'Reserve for try-on', action: 'reserve_try_on'},
+                        {text: 'Checkout', action: 'checkout'}
+                    ]);
+                    break;
+                }
+
+                case 'reserve_try_on':
+                    if (cartItems.length === 0) {
+                        addMessage('Reserve for try-on', true);
+                        addMessage('Add something to your cart first, then I can reserve it for a try-on.', false);
+                        addQuickReplies([{text: 'Browse products', action: 'show_products'}]);
+                    } else {
+                        await showStoreStock(cartItems[0].id, true, 'Reserve for try-on');
+                    }
                     break;
 
                 case 'check_stores':
-                    addMessage('Check availability near me', true);
-                    trackActivity('WhatsApp', 'Checked store availability');
-                    addTypingIndicator();
-                    await sleep(600);
-                    removeTypingIndicator();
-                    addMessage('Checking nearby stores...', false);
-                    await sleep(400);
-                    addMessage('Here are stores near you with stock availability:', false);
-                    await sleep(200);
-                    addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
-                    await sleep(200);
-                    addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
-                    await sleep(200);
-                    addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
-                    addQuickReplies([
-                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
-                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
-                        {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
-                        {text: '👕 Show products', action: 'show_products'}
-                    ]);
+                    await showStoreStock(lastCheckedProductId || firstLikedProductId());
                     break;
 
                 case 'show_recommendations':
@@ -712,37 +956,24 @@
                         similar_customers: 64
                     }, false);
                     
-                    addMessage('💡 Bundle offer: Buy 3+ items, get 20% off!', false);
+                    addMessage('Bundle offer: Buy 3+ items, get 20% off!', false);
                     conversationState = 'recommendations_shown';
+                    await sleep(300);
+                    addMessage('Would you like to add one of these, or do something else?', false);
+                    addQuickReplies([
+                        {text: 'Add the tie', action: 'add_tie'},
+                        {text: 'Add the belt', action: 'add_belt'},
+                        {text: 'View cart', action: 'view_cart'},
+                        {text: 'Checkout', action: 'checkout'}
+                    ]);
                     break;
 
                 case 'reserve_bandra':
-                    addMessage('Reserve at Bandra store', true);
-                    trackActivity('WhatsApp', 'Reserved items at Bandra Store');
-                    addTypingIndicator();
-                    await sleep(500);
-                    removeTypingIndicator();
-                    localStorage.setItem('selected_store', 'bandra'); // Save selected store
-                    addMessage('✅ Items reserved at Bandra Store for 24 hours!\n\n📍 Shop 23, Linking Road, Bandra West\n⏰ Open until 10 PM\n📦 3 items ready for you\n\nYour shopping history is shared with our store team for faster service! 🚀', false);
-                    addQuickReplies([
-                        {text: '🏪 Visit Store Now', action: 'visit_store'},
-                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
-                    ]);
+                    await reserveAtStore('Bandra Store');
                     break;
 
                 case 'reserve_powai':
-                    addMessage('Reserve at Powai store', true);
-                    trackActivity('WhatsApp', 'Reserved items at Powai Store');
-                    addTypingIndicator();
-                    await sleep(500);
-                    removeTypingIndicator();
-                    localStorage.setItem('selected_store', 'powai'); // Save selected store
-                    addMessage('✅ Items reserved at Powai Store for 24 hours!\n\n📍 Phoenix Market City, Powai\n⏰ Open until 11 PM\n📦 1 item ready for you\n\n💡 Note: Limited stock - we recommend visiting soon!', false);
-                    addQuickReplies([
-                        {text: '🏪 Visit Store Now', action: 'visit_store'},
-                        {text: '🗺️ Get Directions', action: 'get_directions_powai'},
-                        {text: '🛍️ Continue Shopping', action: 'show_recommendations'}
-                    ]);
+                    await reserveAtStore('Powai Store');
                     break;
 
                 case 'notify_andheri':
@@ -750,28 +981,79 @@
                     addTypingIndicator();
                     await sleep(500);
                     removeTypingIndicator();
-                    addMessage('🔔 Restock Alert Set!\n\nWe\'ll notify you on WhatsApp when your items are back in stock at Andheri Store.\n\n📅 Expected restock: 2-3 days\n📍 Infinity Mall, Andheri West\n\nMeanwhile, would you like to:\n• Reserve at Bandra (2km) - 3 in stock\n• Reserve at Powai (5km) - 1 in stock', false);
+                    addMessage('Restock Alert Set!\n\nWe\'ll notify you on WhatsApp when your items are back in stock at Andheri Store.\n\nExpected restock: 2-3 days\nInfinity Mall, Andheri West\n\nMeanwhile, would you like to:\n• Reserve at Bandra (2km) - 3 in stock\n• Reserve at Powai (5km) - 1 in stock', false);
                     addQuickReplies([
-                        {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
-                        {text: '📍 Reserve at Powai', action: 'reserve_powai'},
-                        {text: '👕 Browse More', action: 'show_products'}
+                        {text: 'Reserve at Bandra', action: 'reserve_bandra'},
+                        {text: 'Reserve at Powai', action: 'reserve_powai'},
+                        {text: 'Browse More', action: 'show_products'}
                     ]);
                     break;
 
                 case 'get_directions_powai':
                     addMessage('Get directions to Powai', true);
                     await sleep(300);
-                    addMessage('📍 Powai Store - Phoenix Market City\n\n🚗 5km from your location\n⏱️ 15-20 mins via Western Express Highway\n\n[Opening Google Maps...]\n\nStore Contact: +91 22 6789 0123\n\nYour reserved items will be ready when you arrive! 🎉', false);
+                    addMessage('Powai Store - Phoenix Market City\n\n5km from your location\n15-20 mins via Western Express Highway\n\n[Opening Google Maps...]\n\nStore Contact: +91 22 6789 0123\n\nYour reserved items will be ready when you arrive!', false);
                     addQuickReplies([
-                        {text: '📞 Call Store', action: 'call_store_powai'},
-                        {text: '🏪 Visit Store', action: 'visit_store'}
+                        {text: 'Call Store', action: 'call_store_powai'},
+                        {text: 'Visit Store', action: 'visit_store'}
                     ]);
                     break;
 
                 case 'call_store_powai':
                     addMessage('Call Powai store', true);
                     await sleep(300);
-                    addMessage('📞 Calling Powai Store...\n\n+91 22 6789 0123\n\nOur team is ready to assist you!\n⏰ Open now until 11 PM', false);
+                    addMessage('Calling Powai Store...\n\n+91 22 6789 0123\n\nOur team is ready to assist you!\nOpen now until 11 PM', false);
+                    addQuickReplies([
+                        {text: 'Visit Store', action: 'visit_store'},
+                        {text: 'Keep shopping', action: 'show_products'}
+                    ]);
+                    break;
+
+                case 'add_this': {
+                    const checked = shownProducts[lastCheckedProductId];
+                    if (checked) {
+                        await addToCart(checked.id, checked.name, checked.price);
+                    } else {
+                        addMessage('Which item would you like to add?', false);
+                        addQuickReplies([
+                            {text: 'Navy Tie', action: 'add_tie'},
+                            {text: 'Brown Belt', action: 'add_belt'},
+                            {text: 'Blue Shirt', action: 'add_shirt'}
+                        ]);
+                    }
+                    break;
+                }
+
+                case 'track_order':
+                    addMessage('Track my order', true);
+                    await sleep(400);
+                    let packingStore = 'our store';
+                    try {
+                        const session = await (await fetch(`${API_URL}/api/session/${sessionId}`)).json();
+                        if (session.reserved_store) packingStore = session.reserved_store;
+                    } catch (error) {
+                        console.error('Could not load the store:', error);
+                    }
+                    addMessage(`Your order is confirmed and being packed at ${packingStore}.\nExpress delivery: tomorrow by 10 AM.\n\nYou will get a WhatsApp message at every step.`, false);
+                    break;
+
+                case 'retry_backend':
+                    if (lastBackendRequest) {
+                        addTypingIndicator();
+                        try {
+                            await showBackendReply(lastBackendRequest.path, lastBackendRequest.body);
+                        } catch (error) {
+                            console.error(error);
+                            removeTypingIndicator();
+                            addMessage('Still cannot reach the backend. Start it with: uv run python main.py', false);
+                            addQuickReplies([{text: 'Try again', action: 'retry_backend'}]);
+                        }
+                    }
+                    break;
+
+                case 'view_cart':
+                    addMessage('View cart', true);
+                    showCart();
                     break;
 
                 case 'add_tie':
@@ -789,7 +1071,7 @@
                 case 'visit_store':
                     addMessage('Take me to store', true);
                     await sleep(500);
-                    addMessage('🏪 Great! Let me redirect you to our in-store kiosk experience.\n\nYou can scan products, reserve items for try-on, and complete your purchase at the store!', false);
+                    addMessage('Great! Let me redirect you to our in-store kiosk experience.\n\nYou can scan products, reserve items for try-on, and complete your purchase at the store!', false);
                     await sleep(1000);
                     // Get selected store from localStorage, default to bandra
                     const selectedStore = localStorage.getItem('selected_store') || 'bandra';
@@ -798,25 +1080,17 @@
                 
                 case 'checkout':
                     addMessage('Checkout', true);
-                    addTypingIndicator();
-                    await sleep(500);
-                    removeTypingIndicator();
-                    
-                    const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-                    const discount = totalItems >= 3 ? 0.2 : 0.1;
-                    const total = Math.round(subtotal * (1 - discount));
-                    
-                    addMessage(`🛒 Your Cart Summary:\n\nItems: ${totalItems}\nSubtotal: ₹${subtotal.toLocaleString()}\nDiscount (${discount * 100}%): -₹${Math.round(subtotal * discount).toLocaleString()}\n\nTotal: ₹${total.toLocaleString()}`, false);
-                    
-                    await sleep(400);
-                    addMessage('How would you like to proceed?', false);
-                    
-                    addQuickReplies([
-                        {text: '🏪 Complete at Store', action: 'visit_store'},
-                        {text: '🚚 Home Delivery', action: 'delivery_options'},
-                        {text: '🎁 Apply Coupon', action: 'apply_coupon'}
-                    ]);
+                    await askBackend('Checkout please');
+                    break;
+
+                case 'approve_yes':
+                    addMessage('Yes, place order', true);
+                    await answerApproval(true);
+                    break;
+
+                case 'approve_no':
+                    addMessage('No, keep cart', true);
+                    await answerApproval(false);
                     break;
                 
                 case 'delivery_options':
@@ -824,24 +1098,28 @@
                     addTypingIndicator();
                     await sleep(500);
                     removeTypingIndicator();
-                    addMessage('📦 Delivery Options:\n\n⚡ Express - Tomorrow by 10 AM (₹99)\n📦 Standard - 2-3 days (FREE)\n\nWhich would you prefer?', false);
+                    addMessage('Delivery Options:\n\nExpress - Tomorrow by 10 AM (₹99)\nStandard - 2-3 days (FREE)\n\nWhich would you prefer?', false);
                     addQuickReplies([
-                        {text: '⚡ Express (₹99)', action: 'express_delivery'},
-                        {text: '📦 Standard (FREE)', action: 'standard_delivery'}
+                        {text: 'Express (₹99)', action: 'express_delivery'},
+                        {text: 'Standard (FREE)', action: 'standard_delivery'}
                     ]);
                     break;
                 
                 case 'apply_coupon':
                     addMessage('Apply coupon', true);
                     await sleep(300);
-                    addMessage('🎁 Available Coupons:\n\n• FIRST20 - 20% off first order\n• WEDDING15 - 15% off formal wear\n• LOYALTY10 - 10% off (auto-applied)', false);
+                    addMessage('Available Coupons:\n\n• FIRST20 - 20% off first order\n• WEDDING15 - 15% off formal wear\n• LOYALTY10 - 10% off (auto-applied)', false);
+                    addQuickReplies([
+                        {text: 'Checkout', action: 'checkout'},
+                        {text: 'View cart', action: 'view_cart'}
+                    ]);
                     break;
                 
                 case 'express_delivery':
                     addMessage('Express delivery', true);
                     await sleep(400);
                     const expressTotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) + 99;
-                    addMessage(`✅ Express Delivery Selected!\n\n📦 Delivery tomorrow by 10 AM\n💰 Total: ₹${expressTotal.toLocaleString()}\n\nRedirecting to payment...`, false);
+                    addMessage(`Express Delivery Selected!\n\nDelivery tomorrow by 10 AM\nTotal: ₹${expressTotal.toLocaleString()}\n\nRedirecting to payment...`, false);
                     await sleep(1500);
                     window.location.href = 'post-purchase.html';
                     break;
@@ -850,7 +1128,7 @@
                     addMessage('Standard delivery', true);
                     await sleep(400);
                     const standardTotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-                    addMessage(`✅ Standard Delivery Selected!\n\n📦 Delivery in 2-3 days\n💰 Total: ₹${standardTotal.toLocaleString()} (FREE delivery)\n\nRedirecting to payment...`, false);
+                    addMessage(`Standard Delivery Selected!\n\nDelivery in 2-3 days\nTotal: ₹${standardTotal.toLocaleString()} (FREE delivery)\n\nRedirecting to payment...`, false);
                     await sleep(1500);
                     window.location.href = 'post-purchase.html';
                     break;
@@ -875,40 +1153,51 @@
             addMessage(`Add ${productName} to cart`, true);
             
             addTypingIndicator();
-            await sleep(500);
-            removeTypingIndicator();
-            
-            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-            const discount = totalItems >= 3 ? 0.2 : 0.1;
-            const total = Math.round(subtotal * (1 - discount));
-            
-            addMessage(`✅ Added to cart! 🛒\n\nTotal items: ${totalItems}\nTotal: ₹${total.toLocaleString()}`, false);
-            
-            await sleep(300);
-            addMessage('Would you like matching accessories?', false);
-            
-            addQuickReplies([
-                {text: '👔 Show Ties & Belts', action: 'show_recommendations'},
-                {text: '🏪 Visit Store', action: 'check_stores'},
-                {text: '💳 Checkout', action: 'checkout'}
-            ]);
-
-            // Send to backend
+            let outOfStock = null;
             try {
-                await fetch(`${API_URL}/api/cart/add`, {
+                const response = await fetch(`${API_URL}/api/cart/add`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        product_id: productId,
-                        quantity: 1,
-                        size: '40'
-                    })
+                    body: JSON.stringify({session_id: sessionId, product_id: productId, quantity: 1, size: '40'})
                 });
+                if (response.status === 409) outOfStock = (await response.json()).detail;
             } catch (error) {
                 console.error('Error adding to cart:', error);
             }
+            await refreshPricing();
+            removeTypingIndicator();
+
+            if (outOfStock) {
+                undoLocalAdd(productId);
+                addMessage(`Sorry, ${productName} is out of stock in every nearby store, so I have not added it to your cart.`, false);
+                if (outOfStock.alternatives.length > 0) {
+                    addMessage('These similar items are available:', false);
+                    outOfStock.alternatives.slice(0, 3).forEach(item => showProductCard(
+                        {id: item.product_id, name: item.name, price: item.price}, false));
+                }
+                addQuickReplies(cartItems.length > 0
+                    ? [{text: 'View cart', action: 'view_cart'}, {text: 'Checkout', action: 'checkout'}]
+                    : [{text: 'Browse products', action: 'show_products'}]);
+                return;
+            }
+            
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            addMessage(`Added to cart!\n\n${cartSummaryText(subtotal, totalItems)}`, false);
+            const offerNote = newOfferText();
+            if (offerNote) addMessage(offerNote, false);
+            
+            await sleep(300);
+            addMessage(nextOfferText() || 'Would you like matching accessories?', false);
+            
+            addQuickReplies([
+                ...(pointsAreAvailable() ? [{text: 'Use my loyalty points', action: 'use_points'}] : []),
+                {text: 'Show Ties & Belts', action: 'show_recommendations'},
+                {text: 'Reserve for try-on', action: 'reserve_try_on'},
+                {text: 'Visit Store', action: 'check_stores'},
+                {text: 'Checkout', action: 'checkout'}
+            ]);
+
         }
 
         function showCart() {
@@ -916,12 +1205,11 @@
             console.log('localStorage cartItems:', localStorage.getItem('cartItems'));
             
             if (cartItems.length === 0) {
-                addMessage('🛒 Your cart is empty. Start shopping to add items!', false);
-                addMessage(`Debug: Cart has ${cartItems.length} items. Did you add items in this session?`, false);
+                addMessage('Your cart is empty. Start shopping to add items!', false);
                 setTimeout(() => {
                     addQuickReplies([
-                        {text: '👕 Browse Products', action: 'show_products'},
-                        {text: '💡 Get Recommendations', action: 'show_recommendations'}
+                        {text: 'Browse Products', action: 'show_products'},
+                        {text: 'Get Recommendations', action: 'show_recommendations'}
                     ]);
                 }, 300);
                 return;
@@ -947,14 +1235,12 @@
                 `;
             });
 
-            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const discount = totalQty >= 3 ? 0.2 : 0.1;
-            const discountAmount = Math.round(subtotal * discount);
-            const total = subtotal - discountAmount;
+            const rows = pricingRows();
+            const total = payableTotal(subtotal - rows.offer);
 
             const cartHtml = `
                 <div style="background: #1f2c34; border: 1px solid #2a3942; border-radius: 12px; padding: 16px; margin: 10px 0;">
-                    <div style="font-weight: 600; margin-bottom: 12px; color: #25d366; font-size: 15px;">🛒 Your Cart (${cartItems.length} items)</div>
+                    <div style="font-weight: 600; margin-bottom: 12px; color: #25d366; font-size: 15px;">Your Cart (${cartItems.length} items)</div>
                     ${itemsHtml}
                     <div style="margin-top: 12px; padding-top: 12px; border-top: 2px solid #2a3942;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #8696a0; font-size: 13px;">
@@ -962,8 +1248,12 @@
                             <span id="cart-subtotal">₹${subtotal.toLocaleString()}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #25d366; font-size: 13px;">
-                            <span>Bundle Discount (${discount * 100}%):</span>
-                            <span id="cart-discount">-₹${discountAmount.toLocaleString()}</span>
+                            <span id="cart-discount-label">${rows.offerLabel}:</span>
+                            <span id="cart-discount">-₹${rows.offer.toLocaleString()}</span>
+                        </div>
+                        <div style="display: ${rows.points > 0 ? 'flex' : 'none'}; justify-content: space-between; margin-bottom: 8px; color: #25d366; font-size: 13px;">
+                            <span>Loyalty points:</span>
+                            <span id="cart-points">-₹${rows.points.toLocaleString()}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 16px; color: #e0e0e0;">
                             <span>Total:</span>
@@ -983,9 +1273,9 @@
 
             setTimeout(() => {
                 addQuickReplies([
-                    {text: '💳 Proceed to Checkout', action: 'checkout'},
-                    {text: '👕 Add More Items', action: 'show_products'},
-                    {text: '🏪 Visit Store', action: 'check_stores'}
+                    {text: 'Proceed to Checkout', action: 'checkout'},
+                    {text: 'Add More Items', action: 'show_products'},
+                    {text: 'Visit Store', action: 'check_stores'}
                 ]);
             }, 300);
         }
@@ -1017,17 +1307,9 @@
 
             // Recalculate totals
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const discount = totalQty >= 3 ? 0.2 : 0.1;
-            const discountAmount = Math.round(subtotal * discount);
-            const total = subtotal - discountAmount;
-
             document.getElementById('cart-subtotal').textContent = `₹${subtotal.toLocaleString()}`;
-            document.getElementById('cart-discount').textContent = `-₹${discountAmount.toLocaleString()}`;
-            document.getElementById('cart-discount').previousElementSibling.textContent = `Bundle Discount (${discount * 100}%):`;
-            document.getElementById('cart-total').textContent = `₹${total.toLocaleString()}`;
 
-            // Update backend
+            // Update backend, then show the price it works out
             try {
                 await fetch(`${API_URL}/api/cart/update`, {
                     method: 'POST',
@@ -1038,6 +1320,13 @@
                         quantity: newQty
                     })
                 });
+                await refreshPricing();
+                const rows = pricingRows();
+                document.getElementById('cart-discount-label').textContent = `${rows.offerLabel}:`;
+                document.getElementById('cart-discount').textContent = `-₹${rows.offer.toLocaleString()}`;
+                document.getElementById('cart-points').textContent = `-₹${rows.points.toLocaleString()}`;
+                document.getElementById('cart-points').parentElement.style.display = rows.points > 0 ? 'flex' : 'none';
+                document.getElementById('cart-total').textContent = `₹${payableTotal(subtotal - rows.offer).toLocaleString()}`;
             } catch (error) {
                 console.error('Cart update error:', error);
             }
@@ -1054,15 +1343,27 @@
             
             console.log('Cart after removal:', JSON.stringify(cartItems, null, 2));
             
-            addMessage(`✗ Removed ${productName}`, false);
-            
+            addMessage(`Removed ${productName}`, false);
+
+            // Tell the backend first so the price shown next is the one it works out
+            try {
+                await fetch(`${API_URL}/api/cart/remove`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: sessionId, product_id: productId})
+                });
+            } catch (error) {
+                console.error('Cart remove error:', error);
+            }
+            await refreshPricing();
+
             // Refresh cart display
             setTimeout(() => {
                 // Remove old cart display
                 const chatDiv = document.getElementById('chat');
                 const cartDisplays = chatDiv.querySelectorAll('div[style*="background: #1f2c34"]');
                 cartDisplays.forEach(display => {
-                    if (display.textContent.includes('🛒 Cart')) {
+                    if (display.textContent.includes('Cart')) {
                         display.remove();
                     }
                 });
@@ -1071,40 +1372,110 @@
                 if (cartItems.length > 0) {
                     showCart();
                 } else {
-                    addMessage('🛒 Your cart is now empty', false);
+                    addMessage('Your cart is now empty', false);
+                    addQuickReplies([
+                        {text: 'Browse Products', action: 'show_products'},
+                        {text: 'Get Recommendations', action: 'show_recommendations'}
+                    ]);
                 }
             }, 500);
-            
-            // Call backend
-            try {
-                await fetch(`${API_URL}/api/cart/remove`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        product_id: productId
-                    })
-                });
-            } catch (error) {
-                console.error('Cart remove error:', error);
-            }
+        }
+
+        function firstLikedProductId() {
+            const liked = JSON.parse(localStorage.getItem('likedProducts') || '[]');
+            return liked[0] || 'VH001';
         }
 
         async function checkInStore(productId) {
-            addMessage('Check in store', true);
-            
+            await showStoreStock(productId);
+        }
+
+        // Ask the backend for the real stock of one product in every nearby store and list them all
+        async function showStoreStock(productId, echo = true, label = 'Check in store') {
+            lastCheckedProductId = productId;
+            if (echo) addMessage(label, true);
             addTypingIndicator();
-            await sleep(600);
+            let stores = [];
+            try {
+                const response = await fetch(`${API_URL}/api/store/check`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: sessionId, product_id: productId})
+                });
+                if (!response.ok) throw new Error('Store check failed');
+                stores = (await response.json()).stores || [];
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Sorry, I could not check the stores right now.', false);
+                addQuickReplies([
+                    {text: 'Try again', action: 'check_stores'},
+                    {text: 'View cart', action: 'view_cart'},
+                    {text: 'Show products', action: 'show_products'}
+                ]);
+                return;
+            }
             removeTypingIndicator();
-            
-            addMessage('Checking store availability...', false);
-            
-            await sleep(400);
-            addMessage('✅ Available at Bandra Store (2km)\n📦 3 pieces in stock\n⏰ Open until 10 PM', false);
-            
+
+            const name = (shownProducts[productId] || {}).name || 'this item';
+            addMessage(`Here is the stock for ${name} in stores near you:`, false);
+            const lines = stores.map(store => {
+                const status = store.stock > 0 ? `${store.stock} in stock` : 'Out of stock';
+                return `${store.name} (${store.distance} away)\n${status}`;
+            });
+            addMessage(lines.join('\n\n'), false);
+
+            const inStock = stores.filter(store => store.stock > 0);
+            await sleep(300);
+            if (inStock.length === 0) {
+                addMessage('It is not in stock at any nearby store right now. I can show you something similar instead.', false);
+                addQuickReplies([
+                    {text: 'Matching accessories', action: 'show_recommendations'},
+                    {text: 'Show products', action: 'show_products'},
+                    {text: 'View cart', action: 'view_cart'}
+                ]);
+                return;
+            }
+            addMessage('Would you like me to reserve it for a try-on, or add it to your cart?', false);
+            const buttons = inStock.slice(0, 3).map(store => (
+                {text: `Reserve at ${store.name.replace(' Store', '')}`, action: `reserve_store:${store.name}`}
+            ));
+            buttons.push({text: 'Add to Cart', action: 'add_this'}, {text: 'Checkout', action: 'checkout'});
+            addQuickReplies(buttons);
+        }
+
+        async function reserveAtStore(storeName) {
+            addMessage(`Reserve at ${storeName}`, true);
+            trackActivity('WhatsApp', `Reserved items at ${storeName}`);
+            addTypingIndicator();
+            let reserved = false;
+            try {
+                const response = await fetch(
+                    `${API_URL}/api/store/reserve?session_id=${encodeURIComponent(sessionId)}&store_name=${encodeURIComponent(storeName)}`,
+                    {method: 'POST'}
+                );
+                reserved = response.ok;
+            } catch (error) {
+                console.error('Reserve error:', error);
+            }
+            removeTypingIndicator();
+            if (!reserved) {
+                addMessage('Sorry, I could not reserve it just now.', false);
+                addQuickReplies([
+                    {text: 'Try again', action: `reserve_store:${storeName}`},
+                    {text: 'Other stores', action: 'check_stores'},
+                    {text: 'Checkout', action: 'checkout'}
+                ]);
+                return;
+            }
+            localStorage.setItem('selected_store', storeName.replace(' Store', '').toLowerCase());
+            watchStoreAlert('reservation');
+            addMessage(`I have asked ${storeName} to hold your items for 24 hours. I will tell you as soon as they confirm.\n\nYour shopping history is shared with our store team for faster service.`, false);
+            await sleep(300);
+            addMessage('Is there anything else you would like, or shall we go to checkout?', false);
             addQuickReplies([
-                {text: '📍 Reserve Now', action: 'reserve_bandra'},
-                {text: '🛒 Add to Cart', action: 'add_this'}
+                {text: 'Visit Store Now', action: 'visit_store'},
+                {text: 'Continue Shopping', action: 'show_recommendations'},
+                {text: 'Checkout', action: 'checkout'}
             ]);
         }
 
@@ -1113,28 +1484,23 @@
             const message = input.value.trim().toLowerCase();
             if (!message) return;
             
-            addMessage(input.value.trim(), true);
+            const rawText = input.value.trim();
+            addMessage(rawText, true);
             input.value = '';
-            
+
+            // Payments, offers, returns and delivery questions go to the real backend
+            if (/\b(pay|payment|checkout|buy|purchase|discount|offer|offers|points|coupon|return|refund|exchange|deliver|delivery|shipping|ignore|instructions|prompt|pretend|override|bypass|jailbreak)\b/.test(message)) {
+                await askBackend(rawText);
+                return;
+            }
+
             addTypingIndicator();
             await sleep(800);
             removeTypingIndicator();
-            
+
             // Smart response based on keywords
             if (message.includes('store') || message.includes('shop') || message.includes('where')) {
-                addMessage('Here are stores near you with stock availability:', false);
-                await sleep(300);
-                addMessage('✅ Bandra Store (2km away)\n📦 3 items in stock\n⏰ Open until 10 PM', false);
-                await sleep(200);
-                addMessage('✅ Powai Store (5km away)\n📦 1 item in stock\n⏰ Open until 11 PM', false);
-                await sleep(200);
-                addMessage('❌ Andheri Store (7km away)\n📦 Out of stock\n⏰ Open until 10 PM', false);
-                addQuickReplies([
-                    {text: '📍 Reserve at Bandra', action: 'reserve_bandra'},
-                    {text: '📍 Reserve at Powai', action: 'reserve_powai'},
-                    {text: '🔔 Notify when Andheri restocks', action: 'notify_andheri'},
-                    {text: '👕 Show products', action: 'show_products'}
-                ]);
+                await showStoreStock(lastCheckedProductId || firstLikedProductId(), false);
             }
             // Cart viewing - check this FIRST before other cart operations
             else if (message.includes('view cart') || message.includes('show cart') || 
@@ -1159,9 +1525,9 @@
                 } else {
                     addMessage('Which item would you like to add?', false);
                     addQuickReplies([
-                        {text: '👔 Navy Tie', action: 'add_tie'},
-                        {text: '👔 Brown Belt', action: 'add_belt'},
-                        {text: '👕 Blue Shirt', action: 'add_shirt'}
+                        {text: 'Navy Tie', action: 'add_tie'},
+                        {text: 'Brown Belt', action: 'add_belt'},
+                        {text: 'Blue Shirt', action: 'add_shirt'}
                     ]);
                 }
             }
@@ -1191,19 +1557,14 @@
             else if (message.includes('help')) {
                 addMessage('I can help you with:\n• Finding products\n• Checking store availability\n• Adding items to cart\n• Reserving items\n• Getting recommendations\n\nWhat would you like to do?', false);
                 addQuickReplies([
-                    {text: '👕 Show Products', action: 'show_products'},
-                    {text: '🏪 Check Stores', action: 'check_stores'},
-                    {text: '💡 Recommendations', action: 'show_recommendations'}
+                    {text: 'Show Products', action: 'show_products'},
+                    {text: 'Check Stores', action: 'check_stores'},
+                    {text: 'Recommendations', action: 'show_recommendations'}
                 ]);
             }
             else {
-                // Default smart response
-                addMessage('I can help you with that! Would you like to:', false);
-                addQuickReplies([
-                    {text: '👕 See Products', action: 'show_products'},
-                    {text: '🏪 Check Stores', action: 'check_stores'},
-                    {text: '💡 Get Recommendations', action: 'show_recommendations'}
-                ]);
+                // Anything else goes to the real backend (this is also where the injection guard runs)
+                await askBackend(rawText);
             }
         }
 

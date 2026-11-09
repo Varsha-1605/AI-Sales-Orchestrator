@@ -4,485 +4,364 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>In-Store Kiosk - Van Heusen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* Page: in-store kiosk. Touch first: larger type, 64px+ targets, one task per screen. */
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .kiosk-container {
-            max-width: 900px;
-            width: 100%;
-            height: 90vh;
-            max-height: 800px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            font-size: 20px;
         }
 
-        /* Header */
+        .kiosk-container { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+
         .kiosk-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 25px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: var(--space-5);
             flex-shrink: 0;
+            padding: var(--space-5) var(--space-7);
+            background: var(--ink);
+            color: var(--white);
         }
-
-        .kiosk-header h1 {
-            font-size: 1.8em;
-            font-weight: 800;
+        .kiosk-header h1 { font-size: 32px; font-weight: 500; letter-spacing: 0.02em; }
+        .kiosk-header .tagline {
+            margin-top: var(--space-1);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #AEB8BF;
         }
+        .kiosk-header .store-info { text-align: right; }
+        #storeName { font-family: var(--font-display); font-size: 28px; font-weight: 500; }
+        #kioskDetails { font-family: var(--font-mono); font-size: var(--text-sm); color: #AEB8BF; }
 
-        .kiosk-header .store-info {
-            text-align: right;
-            font-size: 0.9em;
-            opacity: 0.9;
+        .kiosk-content { flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+        .kiosk-btn,
+        .scan-btn,
+        .payment-method {
+            font-family: var(--font-text);
+            cursor: pointer;
+            transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
         }
+        .kiosk-btn:focus-visible,
+        .scan-btn:focus-visible,
+        .payment-method:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
-        /* Scrollable Content */
-        .kiosk-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background: #f5f7fa;
-        }
-
-        .kiosk-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .kiosk-content::-webkit-scrollbar-track {
-            background: #e0e0e0;
-        }
-
-        .kiosk-content::-webkit-scrollbar-thumb {
-            background: #2c3e50;
-            border-radius: 10px;
-        }
-
-        /* Landing Screen */
+        /* Landing screen: scan a barcode */
         .landing-screen {
-            text-align: center;
-            padding: 60px 40px;
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
             align-items: center;
+            gap: var(--space-8);
+            min-height: 100%;
+            padding: var(--space-7);
+            max-width: 1280px;
+            margin: 0 auto;
         }
+        .landing-copy h2 { font-size: 56px; font-weight: 500; letter-spacing: -0.02em; }
+        .landing-copy p { margin-top: var(--space-4); font-size: 24px; color: var(--ink-soft); max-width: 28ch; }
+        .landing-copy .hint {
+            margin-top: var(--space-6);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
+        }
+
+        .scan-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+            min-height: 72px;
+            margin-top: var(--space-6);
+            padding: 0 var(--space-7);
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--ink);
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .scan-btn:hover { background: #26343F; }
+        .scan-btn:active { background: #0E161C; }
 
         .scan-icon {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 40px;
             position: relative;
+            justify-self: center;
+            width: min(100%, 360px);
+            aspect-ratio: 1;
         }
-
         .barcode-animation {
+            display: grid;
+            place-items: center;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 80px;
-            animation: pulse 2s ease-in-out infinite;
+            border: 2px solid var(--ink);
+            background: var(--white);
+            color: var(--ink);
         }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 60px rgba(102, 126, 234, 0.5); }
-        }
-
+        .barcode-animation .icon { width: 120px; height: 120px; stroke-width: 1.25; }
         .scan-laser {
             position: absolute;
             top: 20%;
             left: 0;
             width: 100%;
-            height: 3px;
-            background: #ff0000;
-            box-shadow: 0 0 20px #ff0000;
+            height: 2px;
+            background: var(--danger);
             animation: scan 2s linear infinite;
             display: none;
         }
-
-        .scan-laser.active {
-            display: block;
-        }
-
+        .scan-laser.active { display: block; }
         @keyframes scan {
             0% { top: 20%; }
             100% { top: 80%; }
         }
 
-        .landing-screen h2 {
-            font-size: 2em;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-weight: 800;
-        }
-
-        .landing-screen p {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        .scan-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 20px 50px;
-            border-radius: 50px;
-            font-size: 1.3em;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .scan-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-        }
-
-        .scan-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Session Screen */
-        .session-screen {
-            padding: 40px;
-            display: none;
-        }
-
-        .session-screen.active {
-            display: block;
-        }
+        /* Session screen: recognised customer */
+        .session-screen { display: none; max-width: 1100px; margin: 0 auto; padding: var(--space-7); }
+        .session-screen.active { display: block; }
 
         .welcome-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            text-align: center;
+            margin-bottom: var(--space-6);
+            padding-top: var(--space-5);
+            border-top: 4px solid var(--ink);
         }
-
-        .welcome-banner h2 {
-            font-size: 2em;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .welcome-banner p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
+        .welcome-banner h2 { font-size: 44px; font-weight: 500; letter-spacing: -0.01em; }
+        .welcome-banner p { margin-top: var(--space-3); font-size: 22px; color: var(--ink-soft); }
 
         .context-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: var(--space-5);
+            padding: var(--space-5);
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
         }
-
         .context-section h3 {
-            color: #2c3e50;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-bottom: var(--space-3);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--ink);
+            font-size: 26px;
+            font-weight: 500;
         }
 
         .cart-item, .liked-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--line);
         }
-
-        .cart-item strong, .liked-item strong {
-            color: #2c3e50;
-            font-size: 1.05em;
+        .cart-item:last-child, .liked-item:last-child { border-bottom: 0; }
+        .cart-item strong, .liked-item strong { font-size: 22px; font-weight: 600; }
+        .cart-item .price, .liked-item .price {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-variant-numeric: tabular-nums;
+            color: var(--ink);
         }
-
-        .cart-item .price {
-            color: #667eea;
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-
         .quantity-badge {
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: 600;
+            padding: 4px var(--space-3);
+            border: 1px solid var(--ink-soft);
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--ink-soft);
         }
 
         .kiosk-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 30px;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
         }
-
         .kiosk-btn {
-            background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: var(--space-3);
+            min-height: 128px;
+            padding: var(--space-4);
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-size: 22px;
+            font-weight: 600;
         }
+        .kiosk-btn:hover { background: var(--stone); }
+        .kiosk-btn .icon { width: 36px; height: 36px; }
+        .kiosk-btn.primary { background: var(--ink); color: var(--white); }
+        .kiosk-btn.primary:hover { background: #26343F; }
 
-        .kiosk-btn:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .kiosk-btn .icon {
-            font-size: 2em;
-        }
-
-        .kiosk-btn.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-        }
-
-        .kiosk-btn.primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-
-        /* Footer */
-        .kiosk-footer {
-            background: #2c3e50;
-            color: white;
-            padding: 20px 40px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .kiosk-footer p {
-            opacity: 0.9;
-            font-size: 0.95em;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .empty-state .icon {
-            font-size: 4em;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        /* POS Payment Screen */
-        .pos-screen {
-            display: none;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .pos-screen.active {
-            display: block;
-        }
+        /* Payment terminal */
+        .pos-screen { display: none; max-width: 760px; margin: 0 auto; padding: var(--space-7); text-align: center; }
+        .pos-screen.active { display: block; }
+        .pos-screen > h2 { font-size: 40px; font-weight: 500; }
 
         .pos-terminal {
-            background: #2c3e50;
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin: 30px auto;
-            max-width: 500px;
+            margin: var(--space-6) auto;
+            padding: var(--space-7);
+            background: var(--ink);
+            color: var(--white);
+            border-radius: var(--radius);
         }
-
         .pos-terminal h2 {
-            font-size: 2em;
-            margin-bottom: 30px;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #AEB8BF;
         }
-
         .pos-amount {
-            font-size: 3em;
-            font-weight: 800;
-            color: #38ef7d;
-            margin-bottom: 30px;
+            margin: var(--space-3) 0 var(--space-6);
+            font-family: var(--font-mono);
+            font-size: 72px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
         }
-
-        .payment-methods {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
+        #paymentMethods h3 { margin-bottom: var(--space-4); font-size: 22px; font-weight: 500; color: #D5DBDF; }
+        .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
         .payment-method {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .payment-method:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #38ef7d;
-        }
-
-        .payment-method .icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .processing {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+            min-height: 140px;
+            border: 1px solid #55616A;
+            border-radius: var(--radius);
+            background: transparent;
+            color: var(--white);
+            font-size: 22px;
             font-weight: 600;
-            display: none;
         }
+        .payment-method:hover { background: #26343F; border-color: var(--white); }
+        .payment-method .icon { width: 40px; height: 40px; }
 
-        .processing.active {
-            display: block;
-            animation: fadeInScale 0.4s ease;
+        .processing { display: none; padding: var(--space-5); border: 1px solid #7FC4A1; border-radius: var(--radius); color: #7FC4A1; font-size: 24px; font-weight: 600; }
+        .processing.active { display: block; animation: fade-in 200ms ease; }
+        .processing.working { border-color: #AEB8BF; color: #D5DBDF; }
+        .processing.failed { border-color: #E5776B; color: #E5776B; }
+        .processing small { display: block; margin-top: var(--space-2); font-size: 16px; font-weight: 400; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .success-checkmark .icon { width: 64px; height: 64px; }
+
+        .kiosk-footer {
+            flex-shrink: 0;
+            padding: var(--space-4) var(--space-7);
+            background: var(--white);
+            border-top: 1px solid var(--line);
+            text-align: center;
         }
+        .kiosk-footer p { font-size: 18px; color: var(--ink-soft); }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .success-checkmark {
-            font-size: 4em;
-            color: #38ef7d;
-            animation: bounceIn 0.6s ease;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        @media (max-width: 900px) {
+            body { font-size: 18px; }
+            .kiosk-header { padding: var(--space-4) var(--space-5); }
+            .landing-screen { grid-template-columns: 1fr; gap: var(--space-6); padding: var(--space-5); }
+            .landing-copy h2 { font-size: 40px; }
+            .session-screen, .pos-screen { padding: var(--space-5); }
+            .kiosk-actions { grid-template-columns: 1fr; }
+            .pos-amount { font-size: 52px; }
+            .payment-methods { grid-template-columns: 1fr; }
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
     <div class="kiosk-container">
         <!-- Header -->
-        <div class="kiosk-header">
+        <header class="kiosk-header">
             <div>
-                <h1>🏪 Van Heusen In-Store Kiosk</h1>
-                <p style="opacity: 0.8; font-size: 0.9em;">Your Personal Shopping Assistant</p>
+                <h1>Van Heusen In-Store Kiosk</h1>
+                <p class="tagline">Your Personal Shopping Assistant</p>
             </div>
             <div class="store-info">
                 <strong id="storeName">Bandra Store</strong><br>
                 <span id="kioskDetails">Kiosk #2 • Open till 10 PM</span>
             </div>
-        </div>
+        </header>
 
         <!-- Scrollable Content -->
-        <div class="kiosk-content">
+        <main class="kiosk-content">
             <!-- Landing Screen: Barcode Scan -->
             <div class="landing-screen" id="landingScreen">
+                <div class="landing-copy">
+                    <h2>Scan Product Barcode</h2>
+                    <p>Scan any product QR code or barcode to start shopping</p>
+                    <button class="scan-btn" onclick="simulateScan()">
+                        <svg class="icon icon-lg" aria-hidden="true"><use href="icons.svg#scan"/></svg>
+                        Simulate Barcode Scan
+                    </button>
+                    <p class="hint">
+                        Try scanning products on shelf or your mobile app QR code
+                    </p>
+                </div>
                 <div class="scan-icon">
-                    <div class="barcode-animation">📱</div>
+                    <div class="barcode-animation"><svg class="icon" aria-hidden="true"><use href="icons.svg#phone"/></svg></div>
                     <div class="scan-laser" id="scanLaser"></div>
                 </div>
-                <h2>Scan Product Barcode</h2>
-                <p>Scan any product QR code or barcode to start shopping</p>
-                <button class="scan-btn" onclick="simulateScan()">
-                    📷 Simulate Barcode Scan
-                </button>
-                <p style="margin-top: 30px; color: #999; font-size: 0.95em;">
-                    💡 Try scanning products on shelf or your mobile app QR code
-                </p>
             </div>
 
             <!-- Session Screen: After Recognition -->
             <div class="session-screen" id="sessionScreen">
                 <div class="welcome-banner">
-                    <h2 id="welcomeMessage">👋 Welcome back!</h2>
+                    <h2 id="welcomeMessage">Welcome back!</h2>
                     <p id="contextSummary">Loading your shopping journey...</p>
                 </div>
 
                 <!-- Cart Section -->
                 <div class="context-section" id="cartSection" style="display: none;">
-                    <h3>🛒 Your Cart</h3>
+                    <h3>Your Cart</h3>
                     <div id="kioskCartItems"></div>
                 </div>
 
                 <!-- Liked Items Section -->
                 <div class="context-section" id="likedSection" style="display: none;">
-                    <h3>❤️ Items You Liked</h3>
+                    <h3>Items You Liked</h3>
                     <div id="kioskLikedItems"></div>
                 </div>
 
                 <!-- Kiosk Actions -->
                 <div class="kiosk-actions">
                     <button class="kiosk-btn" onclick="reserveForTryOn()">
-                        <span class="icon">🛍️</span>
+                        <svg class="icon" aria-hidden="true"><use href="icons.svg#bag"/></svg>
                         <span>Reserve for Try-On</span>
                     </button>
 
                     <button class="kiosk-btn" onclick="addLikedToCart()">
-                        <span class="icon">➕</span>
+                        <svg class="icon" aria-hidden="true"><use href="icons.svg#plus"/></svg>
                         <span>Add Liked to Cart</span>
                     </button>
 
                     <button class="kiosk-btn primary" onclick="showPOSPayment()">
-                        <span class="icon">💳</span>
+                        <svg class="icon" aria-hidden="true"><use href="icons.svg#card"/></svg>
                         <span>Complete Purchase</span>
                     </button>
 
                     <button class="kiosk-btn" onclick="callAssociate()">
-                        <span class="icon">🔔</span>
+                        <svg class="icon" aria-hidden="true"><use href="icons.svg#user"/></svg>
                         <span>Call Store Associate</span>
                     </button>
                 </div>
 
                 <div style="text-align: center; margin-top: 30px; padding: 20px;">
-                    <button class="kiosk-btn" onclick="viewStoreDashboard()" style="max-width: 400px;">
-                        <span class="icon">🖥️</span>
+                    <button class="kiosk-btn" onclick="viewStoreDashboard()" style="max-width: 480px; margin: 0 auto; min-height: 88px; width: 100%;">
+                        <svg class="icon" aria-hidden="true"><use href="icons.svg#layout-grid"/></svg>
                         <span>View on Associate Dashboard</span>
                     </button>
                 </div>
@@ -490,32 +369,43 @@
 
             <!-- POS Payment Screen -->
             <div class="pos-screen" id="posScreen">
-                <h2 style="color: #2c3e50; font-size: 2.2em; margin-bottom: 20px;">💳 Payment Terminal</h2>
-                
+                <h2>Payment Terminal</h2>
+
                 <div class="pos-terminal">
                     <h2>Order Total</h2>
                     <div class="pos-amount" id="posAmount">₹0</div>
-                    
+
                     <div id="paymentMethods">
-                        <h3 style="margin-bottom: 20px; opacity: 0.9;">Select Payment Method</h3>
+                        <h3>Select Payment Method</h3>
                         <div class="payment-methods">
-                            <div class="payment-method" onclick="processPayment('card')">
-                                <div class="icon">💳</div>
+                            <button class="payment-method" onclick="processPayment('card')">
+                                <svg class="icon" aria-hidden="true"><use href="icons.svg#card"/></svg>
                                 <div>Card</div>
-                            </div>
-                            <div class="payment-method" onclick="processPayment('upi')">
-                                <div class="icon">📱</div>
+                            </button>
+                            <button class="payment-method" onclick="processPayment('upi')">
+                                <svg class="icon" aria-hidden="true"><use href="icons.svg#phone"/></svg>
                                 <div>UPI</div>
-                            </div>
-                            <div class="payment-method" onclick="processPayment('cash')">
-                                <div class="icon">💵</div>
+                            </button>
+                            <button class="payment-method" onclick="processPayment('cash')">
+                                <svg class="icon" aria-hidden="true"><use href="icons.svg#receipt"/></svg>
                                 <div>Cash</div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="processing" id="processing">
-                        <div class="success-checkmark">✅</div>
+                    <div class="processing working" id="paymentWorking" role="status">
+                        <div>Processing payment...</div>
+                        <small>Please wait. This can take a few seconds.</small>
+                    </div>
+
+                    <div class="processing failed" id="paymentFailed" role="alert">
+                        <div>Payment not completed</div>
+                        <small id="paymentFailedReason"></small>
+                        <small>Choose a payment method to try again, or call an associate.</small>
+                    </div>
+
+                    <div class="processing" id="processing" role="status">
+                        <div class="success-checkmark"><svg class="icon" aria-hidden="true"><use href="icons.svg#check-circle"/></svg></div>
                         <div style="margin-top: 15px;">Payment Successful!</div>
                         <div style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">
                             Receipt printing...
@@ -523,41 +413,42 @@
                     </div>
                 </div>
 
-                <button class="scan-btn" onclick="backToSession()" style="margin-top: 20px;">
-                    ← Back to Cart
+                <button class="scan-btn" onclick="backToSession()" style="margin-top: 20px; background: var(--white); color: var(--ink);">
+                    <svg class="icon icon-lg" aria-hidden="true"><use href="icons.svg#arrow-left"/></svg>
+                    Back to Cart
                 </button>
             </div>
-        </div>
+        </main>
 
         <!-- Footer -->
-        <div class="kiosk-footer">
+        <footer class="kiosk-footer">
             <p>Need help? Press the <strong>Call Associate</strong> button or scan your loyalty card</p>
-        </div>
+        </footer>
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8000';
         let sessionId = localStorage.getItem('session_id');
         let cartItems = [];
         let likedProducts = [];
         let purchasedItems = [];
+        let reservedStore = null;   // the store the customer reserved at, from the backend session
         
         // All available products - MUST MATCH mobile.html and whatsapp.html
         const allProducts = [
             {id: 'VH001', name: 'Classic Blue Formal Shirt', price: 2500, size: '40', category: 'shirts'},
-            {id: 'VH002', name: 'White Premium Shirt', price: 2800, size: '40', category: 'shirts'},
-            {id: 'VH003', name: 'Light Pink Shirt', price: 2600, size: '40', category: 'shirts'},
-            {id: 'VH004', name: 'Navy Blue Tie', price: 800, category: 'ties'},
-            {id: 'VH005', name: 'Striped Tie', price: 750, category: 'ties'},
+            {id: 'VH002', name: 'White Premium Formal Shirt', price: 2800, size: '40', category: 'shirts'},
+            {id: 'VH003', name: 'Light Pink Formal Shirt', price: 2600, size: '40', category: 'shirts'},
+            {id: 'VH004', name: 'Navy Blue Silk Tie', price: 800, category: 'ties'},
+            {id: 'VH005B', name: 'Striped Silk Tie', price: 750, category: 'ties'},
             {id: 'VH006', name: 'Brown Leather Belt', price: 1200, category: 'accessories'},
-            {id: 'VH007', name: 'Navy Formal Trousers', price: 2200, size: '32', category: 'trousers'},
-            {id: 'VH008', name: 'Charcoal Blazer', price: 4500, size: '42', category: 'blazers'},
-            {id: 'VH009', name: 'Black Formal Shoes', price: 3200, size: '9', category: 'shoes'},
-            {id: 'VH010', name: 'Premium Leather Wallet', price: 1500, category: 'accessories'},
-            {id: 'VH011', name: 'Grey Slim Fit Trousers', price: 2400, size: '32', category: 'trousers'},
-            {id: 'VH012', name: 'Black Leather Belt', price: 1100, category: 'accessories'},
-            {id: 'VH013', name: 'Silver Cufflinks Set', price: 900, category: 'accessories'},
-            {id: 'VH014', name: 'Tan Suede Shoes', price: 3500, size: '9', category: 'shoes'}
+            {id: 'VH007', name: 'Black Leather Belt', price: 1300, category: 'accessories'},
+            {id: 'VH008', name: 'Blue Formal Trousers', price: 2200, size: '32', category: 'trousers'},
+            {id: 'VH008C', name: 'Black Formal Trousers', price: 2300, size: '32', category: 'trousers'},
+            {id: 'VH012', name: 'Blue Formal Shoes', price: 3500, size: '9', category: 'shoes'},
+            {id: 'VH013', name: 'Black Formal Shoes', price: 3800, size: '9', category: 'shoes'},
+            {id: 'VH014', name: 'Blue Formal Socks', price: 300, category: 'accessories'},
+            {id: 'VH015', name: 'Black Formal Socks', price: 300, category: 'accessories'},
+            {id: 'VH001B', name: 'Light Blue Formal Shirt', price: 2450, size: '40', category: 'shirts'}
         ];
 
         function simulateScan() {
@@ -610,7 +501,7 @@
             const source = urlParams.get('source') || 'whatsapp'; // default to whatsapp for backward compatibility
             const sourceText = source === 'chat' ? 'online' : 'on WhatsApp';
             
-            let message = '👋 Welcome back, Rahul!';
+            let message = 'Welcome back, Rahul!';
             let summary = '';
             
             if (cartCount > 0 && likedCount > 0) {
@@ -623,6 +514,10 @@
                 summary = 'Ready to start shopping? Browse our latest collection!';
             }
             
+            if (reservedStore) {
+                summary += ` Your items are reserved for you at ${reservedStore}.`;
+            }
+
             document.getElementById('welcomeMessage').textContent = message;
             document.getElementById('contextSummary').textContent = summary;
         }
@@ -678,7 +573,7 @@
             }).filter(item => item !== null)];
             
             if (itemsToReserve.length === 0) {
-                alert('⚠️ No Items to Reserve\n\nPlease add items to your cart or like some products first.');
+                alert('No Items to Reserve\n\nPlease add items to your cart or like some products first.');
                 return;
             }
             
@@ -701,13 +596,13 @@
             const cartItemCount = cartItems.length;
             const likedItemCount = likedProducts.length;
             
-            itemsList += `📦 From Cart (${cartItemCount}):\n`;
+            itemsList += `From Cart (${cartItemCount}):\n`;
             cartItems.forEach(item => {
                 itemsList += `• ${item.name}${item.size ? ' (Size ' + item.size + ')' : ''}\n`;
             });
             
             if (likedProducts.length > 0) {
-                itemsList += `\n❤️ From Liked (${likedItemCount}):\n`;
+                itemsList += `\nFrom Liked (${likedItemCount}):\n`;
                 likedProducts.forEach(id => {
                     const product = allProducts.find(p => p.id === id);
                     if (product) {
@@ -716,7 +611,7 @@
                 });
             }
             
-            alert(`✅ Items Reserved!\n\n` +
+            alert(`Items Reserved!\n\n` +
                   `Try-On Room #${roomNumber} is ready for you\n\n` +
                   `Total items to try: ${itemsToReserve.length}\n\n` +
                   itemsList + '\n' +
@@ -740,12 +635,13 @@
             console.log('Liked products to add:', likedProducts);
             
             if (!likedProducts || likedProducts.length === 0) {
-                alert('⚠️ No Liked Products\n\nYou haven\'t liked any products yet. Browse our collection first!');
+                alert('No Liked Products\n\nYou haven\'t liked any products yet. Browse our collection first!');
                 return;
             }
             
             let addedCount = 0;
             let updatedCount = 0;
+            const soldOutNames = [];
             
             for (const productId of likedProducts) {
                 console.log('Processing liked product ID:', productId);
@@ -757,6 +653,21 @@
                     continue;
                 }
                 
+                // The backend decides first: a sold-out item is not added
+                try {
+                    const response = await fetch(`${API_URL}/api/cart/add`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({session_id: sessionId, product_id: product.id, size: product.size, quantity: 1})
+                    });
+                    if (response.status === 409) {
+                        soldOutNames.push(product.name);
+                        continue;
+                    }
+                } catch (error) {
+                    console.error('Error adding to cart:', error);
+                }
+
                 // Check if already in cart - must match exact ID
                 const existing = cartItems.find(item => item.id === productId);
                 if (existing) {
@@ -773,24 +684,6 @@
                         quantity: 1
                     });
                     addedCount++;
-                }
-                
-                // Add to backend
-                try {
-                    await fetch(`${API_URL}/api/cart/add`, {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            session_id: sessionId,
-                            product_id: product.id,
-                            product_name: product.name,
-                            price: product.price,
-                            size: product.size,
-                            quantity: 1
-                        })
-                    });
-                } catch (error) {
-                    console.error('Error adding to cart:', error);
                 }
             }
             
@@ -809,24 +702,34 @@
             const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const totalMoved = addedCount + updatedCount;
             
-            alert(`✅ Added to Cart!\n\n` +
+            const soldOutNote = soldOutNames.length > 0
+                ? `\n\nOut of stock, not added: ${soldOutNames.join(', ')}\n`
+                : '';
+
+            alert(`Added to Cart!\n\n` +
                   `${totalMoved} ${totalMoved === 1 ? 'item' : 'items'} moved from likes to cart\n` +
                   `(${addedCount} new, ${updatedCount} quantity updated)\n\n` +
                   `Total items in cart: ${cartItems.length}\n` +
                   `Cart total: ₹${total.toLocaleString()}\n\n` +
+                  soldOutNote +
                   `Ready to complete your purchase at the kiosk?`);
         }
 
-        function showPOSPayment() {
+        async function showPOSPayment() {
             if (cartItems.length === 0) {
-                alert('⚠️ Cart is Empty\n\nPlease add items to your cart before checkout.');
+                alert('Cart is Empty\n\nPlease add items to your cart before checkout.');
                 return;
             }
             
             // Calculate total
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const discount = Math.round(subtotal * (cartItems.length >= 3 ? 0.20 : 0.10));
-            const total = subtotal - discount;
+            try {
+                await syncKioskCartToBackend();
+                await refreshPricing();
+            } catch (error) {
+                console.error('Could not price the cart:', error);
+            }
+            const total = payableTotal(subtotal);
             
             // Save for later
             localStorage.setItem('orderTotal', total.toString());
@@ -838,41 +741,88 @@
             document.getElementById('posAmount').textContent = `₹${total.toLocaleString()}`;
         }
 
-        async function processPayment(method) {
-            const paymentMethods = document.getElementById('paymentMethods');
-            const processing = document.getElementById('processing');
-            
-            paymentMethods.style.display = 'none';
-            processing.classList.add('active');
-            
-            // Simulate payment processing
-            setTimeout(async () => {
-                // Call backend to save order
-                try {
-                    await fetch(`${API_URL}/api/order/complete`, {
+        // Make sure the shop's cart is also in the backend, so the server can price it
+        async function syncKioskCartToBackend() {
+            const response = await fetch(`${API_URL}/api/cart/${sessionId}`);
+            if (!response.ok) throw new Error('Cannot reach the cart service');
+            const backendIds = (await response.json()).items.map(item => item.product_id);
+            for (const item of cartItems) {
+                if (!backendIds.includes(item.id)) {
+                    await fetch(`${API_URL}/api/cart/add`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             session_id: sessionId,
-                            items: purchasedItems,
-                            payment_method: method,
-                            total: localStorage.getItem('orderTotal'),
-                            store: 'Bandra Store',
-                            kiosk: '#2'
+                            product_id: item.id,
+                            quantity: item.quantity || 1,
+                            size: item.size || '40'
                         })
                     });
-                } catch (error) {
-                    console.error('Error completing order:', error);
                 }
-                
-                // Clear cart
-                localStorage.removeItem('likedProducts');
-                
-                // Redirect to post-purchase
-                setTimeout(() => {
-                    window.location.href = `post-purchase.html?session=${sessionId}`;
-                }, 2000);
-            }, 2500);
+            }
+        }
+
+        async function processPayment(method) {
+            const paymentMethods = document.getElementById('paymentMethods');
+            const working = document.getElementById('paymentWorking');
+            const failed = document.getElementById('paymentFailed');
+            const success = document.getElementById('processing');
+
+            paymentMethods.style.display = 'none';
+            failed.classList.remove('active');
+            working.classList.add('active');
+
+            try {
+                await syncKioskCartToBackend();
+
+                // Take the payment on the backend (gateway failover), then save the order
+                const paymentResponse = await fetch(`${API_URL}/api/payment/process`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: sessionId, method: method})
+                });
+                const payment = await paymentResponse.json();
+                if (!paymentResponse.ok || !payment.success) {
+                    throw new Error(payment.message || payment.detail || 'The payment was declined.');
+                }
+                // Keep the amount that was really charged for the order page and invoice
+                localStorage.setItem('orderTotal', String(payment.amount));
+
+                const orderResponse = await fetch(`${API_URL}/api/order/complete`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        items: purchasedItems,
+                        payment_method: method,
+                        total: localStorage.getItem('orderTotal'),
+                        store: document.getElementById('storeName').textContent,
+                        kiosk: '#2'
+                    })
+                });
+                if (!orderResponse.ok) {
+                    throw new Error('Your payment went through but the order could not be saved. Please call an associate.');
+                }
+            } catch (error) {
+                console.error('Error completing order:', error);
+                working.classList.remove('active');
+                document.getElementById('paymentFailedReason').textContent =
+                    error instanceof TypeError ? 'The payment service cannot be reached.' : error.message;
+                failed.classList.add('active');
+                paymentMethods.style.display = 'block';
+                return;
+            }
+
+            working.classList.remove('active');
+            success.classList.add('active');
+
+            // Clear cart
+            localStorage.removeItem('likedProducts');
+
+            // Redirect to post-purchase
+            setTimeout(() => {
+                window.location.href = `post-purchase.html?session=${sessionId}`;
+            }, 2000);
         }
 
         function callAssociate() {
@@ -886,7 +836,7 @@
             
             localStorage.setItem('kioskNotification', JSON.stringify(notification));
             
-            alert('🔔 Store Associate Called\n\n' +
+            alert('Store Associate Called\n\n' +
                   'Priya has been notified and is on her way to assist you!\n\n' +
                   'She can help you with:\n' +
                   '• Product recommendations\n' +
@@ -907,11 +857,13 @@
             // Reset payment screen
             document.getElementById('paymentMethods').style.display = 'block';
             document.getElementById('processing').classList.remove('active');
+            document.getElementById('paymentWorking').classList.remove('active');
+            document.getElementById('paymentFailed').classList.remove('active');
         }
 
         window.onload = () => {
             localStorage.setItem('current_step', '3.5'); // Between WhatsApp and Store Dashboard
-            console.log('✅ In-Store Kiosk loaded');
+            console.log('In-Store Kiosk loaded');
             
             // Get store from URL or localStorage
             const urlParams = new URLSearchParams(window.location.search);
@@ -926,13 +878,33 @@
                 'powai': {
                     name: 'Powai Store',
                     details: 'Kiosk #5 • Open till 11 PM'
+                },
+                'andheri': {
+                    name: 'Andheri Store',
+                    details: 'Kiosk #3 • Open till 10 PM'
+                },
+                'kurla': {
+                    name: 'Kurla Store',
+                    details: 'Kiosk #1 • Open till 11 PM'
                 }
             };
             
-            const selectedStore = storeInfo[storeParam] || storeInfo['bandra'];
-            document.getElementById('storeName').textContent = selectedStore.name;
-            document.getElementById('kioskDetails').textContent = selectedStore.details;
-            console.log('Store set to:', selectedStore.name);
+            const showStore = (key) => {
+                const store = storeInfo[key] || storeInfo['bandra'];
+                document.getElementById('storeName').textContent = store.name;
+                document.getElementById('kioskDetails').textContent = store.details;
+            };
+            showStore(storeParam);
+
+            // A reservation made on another channel (WhatsApp, web chat) decides the store here
+            fetch(`${API_URL}/api/session/${sessionId}`)
+                .then(response => response.ok ? response.json() : null)
+                .then(session => {
+                    if (!session || !session.reserved_store) return;
+                    reservedStore = session.reserved_store;
+                    showStore(reservedStore.replace(' Store', '').toLowerCase());
+                })
+                .catch(error => console.error('Could not load the reservation:', error));
             
             // If there's a session, show it
             if (sessionId && (localStorage.getItem('cartItems') || localStorage.getItem('likedProducts'))) {

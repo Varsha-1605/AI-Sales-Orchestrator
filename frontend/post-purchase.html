@@ -4,403 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post-Purchase Follow-up - Van Heusen AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        /* Page: post-purchase follow-up. Roomy and editorial, one reading column. */
+        .page { max-width: 760px; padding-top: var(--space-7); padding-bottom: var(--space-8); }
+
+        .header { padding-bottom: var(--space-6); border-bottom: 2px solid var(--ink); }
+        .header h1 { margin-top: var(--space-2); font-size: var(--text-3xl); font-weight: 500; letter-spacing: -0.02em; }
+        .header p.subtitle { margin-top: var(--space-3); font-size: var(--text-lg); color: var(--ink-soft); }
+
+        .section-title {
+            margin: var(--space-7) 0 var(--space-4);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
         }
 
-        .container {
-            max-width: 450px;
-            width: 100%;
-            height: 90vh;
-            max-height: 900px;
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-            animation: slideIn 0.6s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 0.95em;
-        }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        
-        .scrollable-content::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-thumb:hover {
-            background: #764ba2;
-        }
-        
-        .timeline {
-            padding: 30px;
-            background: #f8f9fa;
-        }
-
+        /* Order timeline (items rendered by the script) */
+        .timeline { margin-top: var(--space-6); }
         .timeline-item {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            animation: fadeInUp 0.6s ease backwards;
             position: relative;
-        }
-
-        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
-        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
-        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
-        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .timeline-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-            flex-shrink: 0;
-            position: relative;
+            gap: var(--space-5);
+            padding-bottom: var(--space-6);
         }
-
-        .timeline-icon.completed {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
-        }
-
-        .timeline-icon.pending {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-        }
-
-        .timeline-item:not(:last-child) .timeline-icon::after {
+        .timeline-item:not(:last-child)::after {
             content: '';
             position: absolute;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 50px;
-            background: linear-gradient(180deg, #667eea, transparent);
+            left: 21px;
+            top: 48px;
+            bottom: 4px;
+            width: 1px;
+            background: var(--line);
         }
-
-        .timeline-content {
-            flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-
-        .timeline-content h3 {
-            color: #667eea;
-            margin-bottom: 8px;
-            font-size: 1.2em;
-            font-weight: 700;
-        }
-
-        .timeline-content p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 8px;
-        }
-
-        .timeline-content .timestamp {
-            color: #999;
-            font-size: 0.85em;
-            font-weight: 500;
-        }
-
-        .whatsapp-message {
-            background: #e7ffdb;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 12px;
-            border-left: 4px solid #25d366;
-            font-style: italic;
-            color: #333;
-        }
-
-        .action-card {
-            background: white;
-            margin: 0 30px 30px;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
-            animation: fadeInUp 0.6s ease 1s backwards;
-        }
-
-        .action-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            font-weight: 700;
-        }
-
-        .rating-stars {
-            display: flex;
-            gap: 12px;
-            margin: 20px 0;
-            justify-content: center;
-        }
-
-        .star {
-            font-size: 3em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            filter: grayscale(100%);
-        }
-
-        .star:hover,
-        .star.active {
-            filter: grayscale(0%);
-            transform: scale(1.2);
-        }
-
-        .quick-actions {
+        .timeline-icon {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 20px;
+            place-items: center;
+            flex: none;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--ink-soft);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink-soft);
+        }
+        .timeline-icon.completed { border-color: var(--success); color: var(--success); }
+        .timeline-icon.pending { border-color: var(--accent); color: var(--accent); }
+
+        .timeline-content { flex: 1; min-width: 0; }
+        .timeline-content h3 { font-size: var(--text-lg); font-weight: 500; }
+        .timeline-content p { margin-top: var(--space-1); color: var(--ink-soft); line-height: 1.6; }
+        .timeline-content .timestamp {
+            margin-top: var(--space-2);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
+        }
+        .whatsapp-message {
+            margin-top: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            border-left: 2px solid var(--accent);
+            background: var(--white);
+            font-family: var(--font-display);
+            font-size: var(--text-md);
+            font-style: italic;
+            line-height: 1.5;
+            color: var(--ink);
         }
 
-        .action-btn {
-            padding: 15px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            border: 2px solid #667eea;
-            border-radius: 12px;
+        /* Rating and quick actions */
+        .action-card { padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+        .action-card h3 { font-size: var(--text-xl); font-weight: 500; }
+        .action-card .lead { margin-top: var(--space-2); color: var(--ink-soft); }
+
+        .rating-stars { display: flex; gap: var(--space-2); margin: var(--space-5) 0 var(--space-3); }
+        .star {
+            display: grid;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--line);
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            transition: color 120ms ease, border-color 120ms ease;
+        }
+        .star .icon { width: 28px; height: 28px; }
+        .star:hover { border-color: var(--accent); color: var(--accent); }
+        .star:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .star.active { border-color: var(--accent); color: var(--accent); }
+        .star.active .icon { fill: var(--accent); }
+        #ratingFeedback { min-height: 24px; font-weight: 500; color: var(--accent); }
+
+        .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); margin-top: var(--space-5); }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            min-height: 52px;
+            padding: 0 var(--space-4);
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
             font-weight: 600;
-            color: #667eea;
+            cursor: pointer;
+            transition: background-color 120ms ease, color 120ms ease;
         }
+        .action-btn:hover { background: var(--ink); color: var(--white); }
+        .action-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-        .action-btn:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .recommendation-section {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
-            margin: 0 30px 30px;
-            padding: 25px;
-            border-radius: 20px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            animation: fadeInUp 0.6s ease 1.2s backwards;
-        }
-
-        .recommendation-section h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            font-weight: 700;
-        }
-
+        /* Recommendations (rows rendered by the script) */
+        .recommendation-section { padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+        .recommendation-section h3 { font-size: var(--text-xl); font-weight: 500; }
+        .recommendation-section > p { margin: var(--space-2) 0 var(--space-4); color: var(--ink-soft); }
         .product-recommendation {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-top: 1px solid var(--line);
         }
-
-        .product-recommendation:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-        }
-
-        .product-info-rec {
-            flex: 1;
-        }
-
-        .product-info-rec strong {
-            display: block;
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 1.05em;
-        }
-
-        .product-info-rec .price {
-            color: #667eea;
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-
+        .product-info-rec { flex: 1; color: var(--ink-soft); font-size: var(--text-sm); }
+        .product-info-rec strong { display: block; margin-bottom: var(--space-1); font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; color: var(--ink); }
+        .product-info-rec .price { font-family: var(--font-mono); font-size: var(--text-md); font-variant-numeric: tabular-nums; color: var(--ink); }
         .add-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
+            min-height: 44px;
+            padding: 0 var(--space-5);
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--ink);
+            color: var(--white);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
             font-weight: 600;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: background-color 120ms ease;
         }
-
-        .add-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .footer {
-            background: #1a1a2e;
-            color: white;
-            padding: 25px 30px;
+        .add-btn:hover { background: #26343F; }
+        .add-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .special-offer {
+            margin-top: var(--space-4);
+            padding: var(--space-3) var(--space-4);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            color: var(--accent);
+            font-weight: 600;
             text-align: center;
-            flex-shrink: 0;
         }
 
-        .footer p {
-            margin-bottom: 15px;
-            opacity: 0.9;
+        /* Loyalty footer */
+        .footer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4);
+            margin-top: var(--space-7);
+            padding-top: var(--space-5);
+            border-top: 2px solid var(--ink);
         }
+        .footer p { margin: 0; }
+        .footer .next-reward { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--ink-soft); }
+        #pointsEarned { font-family: var(--font-mono); font-weight: 500; }
 
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
+        @media (max-width: 600px) {
+            .header h1 { font-size: var(--text-2xl); }
+            .action-card, .recommendation-section { padding: var(--space-5); }
+            .quick-actions { grid-template-columns: 1fr; }
+            .product-recommendation { flex-direction: column; align-items: flex-start; }
+            .wordmark-tag { display: none; }
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
-    <div class="container">
+    <header class="app-bar">
+        <div class="container app-bar-inner">
+            <a class="wordmark" href="index.html">
+                <span class="wordmark-name">Orchestrator</span>
+                <span class="wordmark-tag">Order follow-up</span>
+            </a>
+            <div class="app-bar-meta">
+                <span class="label">Step 6 of 6</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page">
         <!-- Header -->
         <div class="header">
-            <h1 id="headerTitle">✨ Thank You, Rahul!</h1>
-            <p id="headerSubtitle">Your order journey & personalized care</p>
+            <p class="label">Post-purchase</p>
+            <h1 id="headerTitle">Thank You, Rahul!</h1>
+            <p class="subtitle" id="headerSubtitle">Your order journey & personalized care</p>
         </div>
 
-        <!-- Scrollable Content Area -->
-        <div class="scrollable-content">
-            <!-- Order Timeline -->
-            <div class="timeline" id="timelineContainer">
-                <!-- Timeline items will be dynamically generated -->
-            </div>
+        <!-- Order Timeline -->
+        <div class="timeline" id="timelineContainer">
+            <!-- Timeline items will be dynamically generated -->
+        </div>
 
         <!-- Rating Card -->
+        <h2 class="section-title">Your feedback</h2>
         <div class="action-card">
-            <h3>⭐ Rate Your Experience</h3>
-            <p style="text-align: center; color: #666; margin-bottom: 10px;">
-                How was your shopping journey with us?
-            </p>
-            <div class="rating-stars" id="ratingStars">
-                <span class="star" data-rating="1">⭐</span>
-                <span class="star" data-rating="2">⭐</span>
-                <span class="star" data-rating="3">⭐</span>
-                <span class="star" data-rating="4">⭐</span>
-                <span class="star" data-rating="5">⭐</span>
+            <h3>Rate Your Experience</h3>
+            <p class="lead">How was your shopping journey with us?</p>
+            <div class="rating-stars" id="ratingStars" role="group" aria-label="Rating">
+                <button class="star" data-rating="1" aria-label="1 star"><svg class="icon" aria-hidden="true"><use href="icons.svg#star"/></svg></button>
+                <button class="star" data-rating="2" aria-label="2 stars"><svg class="icon" aria-hidden="true"><use href="icons.svg#star"/></svg></button>
+                <button class="star" data-rating="3" aria-label="3 stars"><svg class="icon" aria-hidden="true"><use href="icons.svg#star"/></svg></button>
+                <button class="star" data-rating="4" aria-label="4 stars"><svg class="icon" aria-hidden="true"><use href="icons.svg#star"/></svg></button>
+                <button class="star" data-rating="5" aria-label="5 stars"><svg class="icon" aria-hidden="true"><use href="icons.svg#star"/></svg></button>
             </div>
-            <p id="ratingFeedback" style="text-align: center; color: #667eea; font-weight: 600; min-height: 25px;"></p>
-
+            <p id="ratingFeedback" role="status"></p>
             <div class="quick-actions">
-                <div class="action-btn" onclick="showSupport()">
-                    💬 Need Help?
-                </div>
-                <div class="action-btn" onclick="trackOrder()">
-                    📍 Track Order
-                </div>
-                <div class="action-btn" onclick="viewInvoice()">
-                    📄 View Invoice
-                </div>
-                <div class="action-btn" onclick="initiateReturn()">
-                    🔄 Easy Returns
-                </div>
+                <button class="action-btn" onclick="showSupport()">
+                    <svg class="icon" aria-hidden="true"><use href="icons.svg#chat"/></svg>
+                    Need Help?
+                </button>
+                <button class="action-btn" onclick="trackOrder()">
+                    <svg class="icon" aria-hidden="true"><use href="icons.svg#map-pin"/></svg>
+                    Track Order
+                </button>
+                <button class="action-btn" onclick="viewInvoice()">
+                    <svg class="icon" aria-hidden="true"><use href="icons.svg#receipt"/></svg>
+                    View Invoice
+                </button>
+                <button class="action-btn" onclick="initiateReturn()">
+                    <svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg>
+                    Easy Returns
+                </button>
             </div>
         </div>
 
         <!-- AI Recommendations -->
+        <h2 class="section-title">Recommended for you</h2>
         <div class="recommendation-section" id="recommendationsSection">
             <!-- Recommendations will be dynamically generated based on purchased items -->
         </div>
-        </div>
-        <!-- End Scrollable Content -->
 
         <!-- Footer -->
         <div class="footer" id="loyaltyFooter">
-            <p>Your loyalty: <strong id="pointsEarned">0 points earned</strong> • Gold Member</p>
-            <p style="font-size: 0.9em; opacity: 0.8;">Next reward at 1,000 points</p>
-            <button class="back-btn" onclick="backToHome()">← Back to Dashboard</button>
+            <div>
+                <p>Your loyalty: <strong id="pointsEarned">0 points earned</strong> • Gold Member</p>
+                <p class="next-reward">Next reward at 1,000 points</p>
+            </div>
+            <button class="btn btn-secondary" onclick="backToHome()">
+                <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#arrow-left"/></svg>
+                Back to Dashboard
+            </button>
         </div>
-    </div>
+    </main>
 
     <script>
-        const API_URL = 'http://localhost:8000';
         const sessionId = localStorage.getItem('session_id');
         let purchasedItems = [];
         let orderTotal = 0;
@@ -409,21 +276,19 @@
         // All available products for recommendations
         const allProducts = [
             {id: 'VH001', name: 'Classic Blue Formal Shirt', price: 2500, category: 'shirts', reasoning: 'Premium wrinkle-resistant fabric', buyRate: '287 customers this month'},
-            {id: 'VH002', name: 'Navy Blue Silk Tie', price: 800, category: 'ties', reasoning: '85% of shirt buyers also got this', buyRate: 'Bestseller for formal'},
-            {id: 'VH003', name: 'Navy Formal Trousers', price: 2200, category: 'trousers', reasoning: 'Perfect match • 85% buy together', buyRate: 'Top choice for professionals'},
-            {id: 'VH004', name: 'Charcoal Blazer', price: 4500, category: 'blazers', reasoning: 'Complete formal look', buyRate: 'Premium choice'},
-            {id: 'VH005', name: 'White Dress Shirt', price: 2300, category: 'shirts', reasoning: 'Timeless professional staple', buyRate: '320 sold this month'},
+            {id: 'VH004', name: 'Navy Blue Silk Tie', price: 800, category: 'ties', reasoning: '85% of shirt buyers also got this', buyRate: 'Bestseller for formal'},
+            {id: 'VH008', name: 'Blue Formal Trousers', price: 2200, category: 'trousers', reasoning: 'Perfect match - 85% buy together', buyRate: 'Top choice for professionals'},
+            {id: 'VH008C', name: 'Black Formal Trousers', price: 2300, category: 'trousers', reasoning: 'Essential for power dressing - 92% buy together', buyRate: 'Most popular choice'},
+            {id: 'VH002', name: 'White Premium Formal Shirt', price: 2800, category: 'shirts', reasoning: 'Timeless professional staple', buyRate: '320 sold this month'},
             {id: 'VH006', name: 'Brown Leather Belt', price: 1200, category: 'accessories', reasoning: 'Essential formal accessory', buyRate: '92% match with trousers'},
-            {id: 'VH007', name: 'Black Formal Shoes', price: 3200, category: 'shoes', reasoning: 'Complete professional look • 85% buy together', buyRate: '30% off limited time'},
-            {id: 'VH008', name: 'Premium Leather Wallet', price: 1500, category: 'accessories', reasoning: 'Sophisticated accessory', buyRate: 'Executive favorite'},
-            {id: 'VH009', name: 'Grey Slim Fit Trousers', price: 2400, category: 'trousers', reasoning: 'Modern versatile fit', buyRate: 'Trending style'},
-            {id: 'VH010', name: 'Burgundy Silk Tie', price: 850, category: 'ties', reasoning: 'Bold professional statement • 78% buy together', buyRate: 'Premium collection'},
-            {id: 'VH011', name: 'Light Blue Linen Shirt', price: 2600, category: 'shirts', reasoning: 'Summer formal favorite', buyRate: 'Just restocked'},
-            {id: 'VH012', name: 'Black Leather Belt', price: 1100, category: 'accessories', reasoning: 'Classic essential', buyRate: '88% match rate'},
-            {id: 'VH013', name: 'Tan Suede Shoes', price: 3500, category: 'shoes', reasoning: 'Versatile formal-casual', buyRate: 'Premium quality'},
-            {id: 'VH014', name: 'Silver Cufflinks Set', price: 900, category: 'accessories', reasoning: 'Elegant finishing touch', buyRate: 'Wedding bestseller'},
-            {id: 'VH008C', name: 'Black Formal Trousers', price: 2300, category: 'trousers', reasoning: 'Essential for power dressing • 92% buy together', buyRate: 'Most popular choice'},
-            {id: 'VH010', name: 'Black Blazer', price: 5500, category: 'blazers', reasoning: 'Complete the sophisticated look • Bestseller', buyRate: 'Executive favorite'}
+            {id: 'VH013', name: 'Black Formal Shoes', price: 3800, category: 'shoes', reasoning: 'Complete professional look - 85% buy together', buyRate: 'Premium quality'},
+            {id: 'VH007', name: 'Black Leather Belt', price: 1300, category: 'accessories', reasoning: 'Classic essential', buyRate: '88% match rate'},
+            {id: 'VH003', name: 'Light Pink Formal Shirt', price: 2600, category: 'shirts', reasoning: 'Modern versatile fit', buyRate: 'Trending style'},
+            {id: 'VH005B', name: 'Striped Silk Tie', price: 750, category: 'ties', reasoning: 'Bold professional statement - 78% buy together', buyRate: 'Premium collection'},
+            {id: 'VH001B', name: 'Light Blue Formal Shirt', price: 2450, category: 'shirts', reasoning: 'Summer formal favorite', buyRate: 'Just restocked'},
+            {id: 'VH012', name: 'Blue Formal Shoes', price: 3500, category: 'shoes', reasoning: 'Versatile formal look', buyRate: 'Premium quality'},
+            {id: 'VH014', name: 'Blue Formal Socks', price: 300, category: 'accessories', reasoning: 'Elegant finishing touch', buyRate: 'Wedding bestseller'},
+            {id: 'VH015', name: 'Black Formal Socks', price: 300, category: 'accessories', reasoning: 'Everyday essential', buyRate: 'Pairs with every outfit'}
         ];
 
         // Rating System
@@ -440,11 +305,11 @@
                 
                 const feedback = document.getElementById('ratingFeedback');
                 const messages = {
-                    '1': 'We appreciate your feedback. Let us make it better! 💙',
+                    '1': 'We appreciate your feedback. Let us make it better!',
                     '2': 'Thank you! We\'ll work on improving your experience.',
                     '3': 'Good! We\'re always looking to improve.',
-                    '4': 'Great! We\'re glad you enjoyed shopping with us! 😊',
-                    '5': 'Excellent! Thank you for being an amazing customer! 🎉'
+                    '4': 'Great! We\'re glad you enjoyed shopping with us!',
+                    '5': 'Excellent! Thank you for being an amazing customer!'
                 };
                 feedback.textContent = messages[rating];
 
@@ -471,7 +336,7 @@
         }
 
         function showSupport() {
-            alert('💬 Support Chat\n\n' +
+            alert('Support Chat\n\n' +
                   'Hi Rahul! How can we help?\n\n' +
                   '• Track your order\n' +
                   '• Initiate return/exchange\n' +
@@ -484,7 +349,7 @@
             const itemCount = purchasedItems.length;
             const itemText = itemCount === 1 ? `${purchasedItems[0].name}` : `${itemCount} items`;
             
-            alert('📍 Order Tracking\n\n' +
+            alert('Order Tracking\n\n' +
                   `Order: ${orderNumber}\n` +
                   'Status: Out for Delivery\n' +
                   `Items: ${itemText}\n\n` +
@@ -496,21 +361,21 @@
 
         function viewInvoice() {
             const subtotal = purchasedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const discount = Math.round(subtotal * 0.1);
-            const total = subtotal - discount;
+            const total = orderTotal > 0 ? orderTotal : subtotal;
+            const discount = subtotal - total;
             
             let itemsList = '';
             purchasedItems.forEach(item => {
                 itemsList += `• ${item.name}${item.size ? ' (Size ' + item.size + ')' : ''} - ₹${item.price.toLocaleString()}\n`;
             });
             
-            alert('📄 Invoice Details\n\n' +
+            alert('Invoice Details\n\n' +
                   `Order: ${orderNumber}\n` +
                   'Date: ' + new Date().toLocaleDateString() + '\n\n' +
                   'Items:\n' +
                   itemsList + '\n' +
                   `Subtotal: ₹${subtotal.toLocaleString()}\n` +
-                  `Discount: -₹${discount.toLocaleString()}\n` +
+                  `Offers and loyalty points: -₹${discount.toLocaleString()}\n` +
                   `Total: ₹${total.toLocaleString()}\n\n` +
                   'PDF invoice sent to your email!');
         }
@@ -519,7 +384,7 @@
             const itemCount = purchasedItems.length;
             const itemList = purchasedItems.map(item => `• ${item.name}`).join('\n');
             
-            alert('🔄 Easy Returns\n\n' +
+            alert('Easy Returns\n\n' +
                   `Order: ${orderNumber}\n` +
                   `Items in this order:\n${itemList}\n\n` +
                   '30-day return policy\n' +
@@ -539,7 +404,7 @@
                 'shoes': 'Formal Shoes (Black)'
             };
             
-            alert('✅ Added to Cart!\n\n' +
+            alert('Added to Cart!\n\n' +
                   items[item] + ' has been added.\n\n' +
                   'Total items: ' + (Math.floor(Math.random() * 3) + 2) + '\n' +
                   'Special offer active: 15% off on 2+ items!\n\n' +
@@ -578,14 +443,14 @@
             updateLoyaltyPoints();
         }
         
-        function generateTimeline() {
+        function generateTimeline(packedAtStore = 'our store') {
             const container = document.getElementById('timelineContainer');
             const itemCount = purchasedItems.length;
             const itemNames = purchasedItems.map(item => item.name).join(', ');
             const itemSummary = itemCount === 1 ? purchasedItems[0].name : `${itemCount} items (${itemNames})`;
             
             // Determine styling tips based on what was bought
-            let stylingTip = '💡 Pro styling tip: ';
+            let stylingTip = 'Pro styling tip: ';
             const hasShirt = purchasedItems.some(item => item.name.toLowerCase().includes('shirt'));
             const hasTie = purchasedItems.some(item => item.name.toLowerCase().includes('tie'));
             const hasTrousers = purchasedItems.some(item => item.name.toLowerCase().includes('trouser'));
@@ -607,7 +472,7 @@
             
             container.innerHTML = `
                 <div class="timeline-item">
-                    <div class="timeline-icon completed">✅</div>
+                    <div class="timeline-icon completed"><svg class="icon" aria-hidden="true"><use href="icons.svg#check-circle"/></svg></div>
                     <div class="timeline-content">
                         <h3>Order Confirmed</h3>
                         <p>Your order ${orderNumber} has been placed successfully</p>
@@ -619,10 +484,10 @@
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-icon completed">📦</div>
+                    <div class="timeline-icon completed"><svg class="icon" aria-hidden="true"><use href="icons.svg#box"/></svg></div>
                     <div class="timeline-content">
                         <h3>Order Packed</h3>
-                        <p>${itemCount} ${itemCount === 1 ? 'item' : 'items'} carefully packed at Bandra Store</p>
+                        <p>${itemCount} ${itemCount === 1 ? 'item' : 'items'} carefully packed at ${packedAtStore}</p>
                         <div class="whatsapp-message">
                             "Your ${itemCount === 1 ? 'item is' : 'items are'} packed with care. Ready for dispatch!"
                         </div>
@@ -631,7 +496,7 @@
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-icon pending">🚚</div>
+                    <div class="timeline-icon pending"><svg class="icon" aria-hidden="true"><use href="icons.svg#truck"/></svg></div>
                     <div class="timeline-content">
                         <h3>Out for Delivery</h3>
                         <p>Express delivery - arrives tomorrow by 10 AM</p>
@@ -643,7 +508,7 @@
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-icon">🎁</div>
+                    <div class="timeline-icon"><svg class="icon" aria-hidden="true"><use href="icons.svg#gift"/></svg></div>
                     <div class="timeline-content">
                         <h3>Styling Tips</h3>
                         <p>How to style your ${itemCount === 1 ? 'new purchase' : 'new items'}</p>
@@ -705,8 +570,8 @@
             const topRecommendations = recommendations.filter(r => r).slice(0, 3);
             
             let recsHTML = `
-                <h3>🎯 Complete Your Look</h3>
-                <p style="color: #666; margin-bottom: 15px;">
+                <h3>Complete Your Look</h3>
+                <p>
                     Based on your purchase, customers also bought:
                 </p>
             `;
@@ -725,8 +590,8 @@
             });
             
             recsHTML += `
-                <div style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center; color: #1a1a1a; font-weight: 600;">
-                    🎁 Special Offer: Add 2+ items, get 15% off!
+                <div class="special-offer">
+                    Special Offer: Add 2+ items, get 15% off!
                 </div>
             `;
             
@@ -780,18 +645,25 @@
             const newTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
             
-            alert(`✅ Added to Cart!\n\n` +
+            alert(`Added to Cart!\n\n` +
                   `${product.name} has been added.\n\n` +
                   `Total items: ${itemCount}\n` +
                   `Cart total: ₹${newTotal.toLocaleString()}\n` +
-                  `${itemCount >= 2 ? '🎁 Special offer active: 15% off on 2+ items!\n\n' : ''}` +
+                  `${itemCount >= 2 ? 'Special offer active: 15% off on 2+ items!\n\n' : ''}` +
                   'Continue shopping or visit store to checkout?');
         }
 
         window.onload = () => {
             localStorage.setItem('current_step', '6');
             loadPurchasedItems();
-            console.log('✅ Post-Purchase Follow-up page loaded');
+            // The order is packed at the store the customer reserved at
+            fetch(`${API_URL}/api/session/${sessionId}`)
+                .then(response => response.ok ? response.json() : null)
+                .then(session => {
+                    if (session && session.reserved_store) generateTimeline(session.reserved_store);
+                })
+                .catch(error => console.error('Could not load the store:', error));
+            console.log('Post-Purchase Follow-up page loaded');
         };
     </script>
 </body>

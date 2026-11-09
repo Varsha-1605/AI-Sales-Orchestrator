@@ -5,527 +5,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Associate Dashboard - Van Heusen Bandra</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: white;
-        }
-        .dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            animation: fadeIn 0.6s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-            animation: slideDown 0.6s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 5px;
-            font-weight: 800;
-        }
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
-        }
-        .customer-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            padding: 35px;
-            border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            margin-bottom: 25px;
-            animation: slideUp 0.6s ease 0.1s backwards;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Page: store associate dashboard. Dense and scannable: 14px text, ruled panels, no decoration. */
+        .dashboard { font-size: var(--text-sm); padding-bottom: var(--space-8); }
+
+        .page-head { padding: var(--space-6) 0 var(--space-5); }
+        .page-head h1 { margin-top: var(--space-2); font-size: var(--text-2xl); font-weight: 500; letter-spacing: -0.02em; }
+        .page-head p.subtitle { margin-top: var(--space-2); color: var(--ink-soft); }
+
+        .customer-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+
         .customer-profile {
             display: flex;
-            gap: 25px;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            gap: var(--space-5);
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--line);
         }
+
         .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            animation: scaleIn 0.6s ease 0.2s backwards;
+            flex: none;
+            width: 96px;
+            height: 96px;
             overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--stone);
+            cursor: zoom-in;
         }
-        .avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-        .avatar img {
-            width: 110%;
-            height: 110%;
-            object-fit: cover;
-            object-position: center 20%;
-            transition: transform 0.3s ease;
-        }
-        .avatar:hover img {
-            transform: scale(1.1);
-        }
-        /* Image Modal */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            animation: fadeIn 0.3s ease;
-        }
-        .image-modal.active {
+        .avatar:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+
+        .customer-info h2 { font-size: var(--text-xl); font-weight: 500; }
+        .customer-info p {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-            animation: zoomIn 0.3s ease;
-        }
-        .modal-content img {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        .close-modal {
-            position: absolute;
-            top: -50px;
-            right: 0;
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(90deg);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .customer-info h2 { 
-            margin-bottom: 8px;
-            font-size: 1.8em;
-            font-weight: 700;
-        }
-        .customer-info p { 
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 5px;
-            font-size: 1.05em;
+            gap: var(--space-2);
+            margin-top: var(--space-1);
+            color: var(--ink-soft);
         }
         .loyalty-badge {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #1a1a1a;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
             display: inline-block;
-            margin-top: 10px;
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
-            animation: shine 2s infinite;
+            margin-top: var(--space-3);
+            padding: 3px var(--space-2);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
-        @keyframes shine {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
+
         .sections {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            animation: slideUp 0.6s ease 0.3s backwards;
+            grid-template-columns: repeat(3, 1fr);
         }
-        .section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .section:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
+
+        .section { padding: var(--space-5); min-width: 0; }
+        .section + .section { border-left: 1px solid var(--line); }
         .section h3 {
-            color: #667eea;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
-            font-size: 1.3em;
-            font-weight: 700;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--ink);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
         }
+
+        /* Kiosk notifications: a full-width alert row above the three columns */
+        #notificationsSection {
+            grid-column: 1 / -1;
+            border-left: 0;
+            border-bottom: 1px solid var(--line);
+            background: var(--stone);
+        }
+        #notificationsSection h3 { border-bottom-color: var(--danger); color: var(--danger); }
+
+        .notification-item {
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--danger);
+            border-radius: var(--radius);
+        }
+        .notification-item strong { display: block; margin-bottom: var(--space-2); font-size: var(--text-md); }
+        .notification-item .details { color: var(--ink-soft); line-height: 1.6; }
+        .notification-item .timestamp { margin-top: var(--space-2); font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); }
+        .notification-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+        .notification-actions button {
+            flex: 1;
+            min-height: 40px;
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 120ms ease;
+        }
+        .notification-actions .acknowledge { background: var(--ink); color: var(--white); }
+        .notification-actions .acknowledge:hover { background: #26343F; }
+        .notification-actions .dismiss { background: var(--white); color: var(--ink); }
+        .notification-actions .dismiss:hover { background: var(--stone); }
+
+        /* Recent activity (rows rendered by the script) */
         .activity-container {
-            max-height: 280px;
+            max-height: 320px;
             overflow-y: auto;
-            padding-right: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--line) transparent;
         }
-        .activity-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .activity-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-        .activity-container::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.5);
-            border-radius: 3px;
-        }
-        .activity-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.7);
-        }
-        .activity-container {
-            max-height: 280px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .activity-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .activity-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-        .activity-container::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.5);
-            border-radius: 3px;
-        }
-        .activity-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.7);
-        }
-        .activity-item {
-            padding: 15px;
-            margin: 12px 0;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        .activity-item:hover {
-            background: rgba(102, 126, 234, 0.2);
-            transform: translateX(5px);
-        }
+        .activity-item { padding: var(--space-3) 0; border-bottom: 1px solid var(--line); }
+        .activity-item:first-child { padding-top: 0; }
         .activity-item strong {
             display: block;
-            margin-bottom: 5px;
-            color: #667eea;
+            margin-bottom: 2px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
         }
+
+        /* Cart rows */
         .product-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
-            margin: 12px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--line);
         }
-        .product-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-        .cart-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
+        .product-item:first-child { padding-top: 0; }
+        .cart-controls { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
         .cart-qty-btn {
-            background: #667eea;
-            color: white;
-            border: none;
             width: 28px;
             height: 28px;
-            border-radius: 6px;
-            font-size: 16px;
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-size: var(--text-md);
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            transition: background-color 120ms ease, color 120ms ease;
         }
-        .cart-qty-btn:hover {
-            background: #5568d3;
-        }
-        .cart-qty {
-            min-width: 25px;
-            text-align: center;
-            font-weight: 600;
-            color: #e0e0e0;
-        }
+        .cart-qty-btn:hover { background: var(--ink); color: var(--white); }
+        .cart-qty { min-width: 24px; text-align: center; font-family: var(--font-mono); font-weight: 500; }
         .cart-remove {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
             margin-left: auto;
-            transition: all 0.3s;
-        }
-        .cart-remove:hover {
-            background: #ee5a6f;
-        }
-        .recommendation {
-            padding: 18px;
-            margin: 12px 0;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
-            border-radius: 15px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        .recommendation:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .notification-item {
-            padding: 20px;
-            margin: 12px 0;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            border-left: 5px solid #ff6b6b;
-            color: #2c3e50;
-            animation: slideInRight 0.5s ease;
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
-        }
-        
-        .notification-item strong {
-            display: block;
-            font-size: 1.2em;
-            color: #ff6b6b;
-            margin-bottom: 8px;
-        }
-        
-        .notification-item .details {
-            color: #555;
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-        
-        .notification-item .timestamp {
-            color: #999;
-            font-size: 0.85em;
-            margin-top: 8px;
-        }
-        
-        .notification-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        
-        .notification-actions button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 4px var(--space-2);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--danger);
+            font-family: var(--font-text);
+            font-size: var(--text-xs);
             font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .notification-actions .acknowledge {
-            background: #38ef7d;
-            color: white;
-        }
-        
-        .notification-actions .acknowledge:hover {
-            background: #2dd66b;
-        }
-        
-        .notification-actions .dismiss {
-            background: rgba(255,255,255,0.3);
-            color: #2c3e50;
-        }
-        
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-            animation: slideUp 0.6s ease 0.5s backwards;
-        }
-        .btn {
-            flex: 1;
-            padding: 18px;
-            border: none;
-            border-radius: 15px;
             cursor: pointer;
-            font-size: 1.05em;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: background-color 120ms ease, color 120ms ease;
         }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        .cart-remove:hover { background: var(--danger); border-color: var(--danger); color: var(--white); }
+        #dashboardCartTotals { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--ink); font-variant-numeric: tabular-nums; }
+        #dashboardCartTotals strong { font-family: var(--font-mono); font-weight: 500; }
+
+        /* Recommendations */
+        .recommendation { padding: var(--space-3) 0; border-bottom: 1px solid var(--line); line-height: 1.5; }
+        .recommendation:first-of-type { padding-top: 0; }
+        .recommendation strong { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; }
+        .recommendation small { color: var(--ink-soft); }
+        .upsell {
+            margin-top: var(--space-4);
+            padding: var(--space-3) var(--space-4);
+            border-left: 3px solid var(--success);
+            background: var(--ivory);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .upsell strong { color: var(--success); }
+
+        .action-buttons { display: flex; gap: var(--space-3); justify-content: flex-end; padding: var(--space-4) var(--space-5); border-top: 1px solid var(--line); }
+        .action-buttons .btn { min-width: 240px; }
+
+        /* Photo viewer */
+        .image-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(18, 23, 27, 0.92);
         }
-        .btn-success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
+        .image-modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { position: relative; max-width: 90%; max-height: 90%; }
+        .modal-content img { width: auto; height: auto; max-width: 100%; max-height: 90vh; border-radius: var(--radius); }
+        .close-modal {
+            position: absolute;
+            top: -52px;
+            right: 0;
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--white);
+            border-radius: var(--radius);
+            color: var(--white);
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .close-modal:hover { background: var(--white); color: var(--ink); }
+
+        @media (max-width: 1100px) {
+            .sections { grid-template-columns: 1fr 1fr; }
+            .section:nth-child(odd) { border-left: 0; }
+            .section { border-top: 1px solid var(--line); }
         }
         @media (max-width: 768px) {
             .sections { grid-template-columns: 1fr; }
+            .section + .section { border-left: 0; }
+            .customer-profile { flex-direction: column; align-items: flex-start; }
             .action-buttons { flex-direction: column; }
+            .action-buttons .btn { min-width: 0; }
+            .wordmark-tag { display: none; }
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <div>
-                <h1>🏪 Store Associate Dashboard</h1>
-                <p>Bandra Store | Associate: Priya Sharma | Real-time Customer Insights</p>
+    <header class="app-bar">
+        <div class="container app-bar-inner">
+            <a class="wordmark" href="index.html">
+                <span class="wordmark-name">Orchestrator</span>
+                <span class="wordmark-tag">Store dashboard</span>
+            </a>
+            <div class="app-bar-meta">
+                <button class="btn btn-secondary" onclick="loadCartFromSession()">
+                    <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#refresh"/></svg>
+                    Refresh Cart
+                </button>
             </div>
-            <button onclick="loadCartFromSession()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🔄 Refresh Cart</button>
         </div>
-        
+    </header>
+
+    <main class="container dashboard">
+        <div class="page-head">
+            <p class="label">Real-time customer insights</p>
+            <h1>Store Associate Dashboard</h1>
+            <p class="subtitle" id="storeLine">Bandra Store | Associate: Priya Sharma | Real-time Customer Insights</p>
+        </div>
+
         <div class="customer-card">
             <div class="customer-profile">
-                <div class="avatar" onclick="openImageModal('images/rahul.jpg', 'Rahul Sharma')" title="Click to view full image">
+                <div class="avatar" onclick="openImageModal('images/rahul.jpg', 'Rahul Sharma')" title="Click to view full image" tabindex="0" role="button" aria-label="View photo of Rahul Sharma">
                     <img src="images/rahul.jpg" alt="Rahul Sharma" />
                 </div>
                 <div class="customer-info">
                     <h2>Rahul Sharma</h2>
-                    <p>📞 +91 98765 43210</p>
-                    <p>📍 Bandra, Mumbai (2km away)</p>
-                    <span class="loyalty-badge">⭐ Gold Member • 500 Points</span>
+                    <p><svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#phone"/></svg>+91 98765 43210</p>
+                    <p><svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#map-pin"/></svg>Bandra, Mumbai (2km away)</p>
+                    <span class="loyalty-badge">Gold Member • 500 Points</span>
                 </div>
             </div>
-            
+
             <div class="sections">
                 <!-- Kiosk Notifications -->
-                <div class="section" id="notificationsSection" style="display: none; grid-column: 1 / -1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); animation: slideIn 0.5s ease;">
-                    <h3>🔔 Kiosk Notifications</h3>
+                <div class="section" id="notificationsSection" style="display: none;">
+                    <h3>Kiosk Notifications</h3>
+                    <div id="reservationNotice"></div>
                     <div id="kioskNotifications"></div>
                 </div>
-                
+
                 <div class="section">
-                    <h3>📱 Recent Online Activity</h3>
+                    <h3>Recent Online Activity</h3>
                     <div class="activity-container" id="recentActivityContainer">
                         <!-- Dynamic activity items will be rendered here -->
                     </div>
                 </div>
-                
+
                 <div class="section">
-                    <h3>🛒 Cart Contents</h3>
+                    <h3>Cart Contents</h3>
                     <div id="dashboardCartItems">
                         <!-- Dynamic cart items will be rendered here -->
                     </div>
-                    <div id="dashboardCartTotals" style="margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.1);">
+                    <div id="dashboardCartTotals">
                         <!-- Dynamic totals will be rendered here -->
                     </div>
                 </div>
-                
+
                 <div class="section">
-                    <h3>💡 AI Recommendations</h3>
+                    <h3>AI Recommendations</h3>
                     <div class="recommendation">
-                        <strong style="color: #667eea; font-size: 1.1em;">Brown Leather Belt</strong><br>
+                        <strong>Brown Leather Belt</strong><br>
                         78% match with customer's style<br>
-                        <small style="color: rgba(255,255,255,0.7);">💡 Complete the formal look • ₹1,200</small>
+                        <small>Complete the formal look • ₹1,200</small>
                     </div>
                     <div class="recommendation">
-                        <strong style="color: #667eea; font-size: 1.1em;">Navy Formal Trousers</strong><br>
+                        <strong>Navy Formal Trousers</strong><br>
                         72% match rate<br>
-                        <small style="color: rgba(255,255,255,0.7);">🎁 Bundle offer available • ₹2,200</small>
+                        <small>Bundle offer available • ₹2,200</small>
                     </div>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(56, 239, 125, 0.1); border-radius: 12px; border: 1px solid rgba(56, 239, 125, 0.3);">
-                        <strong style="color: #38ef7d;">💰 Upsell Opportunity</strong><br>
+                    <div class="upsell">
+                        <strong>Upsell Opportunity</strong><br>
                         <small>Add belt to unlock 20% bundle discount<br>
                         Potential AOV increase: +35%</small>
                     </div>
                 </div>
             </div>
-            
+
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="processCheckout()">
-                    💳 Process Checkout
+                <button class="btn btn-secondary btn-success" onclick="applyOffers()">
+                    <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#gift"/></svg>
+                    Apply Bundle Offer (20% off)
                 </button>
-                <button class="btn btn-success" onclick="applyOffers()">
-                    🎁 Apply Bundle Offer (20% off)
+                <button class="btn btn-primary" onclick="processCheckout()">
+                    <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#card"/></svg>
+                    Process Checkout
                 </button>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
-        const API_URL = 'http://localhost:8000';
         
         // Load recent activity from localStorage
         function loadRecentActivity() {
@@ -533,7 +339,7 @@
             const container = document.getElementById('recentActivityContainer');
             
             if (activities.length === 0) {
-                container.innerHTML = '<div style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">No recent activity</div>';
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--ink-soft);">No recent activity</div>';
                 return;
             }
             
@@ -546,7 +352,7 @@
                     <div class="activity-item">
                         <strong>${activity.channel}</strong>
                         ${activity.action}<br>
-                        <small style="color: rgba(255,255,255,0.6);">${timeAgo}</small>
+                        <small style="color: var(--ink-soft);">${timeAgo}</small>
                     </div>
                 `;
             }).join('');
@@ -558,7 +364,7 @@
             const container = document.getElementById('recentActivityContainer');
             
             if (activities.length === 0) {
-                container.innerHTML = '<div style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">No recent activity</div>';
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--ink-soft);">No recent activity</div>';
                 return;
             }
             
@@ -571,7 +377,7 @@
                     <div class="activity-item">
                         <strong>${activity.channel}</strong>
                         ${activity.action}<br>
-                        <small style="color: rgba(255,255,255,0.6);">${timeAgo}</small>
+                        <small style="color: var(--ink-soft);">${timeAgo}</small>
                     </div>
                 `;
             }).join('');
@@ -579,74 +385,114 @@
         const sessionId = localStorage.getItem('session_id');
         let cartItems = [];
 
-        async function loadCartFromSession() {
-            // Load cart from shared localStorage (synced from chat/whatsapp)
-            const savedCart = localStorage.getItem('cartItems');
-            console.log('Loading cart from localStorage:', savedCart);
-            
-            if (savedCart) {
-                try {
-                    cartItems = JSON.parse(savedCart);
-                    console.log('Parsed cartItems:', cartItems);
-                } catch (e) {
-                    console.error('Error parsing cart:', e);
-                    cartItems = [];
+        // The backend holds the real cart and reservation (shared with every channel).
+        // Returns false when the backend cannot be reached, so the caller can fall back to local storage.
+        async function loadFromBackend() {
+            try {
+                const [cartResponse, sessionResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/cart/${sessionId}`),
+                    fetch(`${API_URL}/api/session/${sessionId}`)
+                ]);
+                if (!cartResponse.ok || !sessionResponse.ok) return false;
+                const cart = await cartResponse.json();
+                const session = await sessionResponse.json();
+
+                const backendItems = cart.items.map(item => ({
+                    id: item.product_id, name: item.name, price: item.price,
+                    size: item.size, quantity: item.quantity
+                }));
+                cartPricing = cart.pricing;
+                if (JSON.stringify(backendItems) !== JSON.stringify(cartItems)) {
+                    cartItems = backendItems;
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    renderDashboardCart();
+                } else {
+                    showBackendTotals();
                 }
-            } else {
-                console.log('No cart found in localStorage, fetching from backend...');
-                
-                // Fetch from backend as fallback
-                try {
-                    const response = await fetch(`${API_URL}/api/session/${sessionId}`);
-                    if (response.ok) {
-                        const sessionData = await response.json();
-                        console.log('Session data from backend:', sessionData);
-                        
-                        if (sessionData.cart && sessionData.cart.length > 0) {
-                            cartItems = sessionData.cart.map(item => ({
-                                id: item.product_id,
-                                name: item.product_name || 'Product',
-                                price: item.price || 0,
-                                size: item.size,
-                                quantity: item.quantity || 1
-                            }));
-                            console.log('Cart loaded from backend:', cartItems);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error fetching cart from backend:', error);
-                }
-                
-                cartItems = cartItems || [];
+                showStoreAlert(session);
+                return true;
+            } catch (error) {
+                console.error('Could not load the cart from the backend:', error);
+                return false;
             }
-            
-            renderDashboardCart();
-            checkKioskNotifications();
-            
-            // Auto-refresh every 2 seconds to show real-time updates
-            setInterval(() => {
-                const updatedCart = localStorage.getItem('cartItems');
-                if (updatedCart) {
-                    const newCartItems = JSON.parse(updatedCart);
-                    // Only re-render if cart changed
-                    if (JSON.stringify(newCartItems) !== JSON.stringify(cartItems)) {
-                        console.log('Cart updated, re-rendering...');
-                        cartItems = newCartItems;
-                        renderDashboardCart();
-                    }
-                }
-                
-                // Check for new notifications
-                checkKioskNotifications();
-            }, 2000);
         }
 
+        // What the associate is asked to do: hold reserved items, or get a paid order ready for pickup
+        let shownAlert = null;
+
+        function showStoreAlert(session) {
+            const notice = document.getElementById('reservationNotice');
+            const alert = session.store_alert;
+            if (session.reserved_store) {
+                document.getElementById('storeLine').textContent =
+                    `${session.reserved_store} | Associate: Priya Sharma | Real-time Customer Insights`;
+            }
+            const signature = JSON.stringify(alert);
+            if (signature === shownAlert) return;
+            shownAlert = signature;
+
+            if (!alert || alert.status === 'rejected') {
+                notice.innerHTML = '';
+                return;
+            }
+            const isPickup = alert.kind === 'pickup';
+            const title = isPickup ? 'Paid Order To Hand Over' : 'Items Reserved For Pickup';
+            const details = isPickup
+                ? `<div>Order ${alert.order_id} is paid (₹${Math.round(alert.total).toLocaleString()}). The customer will come to collect it.</div>`
+                : '<div>Please hold these items. The customer will come to try them on.</div>';
+            const actions = alert.status === 'pending' ? `
+                <div class="notification-actions">
+                    <button class="acknowledge" onclick="respondToStoreAlert('accept')">${isPickup ? 'Will Have It Ready' : 'Accept'}</button>
+                    <button class="dismiss" onclick="respondToStoreAlert('reject')">Cannot Hold</button>
+                </div>` : '<div class="timestamp">Accepted</div>';
+            notice.innerHTML = `
+                <div class="notification-item">
+                    <strong>${title}</strong>
+                    <div class="details">
+                        <div>Customer: Rahul Sharma</div>
+                        <div>Store: ${alert.store}</div>
+                        <div>Items: ${alert.items.join(', ')}</div>
+                        ${details}
+                    </div>
+                    ${actions}
+                </div>`;
+            document.getElementById('notificationsSection').style.display = 'block';
+        }
+
+        async function respondToStoreAlert(action) {
+            try {
+                await fetch(`${API_URL}/api/store/alert/respond?session_id=${encodeURIComponent(sessionId)}&action=${action}`, {method: 'POST'});
+            } catch (error) {
+                console.error('Could not answer the customer:', error);
+            }
+            await loadFromBackend();
+        }
+        async function loadCartFromSession() {
+            if (!(await loadFromBackend())) {
+                // Backend unreachable: use what the other pages saved in this browser
+                try {
+                    cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+                } catch (e) {
+                    cartItems = [];
+                }
+                renderDashboardCart();
+            }
+            checkKioskNotifications();
+
+            if (!window.cartRefreshTimer) {
+                // Refresh every 2 seconds so changes from other channels appear
+                window.cartRefreshTimer = setInterval(() => {
+                    loadFromBackend();
+                    checkKioskNotifications();
+                }, 2000);
+            }
+        }
         function renderDashboardCart() {
             const itemsContainer = document.getElementById('dashboardCartItems');
             const totalsContainer = document.getElementById('dashboardCartTotals');
             
             if (cartItems.length === 0) {
-                itemsContainer.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">🛒 Cart is empty</div>';
+                itemsContainer.innerHTML = '<div style="text-align: center; color: var(--ink-soft); padding: 20px;">Cart is empty</div>';
                 totalsContainer.innerHTML = '';
                 return;
             }
@@ -670,27 +516,27 @@
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <strong style="color: #667eea; font-size: 1.2em;" id="dash-price-${item.id}">₹${itemTotal.toLocaleString()}</strong>
+                            <strong style="color: var(--ink); font-size: 1.2em;" id="dash-price-${item.id}">₹${itemTotal.toLocaleString()}</strong>
                         </div>
                     </div>
                 `;
             });
             
             const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const discount = totalQty >= 3 ? 0.2 : 0.1;
-            const discountAmount = Math.round(subtotal * discount);
-            const total = subtotal - discountAmount;
+            const discountAmount = cartPricing ? Math.round(cartPricing.discount_amount) : 0;
+            const pointsAmount = cartPricing ? Math.round(cartPricing.points_used) : 0;
+            const offerLabel = cartPricing && cartPricing.offers.length ? cartPricing.offers[0] : 'Offer';
+            const total = payableTotal(subtotal - discountAmount);
             
             itemsContainer.innerHTML = itemsHtml;
             
             const upsellHtml = totalQty < 3 ? `
-                <div style="margin-top: 15px; padding: 12px; background: rgba(255, 215, 0, 0.1); border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.3);">
-                    <div style="font-size: 0.9em; color: rgba(255, 215, 0, 0.9); margin-bottom: 5px;">
-                        💡 <strong>Add ${3 - totalQty} more item${3 - totalQty > 1 ? 's' : ''} to unlock:</strong>
+                <div style="margin-top: 15px; padding: 12px; background: var(--stone); border-radius: 10px; border: 1px solid var(--line);">
+                    <div style="font-size: 0.9em; color: var(--accent); margin-bottom: 5px;">
+                        <strong>Add ${3 - totalQty} more item${3 - totalQty > 1 ? 's' : ''} to unlock:</strong>
                     </div>
-                    <div style="font-size: 0.85em; color: rgba(255,255,255,0.8);">
-                        • 20% Bundle Discount (instead of ${discount * 100}%)<br>
-                        • Additional ₹${Math.round(subtotal * 0.1)} savings!<br>
+                    <div style="font-size: 0.85em; color: var(--ink-soft);">
+                        • The 20% bundle discount on the whole cart<br>
                         • Recommended: Brown Leather Belt (₹1,200)
                     </div>
                 </div>
@@ -701,16 +547,35 @@
                     <span>Subtotal:</span>
                     <strong id="dash-subtotal">₹${subtotal.toLocaleString()}</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; color: #38ef7d; margin-bottom: 8px;">
-                    <span>Discount (<span id="dash-discount-pct">${discount * 100}%</span> - ${totalQty} items):</span>
+                <div style="display: flex; justify-content: space-between; color: var(--success); margin-bottom: 8px;">
+                    <span id="dash-discount-label">${offerLabel}:</span>
                     <strong id="dash-discount">-₹${discountAmount.toLocaleString()}</strong>
+                </div>
+                <div id="dash-points-row" style="display: ${pointsAmount > 0 ? 'flex' : 'none'}; justify-content: space-between; color: var(--success); margin-bottom: 8px;">
+                    <span>Loyalty points:</span>
+                    <strong id="dash-points">-₹${pointsAmount.toLocaleString()}</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 1.3em;">
                     <strong>Current Total:</strong>
-                    <strong style="color: #667eea;" id="dash-total">₹${total.toLocaleString()}</strong>
+                    <strong style="color: var(--ink);" id="dash-total">₹${total.toLocaleString()}</strong>
                 </div>
                 ${upsellHtml}
             `;
+
+            // The backend price may have changed since the last draw: show it as soon as it loads
+            refreshPricing().then(showBackendTotals);
+        }
+
+        function showBackendTotals() {
+            const totalEl = document.getElementById('dash-total');
+            if (!totalEl || !cartPricing) return;
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const discountAmount = Math.round(cartPricing.discount_amount);
+            document.getElementById('dash-discount-label').textContent = `${cartPricing.offers.length ? cartPricing.offers[0] : 'Offer'}:`;
+            document.getElementById('dash-discount').textContent = `-₹${discountAmount.toLocaleString()}`;
+            document.getElementById('dash-points').textContent = `-₹${Math.round(cartPricing.points_used).toLocaleString()}`;
+            document.getElementById('dash-points-row').style.display = cartPricing.points_used > 0 ? 'flex' : 'none';
+            totalEl.textContent = `₹${payableTotal(subtotal - discountAmount).toLocaleString()}`;
         }
 
         async function updateDashboardQuantity(productId, price, change) {
@@ -745,6 +610,8 @@
             } catch (error) {
                 console.error('Cart update error:', error);
             }
+            await refreshPricing();
+            showBackendTotals();
         }
 
         async function removeFromDashboardCart(productId, productName) {
@@ -761,8 +628,8 @@
             
             // Show toast
             const toast = document.createElement('div');
-            toast.innerHTML = `✗ Removed ${productName}`;
-            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff4757; color: white; padding: 12px 24px; border-radius: 12px; font-weight: 600; z-index: 3000; animation: slideInRight 0.3s ease;';
+            toast.innerHTML = `Removed ${productName}`;
+            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--danger); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 600; z-index: 3000; animation: slideInRight 0.3s ease;';
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
             
@@ -783,14 +650,13 @@
 
         function processCheckout() {
             if (cartItems.length === 0) {
-                alert('🛒 Cart is empty! Please add items to checkout.');
+                alert('Cart is empty! Please add items to checkout.');
                 return;
             }
             
             const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-            const discount = totalQty >= 3 ? 0.2 : 0.1;
-            const total = Math.round(subtotal * (1 - discount));
+            const total = payableTotal(subtotal);
             
             // Save checkout info for agent-monitor
             localStorage.setItem('checkoutTotal', total);
@@ -802,14 +668,15 @@
 
         async function applyOffers() {
             if (cartItems.length === 0) {
-                alert('🛒 Cart is empty! Please add items first.');
+                alert('Cart is empty! Please add items first.');
                 return;
             }
             
             const currentQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
             const currentSubtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-            const currentDiscount = currentQty >= 3 ? 0.2 : 0.1;
-            const currentTotal = Math.round(currentSubtotal * (1 - currentDiscount));
+            await refreshPricing();
+            const currentTotal = payableTotal(currentSubtotal);
+            const currentSavings = cartPricing ? Math.round(cartPricing.savings) : 0;
             
             // Build current cart list
             let cartList = '';
@@ -819,51 +686,32 @@
             
             // If already have 3+ items (20% discount)
             if (currentQty >= 3) {
-                alert(`🎉 You already have the maximum bundle discount!\n\n` +
+                alert(`You already have the maximum bundle discount!\n\n` +
                       `━━━━━━━━━━━━━━━━━━━━━━\n` +
                       `CURRENT CART (${currentQty} items):\n${cartList}\n` +
                       `Subtotal: ₹${currentSubtotal.toLocaleString()}\n` +
-                      `✨ Bundle Discount (20%): -₹${Math.round(currentSubtotal * 0.2).toLocaleString()}\n\n` +
+                      `Offer and loyalty points: -₹${currentSavings.toLocaleString()}\n\n` +
                       `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                      `💰 FINAL TOTAL: ₹${currentTotal.toLocaleString()}\n` +
-                      `🎁 YOU SAVE: ₹${Math.round(currentSubtotal * 0.2).toLocaleString()}`);
+                      `FINAL TOTAL: ₹${currentTotal.toLocaleString()}`);
                 return;
             }
             
-            // Calculate with belt added
             const beltPrice = 1200;
-            const newSubtotal = currentSubtotal + beltPrice;
-            const newQty = currentQty + 1;
-            const newTotal = Math.round(newSubtotal * 0.8); // 20% discount
-            const currentSavings = Math.round(currentSubtotal * currentDiscount);
-            const newSavings = Math.round(newSubtotal * 0.2);
-            const extraSavings = newSavings - currentSavings;
-            
-            const confirmed = confirm(`🎁 Bundle Offer Available!\n\n` +
-                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
+            const confirmed = confirm(`Bundle Offer Available!\n\n` +
                   `CURRENT CART (${currentQty} items):\n${cartList}` +
                   `Subtotal: ₹${currentSubtotal.toLocaleString()}\n` +
-                  `Discount (${currentDiscount * 100}%): -₹${currentSavings.toLocaleString()}\n` +
                   `Total: ₹${currentTotal.toLocaleString()}\n\n` +
-                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
                   `ADD RECOMMENDED ITEM:\n` +
                   `• Brown Leather Belt: ₹${beltPrice.toLocaleString()}\n\n` +
-                  `NEW TOTAL (${newQty} items):\n` +
-                  `Subtotal: ₹${newSubtotal.toLocaleString()}\n` +
-                  `✨ Bundle Discount (20%): -₹${newSavings.toLocaleString()}\n\n` +
-                  `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                  `💰 FINAL TOTAL: ₹${newTotal.toLocaleString()}\n` +
-                  `🎉 EXTRA SAVINGS: ₹${extraSavings.toLocaleString()}\n` +
-                  `💵 Actual Cost for Belt: Only ₹${beltPrice - extraSavings} (${Math.round((beltPrice - extraSavings) / beltPrice * 100)}% off!)\n\n` +
+                  `With 3 items the 20% bundle discount applies to the whole cart.\n` +
                   `Add Brown Leather Belt to cart?`);
-            
-            if (confirmed) {
+                        if (confirmed) {
                 // Add belt to cart
-                const existing = cartItems.find(item => item.id === 'VH005');
+                const existing = cartItems.find(item => item.id === 'VH006');
                 if (existing) {
                     existing.quantity = (existing.quantity || 1) + 1;
                 } else {
-                    cartItems.push({id: 'VH005', name: 'Brown Leather Belt', price: 1200, quantity: 1});
+                    cartItems.push({id: 'VH006', name: 'Brown Leather Belt', price: 1200, quantity: 1});
                 }
                 
                 // Save to localStorage
@@ -879,13 +727,16 @@
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             session_id: sessionId,
-                            product_id: 'VH005',
+                            product_id: 'VH006',
                             quantity: 1
                         })
                     });
                 } catch (error) {
                     console.error('Error adding belt:', error);
                 }
+                await refreshPricing();
+                showBackendTotals();
+                alert(`Belt added.\n\nNew total: ₹${payableTotal(0).toLocaleString()}`);
             }
         }
 
@@ -915,16 +766,16 @@
                 if (notif.type === 'try-on') {
                     notificationHTML = `
                         <div class="notification-item">
-                            <strong>🛍️ Try-On Room Requested</strong>
+                            <strong>Try-On Room Requested</strong>
                             <div class="details">
-                                <div>👤 Customer: ${notif.customer}</div>
-                                <div>🏪 Kiosk: ${notif.kiosk}</div>
-                                <div>🚪 Assigned Room: #${notif.room}</div>
-                                <div>📦 Items to try: ${notif.items}</div>
+                                <div>Customer: ${notif.customer}</div>
+                                <div>Kiosk: ${notif.kiosk}</div>
+                                <div>Assigned Room: #${notif.room}</div>
+                                <div>Items to try: ${notif.items}</div>
                             </div>
                             <div class="timestamp">${timeAgo}</div>
                             <div class="notification-actions">
-                                <button class="acknowledge" onclick="acknowledgeNotification('try-on')">✓ Assist Customer</button>
+                                <button class="acknowledge" onclick="acknowledgeNotification('try-on')">Assist Customer</button>
                                 <button class="dismiss" onclick="dismissNotification()">Dismiss</button>
                             </div>
                         </div>
@@ -932,15 +783,15 @@
                 } else if (notif.type === 'assistance') {
                     notificationHTML = `
                         <div class="notification-item">
-                            <strong>🔔 Customer Needs Assistance</strong>
+                            <strong>Customer Needs Assistance</strong>
                             <div class="details">
-                                <div>👤 Customer: ${notif.customer}</div>
-                                <div>🏪 Location: Kiosk ${notif.kiosk}</div>
-                                <div>🛒 Cart Items: ${notif.cart_items}</div>
+                                <div>Customer: ${notif.customer}</div>
+                                <div>Location: Kiosk ${notif.kiosk}</div>
+                                <div>Cart Items: ${notif.cart_items}</div>
                             </div>
                             <div class="timestamp">${timeAgo}</div>
                             <div class="notification-actions">
-                                <button class="acknowledge" onclick="acknowledgeNotification('assistance')">✓ On My Way</button>
+                                <button class="acknowledge" onclick="acknowledgeNotification('assistance')">On My Way</button>
                                 <button class="dismiss" onclick="dismissNotification()">Dismiss</button>
                             </div>
                         </div>
@@ -960,7 +811,7 @@
         
         function acknowledgeNotification(type) {
             if (type === 'try-on') {
-                alert('✅ Try-On Assistance Confirmed\n\n' +
+                alert('Try-On Assistance Confirmed\n\n' +
                       'You are assigned to help Rahul in Try-On Room.\n\n' +
                       'Actions to take:\n' +
                       '• Guide customer to the room\n' +
@@ -968,7 +819,7 @@
                       '• Offer size alternatives if needed\n' +
                       '• Assist with styling suggestions');
             } else {
-                alert('✅ Assistance Confirmed\n\n' +
+                alert('Assistance Confirmed\n\n' +
                       'Walking to Kiosk #2 to assist Rahul.\n\n' +
                       'Customer Context:\n' +
                       '• Has items in cart\n' +

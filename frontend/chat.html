@@ -4,627 +4,529 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Chat Widget - Van Heusen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Page: web chat */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
             display: flex;
-            min-height: 100vh;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
         }
 
-        /* Sidebar Styles */
+        .bar-wide { padding: 0 var(--gutter); }
+
+        .language-selector {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--ink-soft);
+        }
+
+        .language-selector select {
+            min-height: 40px;
+            padding: 0 var(--space-3);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .language-selector select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .chat-layout {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 0;
+        }
+
+        /* Sidebar: conversation history */
         .sidebar {
-            width: 280px;
-            background: #2c3e50;
-            color: white;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            min-height: 0;
+            background: var(--white);
+            border-right: 1px solid var(--line);
         }
 
         .sidebar-header {
-            padding: 20px;
-            background: #1a252f;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--line);
         }
+        .sidebar-header h3 { margin-bottom: var(--space-4); }
 
-        .sidebar-header h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .new-chat-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: transform 0.2s;
-        }
-
-        .new-chat-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
+        .new-chat-btn { width: 100%; }
 
         .conversations-list {
             flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: var(--space-2) 0;
         }
 
         .conversation-item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: var(--space-3) var(--space-5);
             border-left: 3px solid transparent;
+            border-bottom: 1px solid var(--line);
+            cursor: pointer;
+            transition: background-color 120ms ease;
         }
-
-        .conversation-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .conversation-item.active {
-            background: rgba(102, 126, 234, 0.2);
-            border-left-color: #667eea;
-        }
+        .conversation-item:hover { background: var(--ivory); }
+        .conversation-item.active { background: var(--stone); border-left-color: var(--ink); }
 
         .conversation-title {
-            font-size: 14px;
+            font-size: var(--text-sm);
             font-weight: 500;
-            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         .conversation-date {
+            margin-top: 2px;
+            font-family: var(--font-mono);
             font-size: 11px;
-            opacity: 0.6;
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
         }
 
-        .conversations-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .conversations-list::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .conversations-list::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 3px;
-        }
-
-        .conversations-list::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
+        /* Main column */
         .chat-container {
-            flex: 1;
             display: flex;
             flex-direction: column;
-            background: white;
-            overflow: hidden;
-            height: 100vh;
-            max-height: 100vh;
+            min-height: 0;
+            min-width: 0;
+            background: var(--ivory);
         }
 
         .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px 30px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            gap: var(--space-4);
+            padding: var(--space-4) var(--space-6);
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
         }
 
         .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--ink);
+            background: var(--ink);
+            color: var(--white);
         }
 
-        .header-info h2 {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
+        .header-info h2 { font-size: 22px; font-weight: 500; }
 
         .status {
-            font-size: 13px;
-            opacity: 0.9;
             display: flex;
             align-items: center;
-            gap: 5px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #4CAF50;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            gap: var(--space-2);
+            margin-top: 2px;
+            font-size: var(--text-xs);
+            color: var(--ink-soft);
         }
 
         .chat-messages {
             flex: 1 1 auto;
-            padding: 20px;
+            min-height: 0;
+            padding: var(--space-6) max(var(--gutter), calc((100% - 820px) / 2));
             overflow-y: auto;
             overflow-x: hidden;
-            background: #f5f7fa;
-            min-height: 0;
-            max-height: calc(100vh - 180px); /* Reserve space for header and input */
+            scrollbar-width: thin;
+            scrollbar-color: var(--line) transparent;
         }
 
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
+        .message { margin-bottom: var(--space-5); animation: message-in 160ms ease; }
+        @keyframes message-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 4px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #5568d3;
-        }
-
-        .message {
-            margin-bottom: 20px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .message.bot { text-align: left; }
         .message.user { text-align: right; }
 
         .message-bubble {
             display: inline-block;
-            max-width: 75%;
-            padding: 14px 18px;
-            border-radius: 18px;
+            max-width: min(75%, 640px);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius);
             word-wrap: break-word;
-            line-height: 1.5;
+            text-align: left;
+            line-height: 1.55;
         }
 
         .bot .message-bubble {
-            background: white;
-            color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-bottom-left-radius: 4px;
+            background: var(--white);
+            color: var(--ink);
+            border: 1px solid var(--line);
             white-space: pre-line;
-            line-height: 1.6;
         }
-        
         .bot .message-bubble strong,
-        .bot .message-bubble b {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
+        .bot .message-bubble b { font-weight: 600; }
         .bot .message-bubble em,
-        .bot .message-bubble i {
-            font-style: italic;
-            color: #555;
-        }
+        .bot .message-bubble i { font-family: var(--font-display); font-size: 1.05em; }
 
         .user .message-bubble {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-bottom-right-radius: 4px;
+            background: var(--ink);
+            color: var(--white);
+            border: 1px solid var(--ink);
         }
 
         .message-time {
-            font-size: 11px;
-            color: #999;
-            margin-top: 5px;
             display: block;
+            margin-top: var(--space-2);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
         }
+        .user .message-time { color: #B8C0C6; }
 
         .typing-indicator {
-            display: inline-block;
-            background: white;
-            padding: 14px 18px;
-            border-radius: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: inline-flex;
+            gap: 5px;
+            padding: var(--space-4);
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
         }
-
         .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #999;
-            border-radius: 50%;
-            margin: 0 2px;
-            animation: typing 1.4s infinite;
+            width: 6px;
+            height: 6px;
+            background: var(--ink-soft);
+            animation: typing 1.2s infinite;
         }
-
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
         @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-            30% { transform: translateY(-10px); opacity: 1; }
+            0%, 60%, 100% { opacity: 0.25; }
+            30% { opacity: 1; }
         }
 
+        /* Quick replies and product action buttons */
         .suggestions {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            gap: var(--space-2);
+            margin: var(--space-3) 0 var(--space-5);
         }
 
         .suggestion-btn {
-            background: #f0f2f5;
-            color: #667eea;
-            border: 1px solid #667eea;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .suggestion-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            max-width: 85%;
-        }
-
-        .product-card h4 {
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .product-card p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .product-card .price {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .product-card .reasoning {
-        background: #f0f2f5;
-        padding: 8px 12px;
-        border-radius: 8px;
-        margin-top: 10px;
-        font-size: 13px;
-        color: #555;
-        border-left: 3px solid #667eea;
-    }
-
-        .product-card .social-proof {
-            color: #4CAF50;
-            font-size: 12px;
-            margin-top: 8px;
+            min-height: 40px;
+            padding: 0 var(--space-4);
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--font-text);
+            font-size: var(--text-sm);
             font-weight: 500;
+            cursor: pointer;
+            transition: background-color 120ms ease, color 120ms ease;
         }
+        .suggestion-btn:hover { background: var(--ink); color: var(--white); }
+        .suggestion-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-        .product-card .urgency {
-            color: #ff6b6b;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 5px;
+        /* Product card */
+        .product-card {
+            max-width: 420px;
+            margin-top: var(--space-3);
+            padding: var(--space-4);
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            text-align: left;
         }
+        .product-card .product-photo {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            max-height: 280px;
+            object-fit: cover;
+            background: var(--stone);
+            border: 1px solid var(--line);
+            margin-bottom: var(--space-3);
+        }
+        .product-card h4 { font-size: var(--text-lg); font-weight: 500; margin-bottom: var(--space-1); }
+        .product-card p { font-size: var(--text-sm); color: var(--ink-soft); }
+        .product-card .price {
+            margin-top: var(--space-2);
+            font-family: var(--font-mono);
+            font-size: var(--text-lg);
+            font-weight: 500;
+            color: var(--ink);
+            text-align: left;
+        }
+        .product-card .reasoning {
+            margin-top: var(--space-3);
+            padding: var(--space-2) var(--space-3);
+            background: var(--ivory);
+            border-left: 2px solid var(--accent);
+            font-size: var(--text-sm);
+            color: var(--ink);
+        }
+        .product-card .social-proof { margin-top: var(--space-2); font-size: var(--text-xs); color: var(--success); font-weight: 500; }
+        .product-card .urgency { margin-top: var(--space-1); font-size: var(--text-xs); color: var(--danger); font-weight: 600; }
 
+        /* Cart */
         .cart-display {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 10px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 560px;
+            margin: var(--space-2) 0;
+            padding: var(--space-5);
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            text-align: left;
         }
-
         .cart-display h3 {
-            margin: 0 0 15px 0;
-            color: #333;
-            font-size: 18px;
+            margin: 0 0 var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--ink);
+            font-size: var(--text-lg);
+            font-weight: 500;
         }
 
         .cart-item {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            gap: 10px;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--line);
         }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item-name {
-            flex: 1;
-            font-size: 14px;
-            color: #333;
-        }
+        .cart-item:last-child { border-bottom: 0; }
+        .cart-item-name { flex: 1 1 160px; font-size: var(--text-sm); font-weight: 500; }
 
         .cart-item-remove {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            min-width: 32px;
+            height: 32px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--danger);
+            font-size: var(--text-md);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background-color 120ms ease, border-color 120ms ease;
         }
+        .cart-item-remove:hover { background: var(--danger); border-color: var(--danger); color: var(--white); }
 
-        .cart-item-remove:hover {
-            background: #ee5a6f;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0 15px;
-        }
-
+        .quantity-control { display: flex; align-items: center; gap: var(--space-2); }
         .quantity-control button {
-            width: 30px;
-            height: 30px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: bold;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-size: var(--text-md);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background-color 120ms ease, color 120ms ease;
         }
-
-        .quantity-control button:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .quantity-control button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
+        .quantity-control button:hover { background: var(--ink); color: var(--white); }
+        .quantity-control button:disabled { opacity: 0.35; cursor: not-allowed; }
         .quantity-control span {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            min-width: 20px;
+            min-width: 24px;
             text-align: center;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
         }
 
         .cart-item-price {
-            font-size: 14px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .cart-total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #667eea;
+            min-width: 80px;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            font-variant-numeric: tabular-nums;
             text-align: right;
         }
 
-        .cart-total strong {
-            font-size: 18px;
-            color: #333;
+        .cart-total {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--ink);
+            text-align: right;
         }
-
+        .cart-total strong { font-size: var(--text-md); font-weight: 600; }
+        .cart-total #cartTotal { font-family: var(--font-mono); font-size: var(--text-lg); font-variant-numeric: tabular-nums; }
         .cart-total .discount-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .chat-input-container {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .chat-input input:focus {
-            border-color: #667eea;
-        }
-
-        .chat-input button {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-
-        .chat-input button:hover {
-            transform: scale(1.1);
-        }
-
-        .chat-input button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        #voiceBtn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        #voiceBtn.listening {
-            animation: pulse-voice 1s infinite;
-        }
-
-        @keyframes pulse-voice {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.7); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(245, 87, 108, 0); }
-        }
-
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .language-selector select {
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .language-selector select option {
-            background: #667eea;
-            color: white;
+            display: inline-block;
+            margin-left: var(--space-3);
+            padding: 3px var(--space-2);
+            border: 1px solid var(--success);
+            border-radius: var(--radius);
+            color: var(--success);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            vertical-align: middle;
         }
 
         .agent-indicator {
-            background: #f0f2f5;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #667eea;
-            margin-top: 8px;
             display: inline-block;
+            margin: var(--space-2) 0 var(--space-4);
+            padding: 3px var(--space-2);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* Input bar */
+        .chat-input-container {
+            flex-shrink: 0;
+            padding: var(--space-4) max(var(--gutter), calc((100% - 820px) / 2));
+            background: var(--white);
+            border-top: 1px solid var(--line);
+        }
+
+        .chat-input { display: flex; gap: var(--space-2); align-items: center; }
+
+        .chat-input input {
+            flex: 1;
+            min-width: 0;
+            min-height: 48px;
+            padding: 0 var(--space-4);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--font-text);
+            font-size: var(--text-md);
+        }
+        .chat-input input:hover { border-color: var(--ink-soft); }
+        .chat-input input:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+        .chat-input input::placeholder { color: var(--ink-soft); }
+
+        .chat-input button {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--ink);
+            border-radius: var(--radius);
+            background: var(--ink);
+            color: var(--white);
+            cursor: pointer;
+            transition: background-color 120ms ease, color 120ms ease;
+        }
+        .chat-input button:hover { background: #26343F; }
+        .chat-input button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .chat-input button:disabled { background: var(--stone); border-color: var(--line); color: var(--ink-soft); cursor: not-allowed; }
+
+        #voiceBtn { background: var(--white); color: var(--ink); }
+        #voiceBtn:hover { background: var(--stone); }
+        #voiceBtn.listening { background: var(--decision); border-color: var(--decision); color: var(--white); animation: listening 1s ease-in-out infinite; }
+        @keyframes listening {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @media (max-width: 900px) {
+            .chat-layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+            .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+            .sidebar-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-3) var(--gutter); border-bottom: 0; }
+            .sidebar-header h3 { margin: 0; }
+            .new-chat-btn { width: auto; }
+            .conversations-list { display: flex; overflow-x: auto; overflow-y: hidden; padding: 0; border-top: 1px solid var(--line); }
+            .conversation-item { flex: none; width: 200px; border-bottom: 0; border-left: 0; border-right: 1px solid var(--line); border-top: 3px solid transparent; }
+            .conversation-item.active { border-left-color: transparent; border-top-color: var(--ink); }
+            .chat-header { padding: var(--space-3) var(--gutter); }
+            .message-bubble { max-width: 88%; }
+        }
+
+        @media (max-width: 480px) {
+            .wordmark-tag { display: none; }
+            .conversations-list { display: none; }
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
-    <!-- Sidebar for conversation history -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>💬 Conversations</h3>
-            <button class="new-chat-btn" onclick="createNewConversation()">
-                ➕ New Chat
-            </button>
-        </div>
-        <div class="conversations-list" id="conversationsList">
-            <!-- Conversations will be loaded here -->
-        </div>
-    </div>
-
-    <!-- Main chat container -->
-    <div class="chat-container">
-        <div class="chat-header">
-            <div class="avatar">🤖</div>
-            <div class="header-info">
-                <h2>Van Heusen AI Assistant</h2>
-                <div class="status">
-                    <span class="status-dot"></span>
-                    <span id="statusText">Online - AI Powered</span>
+    <header class="app-bar">
+        <div class="app-bar-inner bar-wide">
+            <a class="wordmark" href="index.html">
+                <span class="wordmark-name">Orchestrator</span>
+                <span class="wordmark-tag">Web chat</span>
+            </a>
+            <div class="app-bar-meta">
+                <div class="language-selector">
+                    <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#globe"/></svg>
+                    <label class="visually-hidden" for="languageSelect">Language</label>
+                    <select id="languageSelect" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                        <option value="gu">ગુજરાતી (Gujarati)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="bn">বাংলা (Bengali)</option>
+                    </select>
                 </div>
             </div>
         </div>
+    </header>
 
-        <div class="chat-messages" id="chatMessages">
-            <!-- Messages will be added here -->
-        </div>
-
-        <div class="language-selector">
-            <select id="languageSelect" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="hi">हिंदी (Hindi)</option>
-                <option value="mr">मराठी (Marathi)</option>
-                <option value="gu">ગુજરાતી (Gujarati)</option>
-                <option value="ta">தமிழ் (Tamil)</option>
-                <option value="te">తెలుగు (Telugu)</option>
-                <option value="bn">বাংলা (Bengali)</option>
-            </select>
-        </div>
-
-        <div class="chat-input-container">
-            <div class="chat-input">
-                <input 
-                    type="text" 
-                    id="messageInput" 
-                    placeholder="Ask me anything about products, stores, or orders..."
-                    autocomplete="off"
-                >
-                <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
-                <button id="sendBtn" onclick="sendMessage()">➤</button>
+    <div class="chat-layout">
+        <!-- Sidebar for conversation history -->
+        <aside class="sidebar" aria-label="Conversation history">
+            <div class="sidebar-header">
+                <h3 class="label">Conversations</h3>
+                <button class="btn btn-secondary new-chat-btn" onclick="createNewConversation()">
+                    <svg class="icon icon-sm" aria-hidden="true"><use href="icons.svg#plus"/></svg>
+                    New chat
+                </button>
             </div>
-        </div>
+            <div class="conversations-list" id="conversationsList">
+                <!-- Conversations will be loaded here -->
+            </div>
+        </aside>
+
+        <!-- Main chat container -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <div class="avatar"><svg class="icon icon-lg" aria-hidden="true"><use href="icons.svg#chat"/></svg></div>
+                <div class="header-info">
+                    <h2>Van Heusen AI Assistant</h2>
+                    <div class="status">
+                        <span class="status-dot"></span>
+                        <span id="statusText">Online - AI Powered</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Conversation">
+                <!-- Messages will be added here -->
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input">
+                    <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Ask me anything about products, stores, or orders..."
+                        aria-label="Message"
+                        autocomplete="off"
+                    >
+                    <button id="voiceBtn" onclick="toggleVoice()" title="Voice Input" aria-label="Voice input"><svg class="icon" aria-hidden="true"><use href="icons.svg#mic"/></svg></button>
+                    <button id="sendBtn" onclick="sendMessage()" title="Send" aria-label="Send message"><svg class="icon" aria-hidden="true"><use href="icons.svg#send"/></svg></button>
+                </div>
+            </div>
+        </main>
     </div>
 
-
-
     <script>
-        const API_URL = 'http://localhost:8000';
         let ws = null;
         let isProcessing = false;
 
@@ -639,6 +541,21 @@
         // Cart tracking
         let cartItems = [];
         
+        // Replace the local cart with the backend cart (shared with WhatsApp)
+        async function syncCartFromBackend() {
+            try {
+                const response = await fetch(`${API_URL}/api/cart/${sessionId}`);
+                if (!response.ok) return;
+                const data = await response.json();
+                cartItems = data.items.map(item => ({
+                    id: item.product_id, name: item.name, price: item.price, quantity: item.quantity
+                }));
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            } catch (error) {
+                console.error('Could not load the cart from the backend:', error);
+            }
+        }
+
         // Track activity for store dashboard
         function trackActivity(channel, action) {
             const activities = JSON.parse(localStorage.getItem('recentActivity') || '[]');
@@ -675,6 +592,7 @@
 
         // Initialize
         window.onload = () => {
+            loadAvailability();
             // Check URL parameters to see if we're coming from another interface
             const urlParams = new URLSearchParams(window.location.search);
             const hasSessionParam = urlParams.has('session');
@@ -688,14 +606,16 @@
                 localStorage.removeItem('cartItems');
                 localStorage.removeItem('likedProducts');
                 localStorage.removeItem('current_step');
-                console.log('🆕 Starting fresh session - cart cleared');
+                console.log('Starting fresh session - cart cleared');
             } else {
                 // Continuing from mobile/WhatsApp - preserve cart
                 const savedCart = localStorage.getItem('cartItems');
                 if (savedCart) {
                     cartItems = JSON.parse(savedCart);
-                    console.log('📦 Loaded cart from previous session:', cartItems.length, 'items');
+                    console.log('Loaded cart from previous session:', cartItems.length, 'items');
                 }
+                // The backend holds the real shared cart (same one WhatsApp uses)
+                syncCartFromBackend();
             }
             
             loadConversations();
@@ -841,13 +761,13 @@
             // Personalized welcome message
             setTimeout(() => {
                 addBotMessage(
-                    `Hi ${customerName}! 👋 Welcome back to Van Heusen.\n\n` +
-                    "I'm your AI shopping assistant powered by Claude. I can help you with:\n\n" +
-                    "🔍 Finding products that match your style\n" +
-                    "📍 Checking real-time store availability\n" +
-                    "💡 Getting personalized recommendations\n" +
-                    "📦 Tracking orders and delivery\n" +
-                    "🎁 Applying best offers automatically\n\n" +
+                    `Hi ${customerName}! Welcome back to Van Heusen.\n\n` +
+                    "I'm your AI shopping assistant. I can help you with:\n\n" +
+                    "Finding products that match your style\n" +
+                    "Checking real-time store availability\n" +
+                    "Getting personalized recommendations\n" +
+                    "Tracking orders and delivery\n" +
+                    "Applying best offers automatically\n\n" +
                     "What brings you here today?"
                 );
                 
@@ -865,7 +785,7 @@
             setTimeout(() => {
                 try {
                     console.log('Attempting WebSocket connection...');
-                    ws = new WebSocket(`ws://localhost:8000/ws/${sessionId}`);
+                    ws = new WebSocket(socketUrl(sessionId));
                     
                     // Set a timeout for connection
                     const connectionTimeout = setTimeout(() => {
@@ -922,7 +842,7 @@
         function showAgentActivity(agentName) {
             const indicator = document.createElement('div');
             indicator.className = 'agent-indicator';
-            indicator.textContent = `🤖 ${agentName} agent working...`;
+            indicator.textContent = `${agentName} agent working...`;
             
             const container = document.getElementById('chatMessages');
             container.appendChild(indicator);
@@ -946,7 +866,7 @@
                 recognition.onstart = () => {
                     isListening = true;
                     document.getElementById('voiceBtn').classList.add('listening');
-                    document.getElementById('messageInput').placeholder = '🎤 Listening...';
+                    document.getElementById('messageInput').placeholder = 'Listening...';
                 };
 
                 recognition.onresult = (event) => {
@@ -1194,6 +1114,44 @@
             container.scrollTop = container.scrollHeight;
         }
 
+        function addApprovalButtons() {
+            const container = document.getElementById('chatMessages');
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'suggestions';
+
+            [['Yes, place order', true], ['No, keep cart', false]].forEach(([text, approved]) => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-btn';
+                btn.textContent = text;
+                btn.onclick = () => {
+                    buttonsDiv.remove();
+                    addUserMessage(text);
+                    sendApproval(approved);
+                };
+                buttonsDiv.appendChild(btn);
+            });
+
+            container.appendChild(buttonsDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendApproval(approved) {
+            addTypingIndicator();
+            try {
+                const reply = await streamChatReply('/api/chat/approve/stream', {session_id: sessionId, approved: approved});
+                await syncCartFromBackend();
+                if (reply.order_id) {
+                    askForRating(reply.order_id);
+                } else {
+                    addNextStepSuggestions();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                addBotMessage("Sorry, I couldn't reach the server. Please try again.");
+            }
+        }
+
         // function addProductCard(product) {
         //     const container = document.getElementById('chatMessages');
         //     const card = document.createElement('div');
@@ -1203,26 +1161,39 @@
         //             <h4>${product.name}</h4>
         //             <p>${product.category || ''}</p>
         //             <p class="price">₹${product.price}</p>
-        //             <p style="font-size: 12px; color: #4CAF50;">✓ Available</p>
+        //             <p style="font-size: 12px; color: #4CAF50;">- Available</p>
         //         </div>
         //     `;
         //     container.appendChild(card);
         //     container.scrollTop = container.scrollHeight;
         // }
+        // A store chosen or reserved in the chat is saved on the backend, so every channel agrees on it
+        async function reserveStoreOnBackend(storeName) {
+            try {
+                await fetch(`${API_URL}/api/store/reserve?session_id=${encodeURIComponent(sessionId)}&store_name=${encodeURIComponent(storeName)}`, {method: 'POST'});
+            } catch (error) {
+                console.error('Reserve error:', error);
+            }
+        }
+
         function addProductCard(product) {
         const container = document.getElementById('chatMessages');
         const card = document.createElement('div');
         card.className = 'message bot';
         card.innerHTML = `
             <div class="product-card">
+                <img class="product-photo" src="${productImage(product.id)}" alt="${product.name}" loading="lazy" onerror="this.onerror=null; this.src=PRODUCT_IMAGE_PLACEHOLDER;">
                 <h4>${product.name}</h4>
                 <p>${product.category || ''}</p>
                 <p class="price">₹${product.price}</p>
-                ${product.reasoning ? `<div class="reasoning">💡 ${product.reasoning}</div>` : ''}
-                ${product.socialProof ? `<div class="social-proof">👥 ${product.socialProof}</div>` : ''}
-                ${product.urgency ? `<div class="urgency">⚡ ${product.urgency}</div>` : ''}
-                <p style="font-size: 12px; color: #4CAF50;">✓ Available</p>
-                <button class="suggestion-btn" onclick="addToCartFromCard('${product.id || 'UNKNOWN'}', '${product.name}', ${product.price}, '${product.size || '40'}')" style="margin-top: 10px; width: 100%;">🛒 Add to Cart</button>
+                ${product.reasoning ? `<div class="reasoning">${product.reasoning}</div>` : ''}
+                ${product.socialProof ? `<div class="social-proof">${product.socialProof}</div>` : ''}
+                ${product.urgency ? `<div class="urgency">${product.urgency}</div>` : ''}
+                ${isInStock(product.id)
+                    ? `<p style="font-size: 12px; color: #4CAF50;">- Available</p>
+                <button class="suggestion-btn" onclick="addToCartFromCard('${product.id || 'UNKNOWN'}', '${product.name}', ${product.price}, '${product.size || '40'}')" style="margin-top: 10px; width: 100%;">Add to Cart</button>`
+                    : `<p style="font-size: 12px; color: #B3392B;">- Out of stock in every nearby store</p>
+                <button class="suggestion-btn" disabled style="margin-top: 10px; width: 100%; opacity: 0.5; cursor: not-allowed;">Out of stock</button>`}
             </div>
         `;
         container.appendChild(card);
@@ -1240,8 +1211,8 @@
             if (cartItems.length === 0) {
                 cartContainer.innerHTML = `
                     <div class="cart-display">
-                        <h3>🛒 Your Cart</h3>
-                        <p style="text-align: center; color: #999; padding: 20px 0;">🛍️ Your cart is empty</p>
+                        <h3>Your Cart</h3>
+                        <p style="text-align: center; color: #999; padding: 20px 0;">Your cart is empty</p>
                     </div>
                 `;
             } else {
@@ -1265,14 +1236,12 @@
                     `;
                 });
                 
-                const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                let discount = totalQty >= 3 ? 0.2 : 0.1;
-                const total = Math.round(subtotal * (1 - discount));
-                const discountText = totalQty >= 3 ? '20% OFF' : '10% OFF';
+                const total = payableTotal(subtotal);
+                const discountText = offerBadgeText();
                 
                 cartContainer.innerHTML = `
                     <div class="cart-display">
-                        <h3>🛒 Your Cart</h3>
+                        <h3>Your Cart</h3>
                         ${itemsHtml}
                         <div class="cart-total">
                             <strong>Total: <span id="cartTotal">₹${total.toLocaleString()}</span><span class="discount-badge" id="discountBadge">${discountText}</span></strong>
@@ -1283,6 +1252,16 @@
             
             chatMessages.appendChild(cartContainer);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show the price the backend works out as soon as it is loaded
+            refreshPricing().then(() => {
+                const totalEl = document.getElementById('cartTotal');
+                const badgeEl = document.getElementById('discountBadge');
+                if (!totalEl || cartItems.length === 0) return;
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                totalEl.textContent = `₹${payableTotal(subtotal).toLocaleString()}`;
+                badgeEl.textContent = offerBadgeText();
+            });
         }
 
         async function addToCartFromCard(productId, productName, price, size) {
@@ -1306,22 +1285,42 @@
             
             console.log('Current cartItems:', JSON.stringify(cartItems, null, 2));
             
-            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-            const discount = totalItems >= 3 ? 0.2 : 0.1;
-            const total = Math.round(subtotal * (1 - discount));
-            
-            addBotMessage(`✅ Added ${productName} to cart! 🛒\n\nTotal items: ${totalItems}\nTotal: ₹${total.toLocaleString()}`);
-            
-            if (totalItems >= 3 && totalItems - 1 < 3) {
-                const savings = subtotal - total;
-                setTimeout(() => {
-                    addBotMessage(`🎉 You unlocked 20% bundle discount! Saving ₹${savings.toLocaleString()}!`);
-                }, 400);
+            let outOfStock = null;
+            try {
+                const response = await fetch(`${API_URL}/api/cart/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: sessionId, product_id: productId, quantity: 1, size: size})
+                });
+                if (response.status === 409) outOfStock = (await response.json()).detail;
+            } catch (error) {
+                console.error('Cart add error:', error);
+            }
+            await refreshPricing();
+
+            if (outOfStock) {
+                undoLocalAdd(productId);
+                addBotMessage(`Sorry, ${productName} is out of stock in every nearby store, so I have not added it to your cart.`);
+                if (outOfStock.alternatives.length > 0) {
+                    addBotMessage("These similar items are available:");
+                    outOfStock.alternatives.slice(0, 3).forEach(item => addProductCard(
+                        {id: item.product_id, name: item.name, price: item.price, category: 'Similar item'}));
+                }
+                addSuggestions(["View cart", "See matching accessories"]);
+                return;
             }
             
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            addBotMessage(`Added ${productName} to cart!\n\n${cartSummaryText(subtotal, totalItems)}`);
+            const offerNote = newOfferText();
+            if (offerNote) addBotMessage(offerNote);
+            const nextOffer = nextOfferText();
+            if (nextOffer) addBotMessage(nextOffer);
+
             setTimeout(() => {
                 addSuggestions([
+                    ...(pointsAreAvailable() ? ["Use my loyalty points"] : (cartPricing && cartPricing.use_points ? ["Keep my loyalty points"] : [])),
                     "View cart",
                     "Proceed to checkout",
                     "Add more items",
@@ -1329,21 +1328,6 @@
                 ]);
             }, 600);
             
-            // Call backend
-            try {
-                await fetch(`${API_URL}/api/cart/add`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        product_id: productId,
-                        quantity: 1,
-                        size: size
-                    })
-                });
-            } catch (error) {
-                console.error('Cart add error:', error);
-            }
         }
 
         async function updateQuantity(productId, unitPrice, change) {
@@ -1376,39 +1360,22 @@
                 }
             });
             
-            const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            let discount = totalQty >= 3 ? 0.2 : 0.1;
-            const total = Math.round(subtotal * (1 - discount));
-            const savings = subtotal - total;
-            const discountText = totalQty >= 3 ? '20% OFF' : '10% OFF';
-            
-            document.getElementById('cartTotal').textContent = `₹${total.toLocaleString()}`;
-            document.getElementById('discountBadge').textContent = discountText;
-            
-            // Show message for discount upgrade
-            const wasUnder3 = totalQty - change < 3;
-            const isNow3OrMore = totalQty >= 3;
-            
-            if (isNow3OrMore && wasUnder3) {
-                addBotMessage(`🎉 Great news! You unlocked ${Math.round(discount * 100)}% bundle discount!\n\nYou're now saving ₹${savings.toLocaleString()}!`);
-            } else {
-                addBotMessage(`✅ Cart updated! New total: ₹${total.toLocaleString()}`);
-            }
-            
-            // Call backend
+            // Tell the backend, then show the price it works out
             try {
                 await fetch(`${API_URL}/api/cart/update`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        product_id: productId,
-                        quantity: newQty
-                    })
+                    body: JSON.stringify({session_id: sessionId, product_id: productId, quantity: newQty})
                 });
             } catch (error) {
                 console.error('Cart update error:', error);
             }
+            await refreshPricing();
+            const total = payableTotal(subtotal);
+            document.getElementById('cartTotal').textContent = `₹${total.toLocaleString()}`;
+            document.getElementById('discountBadge').textContent = offerBadgeText();
+            addBotMessage(`Cart updated! New total: ₹${total.toLocaleString()}`);
+            
         }
 
         async function removeFromCart(productId, productName) {
@@ -1422,7 +1389,7 @@
             
             console.log('Cart after removal:', JSON.stringify(cartItems, null, 2));
             
-            addBotMessage(`❌ Removed ${productName} from cart`);
+            addBotMessage(`Removed ${productName} from cart`);
             
             // Refresh cart display
             setTimeout(() => {
@@ -1434,12 +1401,13 @@
                 
                 // Show updated cart
                 showCartWithModifyOption();
+                addNextStepSuggestions();
                 
                 if (cartItems.length > 0) {
                     const totalQty = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
                     setTimeout(() => {
                         if (totalQty < 3) {
-                            addBotMessage("💡 Add more items to unlock 20% bundle discount!");
+                            addBotMessage("Add more items to unlock 20% bundle discount!");
                         }
                     }, 300);
                 }
@@ -1458,6 +1426,108 @@
             } catch (error) {
                 console.error('Cart remove error:', error);
             }
+        }
+
+        // ---- Streaming replies -------------------------------------------------
+        // The backend sends the reply as server-sent events: "progress" (agent and payment
+        // steps), "token" (the next few words of the text) and "done" (the full reply).
+
+        // Read a server-sent event stream and call onEvent(name, data) for each event
+        async function readEventStream(response, onEvent) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+                const {value, done} = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, {stream: true});
+                let boundary;
+                while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+                    const block = buffer.slice(0, boundary);
+                    buffer = buffer.slice(boundary + 2);
+                    const name = /^event: (.*)$/m.exec(block)[1];
+                    const data = JSON.parse(/^data: (.*)$/m.exec(block)[1]);
+                    onEvent(name, data);
+                }
+            }
+        }
+
+        // A bot message that grows as text arrives. finish() saves it and reads it aloud, like addBotMessage.
+        function startStreamingBotMessage() {
+            const container = document.getElementById('chatMessages');
+            const msg = document.createElement('div');
+            msg.className = 'message bot';
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            msg.appendChild(bubble);
+            container.appendChild(msg);
+
+            const format = (text) => text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/•/g, '&nbsp;&nbsp;•')
+                .replace(/\n/g, '<br>');
+            let text = '';
+
+            return {
+                append(piece) {
+                    text += piece;
+                    bubble.innerHTML = format(text);
+                    container.scrollTop = container.scrollHeight;
+                },
+                finish() {
+                    bubble.innerHTML = `${format(text)}<span class="message-time">${getCurrentTime()}</span>`;
+                    container.scrollTop = container.scrollHeight;
+                    speakResponse(text);
+                    const convo = findConversation(currentConversationId);
+                    if (convo) {
+                        convo.messages.push({ type: 'bot', text: text });
+                        convo.updatedAt = new Date().toISOString();
+                        saveConversations();
+                    }
+                }
+            };
+        }
+
+        // POST to a streaming endpoint and show the reply as it arrives. Returns the full reply.
+        async function streamChatReply(path, body) {
+            const response = await fetch(`${API_URL}${path}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            if (!response.ok || !response.body) {
+                throw new Error(`Stream request failed: ${response.status}`);
+            }
+
+            let bubble = null;
+            let reply = null;
+            await readEventStream(response, (name, data) => {
+                if (name === 'progress') {
+                    if (data.type === 'input_blocked') {
+                        addBotMessage('Message blocked by the prompt-injection guard.');
+                    } else if (data.type === 'agent_called' && data.status === 'processing' && (!ws || ws.readyState !== WebSocket.OPEN)) {
+                        showAgentActivity(data.agent);
+                    }
+                } else if (name === 'token') {
+                    if (!bubble) {
+                        removeTypingIndicator();
+                        bubble = startStreamingBotMessage();
+                    }
+                    bubble.append(data.text);
+                } else if (name === 'done') {
+                    reply = data;
+                }
+            });
+
+            removeTypingIndicator();
+            if (!reply) {
+                throw new Error('The reply stream ended early');
+            }
+            if (bubble) {
+                bubble.finish();
+            }
+            return reply;
         }
 
         async function sendMessage() {
@@ -1486,68 +1556,104 @@
                 messageInEnglish = await translateText(message, 'en');
             }
             
-            // Always use smart fallback for consistent demo experience
-            // Backend integration can be enabled later
-            setTimeout(async () => {
+            if (isUsePointsRequest(messageInEnglish) || isKeepPointsRequest(messageInEnglish)) {
+                const useThem = isUsePointsRequest(messageInEnglish);
+                await setUsePoints(useThem);
                 removeTypingIndicator();
-                
+                const itemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                const itemSubtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                addBotMessage(cartItems.length === 0
+                    ? "Your cart is empty. Add something first and I will apply your points."
+                    : `${useThem ? 'Your loyalty points are applied.' : 'Your loyalty points are not used, so they stay in your account.'}\n\n${cartSummaryText(itemSubtotal, itemCount)}`);
+                addSuggestions([useThem ? "Keep my loyalty points" : "Use my loyalty points", "Proceed to checkout", "View cart"]);
+                isProcessing = false;
+                document.getElementById('sendBtn').disabled = false;
+                document.getElementById('voiceBtn').disabled = false;
+                return;
+            }
+
+            if (isCartViewRequest(messageInEnglish)) {
+                removeTypingIndicator();
+                showCartWithModifyOption();
+                addNextStepSuggestions();
+                isProcessing = false;
+                document.getElementById('sendBtn').disabled = false;
+                document.getElementById('voiceBtn').disabled = false;
+                return;
+            }
+
+            // Ask the backend. If the request fails, use the built-in smart fallback.
+            try {
+                const chatBody = {
+                    session_id: sessionId,
+                    message: messageInEnglish,
+                    channel: 'web'
+                };
+                let data;
+                if (currentLanguage === 'en') {
+                    // English replies stream in word by word
+                    data = await streamChatReply('/api/chat/stream', chatBody);
+                } else {
+                    // Other languages are translated as a whole, so they cannot stream
+                    const response = await fetch(`${API_URL}/api/chat`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(chatBody)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Chat request failed: ${response.status}`);
+                    }
+                    data = await response.json();
+
+                    removeTypingIndicator();
+
+                    if (data.blocked) {
+                        addBotMessage('Message blocked by the prompt-injection guard.');
+                    }
+                    if (data.response) {
+                        addBotMessage(await translateText(data.response, currentLanguage));
+                    }
+                }
+                syncCartFromBackend();
+
+                if (data.pending_approval) {
+                    addApprovalButtons();
+                } else {
+                    if (data.recommendations && data.recommendations.length > 0) {
+                        setTimeout(() => {
+                            addBotMessage("Here are some recommendations:");
+                            data.recommendations.forEach((product, index) => {
+                                setTimeout(() => addProductCard({...product, id: product.product_id}), index * 200);
+                            });
+                        }, 500);
+                    }
+
+                    if (!addContextualSuggestions(messageInEnglish)) {
+                        addNextStepSuggestions();
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+
                 // Use our intelligent response system (in English)
                 const smartResponse = getSmartFallback(messageInEnglish);
-                
+
                 // Translate response to user's language
                 let responseInUserLang = smartResponse;
                 if (currentLanguage !== 'en') {
                     responseInUserLang = await translateText(smartResponse, currentLanguage);
                 }
-                
+
                 addBotMessage(responseInUserLang);
-                
+
                 // Add contextual suggestions
                 addContextualSuggestions(messageInEnglish);
-            }, 1000);
-            
-            /* Backend API integration (disabled for demo consistency)
-            try {
-                const response = await fetch(`${API_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        message: message,
-                        channel: 'web'
-                    })
-                });
-                
-                const data = await response.json();
-                
-                removeTypingIndicator();
-                
-                if (data.response) {
-                    addBotMessage(data.response);
-                }
-                
-                if (data.recommendations && data.recommendations.length > 0) {
-                    setTimeout(() => {
-                        addBotMessage("Here are some recommendations:");
-                        data.recommendations.forEach((product, index) => {
-                            setTimeout(() => addProductCard(product), index * 200);
-                        });
-                    }, 500);
-                }
-                
-                addContextualSuggestions(message);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                removeTypingIndicator();
-                
-                const fallbackResponse = getSmartFallback(message);
-                addBotMessage(fallbackResponse);
-                addContextualSuggestions(message);
             }
-            */
             
             // Re-enable input
             isProcessing = false;
@@ -1569,7 +1675,7 @@
                         "Show more options"
                     ]);
                 }, 100);
-                return "Perfect! 👍";
+                return "Perfect!";
             }
             
             // MODIFY/CHANGE SELECTIONS
@@ -1583,7 +1689,7 @@
                         "Start over"
                     ]);
                 }, 100);
-                return "Let me help you adjust your selections! 🔄";
+                return "Let me help you adjust your selections!";
             }
             
             // ========== SALES PSYCHOLOGY LAYER ==========
@@ -1591,31 +1697,31 @@
             // OBJECTION HANDLING - Price
             if (msg.includes('expensive') || msg.includes('pricey') || msg.includes('too much') || msg.includes('costly')) {
                 conversationContext.objections.push('price');
-                return "I completely understand - budget is important! 💡\n\n" +
+                return "I completely understand - budget is important!\n\n" +
                     "Here's what makes this a smart investment:\n" +
-                    "✨ **Premium fabric** that lasts 3x longer than regular brands\n" +
-                    "💎 You're a **Gold Member**: 500 points = **₹200 instant discount**\n" +
-                    "🎁 Add just 1 more item = **20% bundle discount unlocked**\n\n" +
+                    "**Premium fabric** that lasts 3x longer than regular brands\n" +
+                    "You're a **Gold Member**: 500 points = **₹200 instant discount**\n" +
+                    "Add just 1 more item = **20% bundle discount unlocked**\n\n" +
                     "**Your final price: ₹2,000** (down from ₹2,500)\n" +
                     "+ **Free alterations** + **30-day returns**!\n\n" +
-                    "When you think about cost-per-wear over the years, it's actually very economical. Fair? 😊";
+                    "When you think about cost-per-wear over the years, it's actually very economical. Fair?";
             }
             
             // OBJECTION HANDLING - Quality Concerns
             if (msg.includes('quality') || msg.includes('is it good') || msg.includes('worth it')) {
-                return "Great question! Quality is what we're known for. 🌟\n\n" +
+                return "Great question! Quality is what we're known for.\n\n" +
                     "**What sets us apart:**\n" +
-                    "✓ 100% premium cotton (not blended)\n" +
-                    "✓ Double-stitched seams for durability\n" +
-                    "✓ Color-fast dyes (won't fade)\n" +
-                    "✓ 1-year warranty against defects\n\n" +
-                    "👥 Over **250+ customers** bought this exact shirt last month with **4.8/5 stars**!\n\n" +
+                    "- 100% premium cotton (not blended)\n" +
+                    "- Double-stitched seams for durability\n" +
+                    "- Color-fast dyes (won't fade)\n" +
+                    "- 1-year warranty against defects\n\n" +
+                    "Over **250+ customers** bought this exact shirt last month with **4.8/5 stars**!\n\n" +
                     "Want to see it in-store before deciding?";
             }
             
             // OBJECTION HANDLING - Indecision
             if (msg.includes('not sure') || msg.includes('confused') || msg.includes('help me choose') || msg.includes("don't know")) {
-                return "No worries at all - I'm here to guide you! 🤝\n\n" +
+                return "No worries at all - I'm here to guide you!\n\n" +
                     "Let me ask you a quick question to narrow it down:\n\n" +
                     "What matters most to you?\n" +
                     "• Looking sharp & professional\n" +
@@ -1666,7 +1772,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 These items prioritize comfort without compromising professionalism!");
+                        addBotMessage("These items prioritize comfort without compromising professionalism!");
                         addSuggestions([
                             "Add to cart",
                             "See in-store",
@@ -1718,7 +1824,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💼 This combination guarantees a sharp, commanding presence!");
+                        addBotMessage("This combination guarantees a sharp, commanding presence!");
                         addSuggestions([
                             "Add to cart",
                             "See in-store",
@@ -1771,7 +1877,7 @@
                     setTimeout(() => {
                         const total = budgetOutfit.reduce((sum, item) => sum + item.price, 0);
                         const bundlePrice = Math.round(total * 0.8);
-                        addBotMessage(`💰 Total: ₹${total.toLocaleString()} → With 20% bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${(total - bundlePrice).toLocaleString()}!)`);
+                        addBotMessage(`Total: ₹${total.toLocaleString()} → With 20% bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${(total - bundlePrice).toLocaleString()}!)`);
                         addSuggestions([
                             "Add bundle to cart",
                             "See in-store",
@@ -1823,7 +1929,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("✨ This outfit will make you unforgettable - professional and commanding!");
+                        addBotMessage("This outfit will make you unforgettable - professional and commanding!");
                         addSuggestions([
                             "Add to cart",
                             "See in-store",
@@ -1913,7 +2019,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 All great choices! Which style appeals to you?");
+                        addBotMessage("All great choices! Which style appeals to you?");
                         addSuggestions([
                             "Show complete outfit",
                             "Add to cart",
@@ -1927,13 +2033,13 @@
             
             // OBJECTION HANDLING - Comparison Shopping
             if (msg.includes('compare') || msg.includes('other brands') || (msg.includes('alternatives') && !msg.includes('show'))) {
-                return "Smart to compare! Let me show you why customers choose us: 🏆\n\n" +
+                return "Smart to compare! Let me show you why customers choose us:\n\n" +
                     "**Van Heusen vs Others:**\n" +
-                    "✅ Premium fabric quality (not synthetic blends)\n" +
-                    "✅ Perfect fit guarantee (free alterations)\n" +
-                    "✅ 30-day easy returns (no questions asked)\n" +
-                    "✅ Loyalty rewards (you're already earning!)\n" +
-                    "✅ 1-year warranty\n\n" +
+                    "- Premium fabric quality (not synthetic blends)\n" +
+                    "- Perfect fit guarantee (free alterations)\n" +
+                    "- 30-day easy returns (no questions asked)\n" +
+                    "- Loyalty rewards (you're already earning!)\n" +
+                    "- 1-year warranty\n\n" +
                     "Plus, you get **instant 10-20% discounts** with bundles.\n\n" +
                     "Want to see our bestsellers?";
             }
@@ -1956,7 +2062,7 @@
                             "Surprise me"
                         ]);
                     }, 100);
-                    return "Smart choice! Let's build your professional wardrobe! 💼";
+                    return "Smart choice! Let's build your professional wardrobe!";
                 }
                 else if (msg.includes('wedding') || msg.includes('party') || msg.includes('celebration')) {
                     setTimeout(() => {
@@ -1968,7 +2074,7 @@
                             "Show me all options"
                         ]);
                     }, 100);
-                    return "Excellent! Let me help you look your best for the wedding! 💍";
+                    return "Excellent! Let me help you look your best for the wedding!";
                 }
                 else if (msg.includes('interview') || msg.includes('meeting')) {
                     setTimeout(() => {
@@ -1979,7 +2085,7 @@
                             "Not sure, help me decide"
                         ]);
                     }, 100);
-                    return "Great! Let's ensure you make a strong impression! 🎯";
+                    return "Great! Let's ensure you make a strong impression!";
                 }
                 else {
                     setTimeout(() => {
@@ -1991,7 +2097,7 @@
                             "Just updating wardrobe"
                         ]);
                     }, 100);
-                    return "I'd love to help you find the perfect formal wear! 👔";
+                    return "I'd love to help you find the perfect formal wear!";
                 }
             }
             
@@ -2046,7 +2152,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 These 4 essentials form the perfect wardrobe foundation. Mix & match for any occasion!");
+                        addBotMessage("These 4 essentials form the perfect wardrobe foundation. Mix & match for any occasion!");
                         addSuggestions([
                             "Add all to cart",
                             "Show more essentials",
@@ -2055,7 +2161,7 @@
                         ]);
                     }, 1500);
                 }, 100);
-                return "Excellent! Let's build a versatile wardrobe! 👔";
+                return "Excellent! Let's build a versatile wardrobe!";
             }
             
             else if (msg.includes('wedding') || msg.includes('party') || msg.includes('celebration') || 
@@ -2069,7 +2175,7 @@
                         "Show me all options"
                     ]);
                 }, 100);
-                return "Excellent! Let me help you look your best for the wedding! 💍";
+                return "Excellent! Let me help you look your best for the wedding!";
             }
             
             else if (msg.includes('office') || msg.includes('work') || msg.includes('professional') ||
@@ -2084,7 +2190,7 @@
                         "Surprise me"
                     ]);
                 }, 100);
-                return "Smart choice! Let's build your professional wardrobe! 💼";
+                return "Smart choice! Let's build your professional wardrobe!";
             }
             
             else if (msg.includes('interview') || msg.includes('meeting') || msg.includes('presentation')) {
@@ -2096,7 +2202,7 @@
                         "Not sure, help me decide"
                     ]);
                 }, 100);
-                return "Great! Let's ensure you make a strong impression! 🎯";
+                return "Great! Let's ensure you make a strong impression!";
             }
             
             // Interview/Meeting style responses
@@ -2140,7 +2246,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💼 This classic combination never fails to impress! Want to add the complete set to cart?");
+                        addBotMessage("This classic combination never fails to impress! Want to add the complete set to cart?");
                         addSuggestions([
                             "Add bundle to cart",
                             "See in-store",
@@ -2191,7 +2297,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 This modern look shows confidence while staying professional! Ready to proceed?");
+                        addBotMessage("This modern look shows confidence while staying professional! Ready to proceed?");
                         addSuggestions([
                             "Add bundle to cart",
                             "See in-store",
@@ -2253,7 +2359,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 Which style catches your eye? I can show you complete outfits in any color!");
+                        addBotMessage("Which style catches your eye? I can show you complete outfits in any color!");
                         addSuggestions([
                             "Show complete outfit",
                             "More blue options",
@@ -2331,7 +2437,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 Pro tip: Complete coordinated light blue outfit for a modern professional look! Would you like to add all items to cart?");
+                        addBotMessage("Pro tip: Complete coordinated light blue outfit for a modern professional look! Would you like to add all items to cart?");
                         addSuggestions([
                             "Add all to cart",
                             "Show complete outfit",
@@ -2409,7 +2515,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 Pro tip: These items create a complete professional outfit! Would you like to see the complete outfit or modify selections?");
+                        addBotMessage("Pro tip: These items create a complete professional outfit! Would you like to see the complete outfit or modify selections?");
                         addSuggestions([
                             "Show complete outfit",
                             "Add matching accessories",
@@ -2640,7 +2746,7 @@
                         "Just updating wardrobe"
                     ]);
                 }, 100);
-                return "Let me help you find the perfect outfit! 👔";
+                return "Let me help you find the perfect outfit!";
             }
             
             else if ((msg.includes('complete') && !msg.includes('payment')) || msg.includes('show complete outfit') || 
@@ -2695,7 +2801,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage(`🎁 Bundle Offer: Get all 3 items with 20% off!\n\nOriginal: ₹${totalPrice.toLocaleString()}\nWith Bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${savings.toLocaleString()}!)\n\n✨ Why customers love this combo:\n👥 143 people bought this exact set last week\n⭐ 4.8/5 rating from verified buyers\n🏆 Most popular 3-piece outfit this month`);
+                        addBotMessage(`Bundle Offer: Get all 3 items with 20% off!\n\nOriginal: ₹${totalPrice.toLocaleString()}\nWith Bundle: ₹${bundlePrice.toLocaleString()} (Save ₹${savings.toLocaleString()}!)\n\nWhy customers love this combo:\n143 people bought this exact set last week\n4.8/5 rating from verified buyers\nMost popular 3-piece outfit this month`);
                         addSuggestions([
                             "Add bundle to cart",
                             "See styling tips",
@@ -2714,8 +2820,8 @@
                     
                     const accessories = [
                         {id: "VH004", name: "Navy Blue Silk Tie", category: "Premium Finish", price: 800},
-                        {id: "VH005", name: "Brown Leather Belt", category: "Elegant Touch", price: 1200},
-                        {id: "VH007", name: "Premium Wallet", category: "Final Touch", price: 1500}
+                        {id: "VH006", name: "Brown Leather Belt", category: "Elegant Touch", price: 1200},
+                        {id: "VH007", name: "Black Leather Belt", category: "Final Touch", price: 1300}
                     ];
                     
                     accessories.forEach((item, i) => {
@@ -2723,7 +2829,7 @@
                     });
                     
                     setTimeout(() => {
-                        addBotMessage("💡 Add 2+ accessories for 15% combo discount!");
+                        addBotMessage("Add 2+ accessories for 15% combo discount!");
                         addSuggestions([
                             "Add to cart",
                             "See in-store",
@@ -2738,19 +2844,19 @@
             // STORE ACTIONS (Level 5)
             else if (msg.includes('see in') || msg.includes('see in-store') || (msg.includes('in') && msg.includes('store'))) {
                 return "Great! Here are stores where you can see and try these items:\n\n" +
-                       "📍 *Stores near you:*\n\n" +
-                       "🏪 *Bandra Store* (2km away)\n" +
+                       "*Stores near you:*\n\n" +
+                       "*Bandra Store* (2km away)\n" +
                        "Shop 23, Linking Road, Bandra West\n" +
-                       "⏰ Open until 10 PM\n" +
-                       "📦 All items in stock\n\n" +
-                       "🏪 *Powai Store* (5km away)\n" +
+                       "Open until 10 PM\n" +
+                       "All items in stock\n\n" +
+                       "*Powai Store* (5km away)\n" +
                        "Phoenix Market City, Powai\n" +
-                       "⏰ Open until 11 PM\n" +
-                       "📦 Limited stock\n\n" +
-                       "🏪 *Andheri Store* (3km away)\n" +
+                       "Open until 11 PM\n" +
+                       "Limited stock\n\n" +
+                       "*Andheri Store* (3km away)\n" +
                        "Infinity Mall, Andheri West\n" +
-                       "⏰ Open until 10 PM\n" +
-                       "❌ Out of stock";
+                       "Open until 10 PM\n" +
+                       "Out of stock";
             }
             
             // Handle store selection - redirect to kiosk
@@ -2759,15 +2865,15 @@
                 localStorage.setItem('current_step', '3');
                 localStorage.setItem('selected_store', 'bandra');
                 setTimeout(() => {
-                    addBotMessage("🏪 Taking you to Bandra Store kiosk...");
+                    addBotMessage("Taking you to Bandra Store kiosk...");
                     setTimeout(() => {
-                        window.location.href = `kiosk.html?session=${sessionId}&store=bandra&source=chat&auto=true`;
+                        reserveStoreOnBackend('Bandra Store').then(() => { window.location.href = `kiosk.html?session=${sessionId}&store=bandra&source=chat&auto=true`; });
                     }, 800);
                 }, 300);
-                return "✅ *Bandra Store Selected!*\n\n" +
-                       "📍 Shop 23, Linking Road, Bandra West\n" +
-                       "⏰ Open until 10 PM\n" +
-                       "📦 All items in stock\n\n" +
+                return "*Bandra Store Selected!*\n\n" +
+                       "Shop 23, Linking Road, Bandra West\n" +
+                       "Open until 10 PM\n" +
+                       "All items in stock\n\n" +
                        "Redirecting to store kiosk experience...";
             }
             
@@ -2776,15 +2882,15 @@
                 localStorage.setItem('current_step', '3');
                 localStorage.setItem('selected_store', 'powai');
                 setTimeout(() => {
-                    addBotMessage("🏪 Taking you to Powai Store kiosk...");
+                    addBotMessage("Taking you to Powai Store kiosk...");
                     setTimeout(() => {
-                        window.location.href = `kiosk.html?session=${sessionId}&store=powai&source=chat&auto=true`;
+                        reserveStoreOnBackend('Powai Store').then(() => { window.location.href = `kiosk.html?session=${sessionId}&store=powai&source=chat&auto=true`; });
                     }, 800);
                 }, 300);
-                return "✅ *Powai Store Selected!*\n\n" +
-                       "📍 Phoenix Market City, Powai\n" +
-                       "⏰ Open until 11 PM\n" +
-                       "📦 Limited stock\n\n" +
+                return "*Powai Store Selected!*\n\n" +
+                       "Phoenix Market City, Powai\n" +
+                       "Open until 11 PM\n" +
+                       "Limited stock\n\n" +
                        "Redirecting to store kiosk experience...";
             }
             
@@ -2796,12 +2902,12 @@
                     addBotMessage("Great! Redirecting you to Bandra Store kiosk...");
                 }, 500);
                 setTimeout(() => {
-                    window.location.href = `kiosk.html?session=${sessionId}&store=bandra&auto=true`;
+                    reserveStoreOnBackend('Bandra Store').then(() => { window.location.href = `kiosk.html?session=${sessionId}&store=bandra&auto=true`; });
                 }, 1500);
-                return "✅ *Reserved at Bandra Store!*\n\n" +
-                       "📍 Shop 23, Linking Road, Bandra West\n" +
-                       "📦 Your items will be ready when you arrive\n" +
-                       "⏰ Reserved for 24 hours\n\n" +
+                return "*Reserved at Bandra Store!*\n\n" +
+                       "Shop 23, Linking Road, Bandra West\n" +
+                       "Your items will be ready when you arrive\n" +
+                       "Reserved for 24 hours\n\n" +
                        "Redirecting to in-store kiosk experience...";
             }
             
@@ -2813,27 +2919,27 @@
                     addBotMessage("Great! Redirecting you to Powai Store kiosk...");
                 }, 500);
                 setTimeout(() => {
-                    window.location.href = `kiosk.html?session=${sessionId}&store=powai&auto=true`;
+                    reserveStoreOnBackend('Powai Store').then(() => { window.location.href = `kiosk.html?session=${sessionId}&store=powai&auto=true`; });
                 }, 1500);
-                return "✅ *Reserved at Powai Store!*\n\n" +
-                       "📍 Phoenix Market City, Powai\n" +
-                       "📦 Limited stock - please visit soon\n" +
-                       "⏰ Reserved for 24 hours\n\n" +
+                return "*Reserved at Powai Store!*\n\n" +
+                       "Phoenix Market City, Powai\n" +
+                       "Limited stock - please visit soon\n" +
+                       "Reserved for 24 hours\n\n" +
                        "Redirecting to in-store kiosk experience...";
             }
             
             else if (msg.includes('direction')) {
-                return "🗺️ *Directions to Bandra Store:*\n\n" +
-                       "📍 From your location (Bandra area):\n" +
+                return "*Directions to Bandra Store:*\n\n" +
+                       "From your location (Bandra area):\n" +
                        "• 2km away, 8-10 mins drive\n" +
                        "• Via Linking Road\n\n" +
-                       "📞 Call for guidance: +91 22 1234 5678\n" +
-                       "🚗 Opening Google Maps...\n\n" +
-                       "💡 Your reserved items will be ready!";
+                       "Call for guidance: +91 22 1234 5678\n" +
+                       "Opening Google Maps...\n\n" +
+                       "Your reserved items will be ready!";
             }
             
             else if (msg.includes('call store')) {
-                return "📞 *Bandra Store Contact:*\n\n" +
+                return "*Bandra Store Contact:*\n\n" +
                        "+91 22 1234 5678\n" +
                        "Open now until 10 PM\n\n" +
                        "Our team can help with:\n" +
@@ -2851,9 +2957,9 @@
                     if (cartItems.length > 0) {
                         setTimeout(() => {
                             if (totalQty < 3) {
-                                addBotMessage("💡 Tip: Click + or - to modify quantities. Add more items to unlock 20% bundle discount!");
+                                addBotMessage("Tip: Click + or - to modify quantities. Add more items to unlock 20% bundle discount!");
                             } else {
-                                addBotMessage("✅ You've unlocked the 20% bundle discount!");
+                                addBotMessage("You've unlocked the 20% bundle discount!");
                             }
                             addSuggestions([
                                 "Proceed to checkout",
@@ -2881,7 +2987,7 @@
                     addBotMessage("You can complete your purchase in two ways:");
                 }, 300);
                 setTimeout(() => {
-                    addBotMessage("🏪 Visit our stores to try items:");
+                    addBotMessage("Visit our stores to try items:");
                     addSuggestions([
                         "Reserve at Bandra (2km)",
                         "Reserve at Powai (5km)",
@@ -2890,14 +2996,14 @@
                     ]);
                 }, 600);
                 setTimeout(() => {
-                    addBotMessage("📦 Or get home delivery:");
+                    addBotMessage("Or get home delivery:");
                     addSuggestions([
                         "Express delivery (Tomorrow)",
                         "Standard delivery (2-3 days)",
                         "Continue shopping"
                     ]);
                 }, 1200);
-                return "💳 *Ready to checkout!*\n\n" +
+                return "*Ready to checkout!*\n\n" +
                        "Cart Total: ₹2,970\n" +
                        "Loyalty Points Available: 500 (₹200 value)\n\n" +
                        "Choose how you'd like to proceed...";
@@ -2914,9 +3020,9 @@
                         "See in-store"
                     ]);
                 }, 500);
-                return "✅ *Added to cart!*\n\n" +
+                return "*Added to cart!*\n\n" +
                        "Your cart now has 3 items\n" +
-                       "🎁 Bundle discount applied: 20% off\n" +
+                       "Bundle discount applied: 20% off\n" +
                        "New total: ₹3,600 (saved ₹900!)\n\n" +
                        "Ready to checkout?";
             }
@@ -2933,14 +3039,14 @@
                         "Continue shopping"
                     ]);
                 }, 500);
-                return "✨ *Loyalty Points Applied!*\n\n" +
+                return "*Loyalty Points Applied!*\n\n" +
                        "Used: 500 points (-₹200)\n\n" +
                        "*Updated Order Summary:*\n" +
                        "Cart: ₹2,970\n" +
                        "Loyalty Discount: -₹200\n" +
                        "Delivery: ₹99\n" +
                        "Final Total: ₹2,869\n\n" +
-                       "💰 You saved ₹530 on this order!";
+                       "You saved ₹530 on this order!";
             }
             
             else if (msg.includes('complete payment') || msg.includes('pay now')) {
@@ -2953,13 +3059,13 @@
                         "Cash on Delivery"
                     ]);
                 }, 500);
-                return "💳 *Select Payment Method*\n\n" +
+                return "*Select Payment Method*\n\n" +
                        "Final Amount: ₹2,869\n\n" +
                        "Available payment options:\n" +
-                       "💳 Cards (Instant discount available)\n" +
-                       "📱 UPI (5% cashback)\n" +
-                       "🏦 Net Banking\n" +
-                       "💵 Cash on Delivery (+₹50)";
+                       "Cards (Instant discount available)\n" +
+                       "UPI (5% cashback)\n" +
+                       "Net Banking\n" +
+                       "Cash on Delivery (+₹50)";
             }
             
             else if (msg.includes('credit') || msg.includes('debit') || msg.includes('card') || msg.includes('upi') || msg.includes('net banking')) {
@@ -2967,23 +3073,23 @@
                     addBotMessage("Processing payment...");
                 }, 300);
                 setTimeout(() => {
-                    addBotMessage("✅ Payment Successful!\n\nRedirecting to order confirmation...");
+                    addBotMessage("Payment Successful!\n\nRedirecting to order confirmation...");
                 }, 1000);
                 setTimeout(() => {
                     // Save cart and redirect to post-purchase
                     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-                    localStorage.setItem('orderTotal', cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0));
+                    localStorage.setItem('orderTotal', payableTotal(cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0)));
                     window.location.href = 'post-purchase.html';
                 }, 2000);
-                return "💳 *Payment Processing...*\n\nPlease wait while we confirm your payment...";
+                return "*Payment Processing...*\n\nPlease wait while we confirm your payment...";
             }
             
             else if (msg.includes('upi')) {
-                return "📱 *UPI Payment*\n\n" +
+                return "*UPI Payment*\n\n" +
                        "Scan QR code or use UPI ID:\n" +
                        "vanheusen@paytm\n\n" +
                        "Amount: ₹2,869\n" +
-                       "🎁 Get 5% cashback (₹143)\n\n" +
+                       "Get 5% cashback (₹143)\n\n" +
                        "Waiting for payment confirmation...";
             }
             
@@ -2998,7 +3104,7 @@
                         "Skip and continue"
                     ]);
                 }, 300);
-                return "🎁 *Apply Discount Code*\n\n" +
+                return "*Apply Discount Code*\n\n" +
                        "Available offers:\n" +
                        "• FIRST20 - 20% off first order\n" +
                        "• WEDDING15 - 15% off formal wear\n" +
@@ -3023,20 +3129,20 @@
                     ]);
                 }, 500);
                 
-                return `✅ *Discount Applied!*\n\n` +
+                return `*Discount Applied!*\n\n` +
                        `Code: ${codeName}\n` +
                        `Discount: ${discountPercent}% off\n\n` +
                        `*Updated Cart:*\n` +
                        `Subtotal: ₹${subtotal.toLocaleString()}\n` +
                        `Discount (${discountPercent}%): -₹${discountAmount.toLocaleString()}\n` +
                        `New Total: ₹${total.toLocaleString()}\n\n` +
-                       `💰 You're saving ₹${discountAmount.toLocaleString()}!`;
+                       `You're saving ₹${discountAmount.toLocaleString()}!`;
             }
             
             else if (msg.includes('add') && (msg.includes('cart') || msg.includes('bundle'))) {
-                return "✅ *Added to cart!*\n\n" +
+                return "*Added to cart!*\n\n" +
                        "Your cart now has 3 items\n" +
-                       "🎁 Bundle discount applied: 20% off\n" +
+                       "Bundle discount applied: 20% off\n" +
                        "New total: ₹3,600 (saved ₹900!)\n\n" +
                        "Ready to checkout?";
             }
@@ -3049,7 +3155,7 @@
                 setTimeout(() => {
                     window.location.href = `kiosk.html?session=${sessionId}&auto=true`;
                 }, 500);
-                return "🏪 *Great! Let's continue at our store kiosk...*\n\n" +
+                return "*Great! Let's continue at our store kiosk...*\n\n" +
                        "I'm redirecting you to our in-store kiosk experience where you can:\n" +
                        "• Scan products with barcode\n" +
                        "• Reserve items for try-on\n" +
@@ -3063,13 +3169,13 @@
                 // Track activity
                 trackActivity('Web Chat', 'Checked store availability');
                 
-                return "📍 *Stores near you:*\n\n" +
-                       "🏪 *Bandra Store* (2km away)\n" +
+                return "*Stores near you:*\n\n" +
+                       "*Bandra Store* (2km away)\n" +
                        "Shop 23, Linking Road, Bandra West\n" +
-                       "⏰ Open until 10 PM\n\n" +
-                       "🏪 *Powai Store* (5km away)\n" +
+                       "Open until 10 PM\n\n" +
+                       "*Powai Store* (5km away)\n" +
                        "Phoenix Market City, Powai\n" +
-                       "⏰ Open until 11 PM";
+                       "Open until 11 PM";
             }
             
             // DELIVERY OPTIONS - Enhanced with natural variations
@@ -3089,14 +3195,14 @@
                         "Apply discount code"
                     ]);
                 }, 500);
-                return "✅ *Express Delivery Selected!*\n\n" +
-                       "📦 Delivery by Tomorrow, 10 AM\n" +
-                       "💰 Delivery charge: ₹99\n\n" +
+                return "*Express Delivery Selected!*\n\n" +
+                       "Delivery by Tomorrow, 10 AM\n" +
+                       "Delivery charge: ₹99\n\n" +
                        "*Order Summary:*\n" +
                        `Cart: ₹${subtotal.toLocaleString()}\n` +
                        "Delivery: ₹99\n" +
                        `Total: ₹${total.toLocaleString()}\n\n` +
-                       "💡 Use 500 loyalty points to save ₹200!";
+                       "Use 500 loyalty points to save ₹200!";
             }
             
             else if (msg.includes('standard delivery') || msg === 'standard delivery (2-3 days)') {
@@ -3114,14 +3220,14 @@
                         "Apply discount code"
                     ]);
                 }, 500);
-                return "✅ *Standard Delivery Selected!*\n\n" +
-                       "📦 Delivery in 2-3 business days\n" +
-                       `💰 Delivery: ${deliveryCharge === 0 ? 'FREE (order above ₹2,500)' : '₹49'}\n\n` +
+                return "*Standard Delivery Selected!*\n\n" +
+                       "Delivery in 2-3 business days\n" +
+                       `Delivery: ${deliveryCharge === 0 ? 'FREE (order above ₹2,500)' : '₹49'}\n\n` +
                        "*Order Summary:*\n" +
                        `Cart: ₹${subtotal.toLocaleString()}\n` +
                        `Delivery: ${deliveryCharge === 0 ? 'FREE' : '₹49'}\n` +
                        `Total: ₹${total.toLocaleString()}\n\n` +
-                       "💡 Use 500 loyalty points to save ₹200!";
+                       "Use 500 loyalty points to save ₹200!";
             }
             
             else if (msg.includes('store pickup') || msg === 'store pickup (today)') {
@@ -3137,9 +3243,9 @@
                         "Complete order"
                     ]);
                 }, 500);
-                return "✅ *Store Pickup Selected!*\n\n" +
-                       "📍 Pick up today after 6 PM\n" +
-                       "💰 Pickup: FREE\n\n" +
+                return "*Store Pickup Selected!*\n\n" +
+                       "Pick up today after 6 PM\n" +
+                       "Pickup: FREE\n\n" +
                        "*Order Summary:*\n" +
                        `Cart: ₹${subtotal.toLocaleString()}\n` +
                        "Pickup: FREE\n" +
@@ -3158,12 +3264,12 @@
                         "View more details"
                     ]);
                 }, 500);
-                return "📦 *Delivery Options:*\n\n" +
-                       "⚡ *Express Delivery*\n" +
+                return "*Delivery Options:*\n\n" +
+                       "*Express Delivery*\n" +
                        "Tomorrow by 10 AM - ₹99\n\n" +
-                       "📦 *Standard Delivery*\n" +
+                       "*Standard Delivery*\n" +
                        "2-3 business days - FREE (orders above ₹2,500)\n\n" +
-                       "🏪 *Store Pickup*\n" +
+                       "*Store Pickup*\n" +
                        "Today after 6 PM - FREE";
             }
             
@@ -3178,12 +3284,12 @@
                         "Continue shopping"
                     ]);
                 }, 500);
-                return "💰 *Price Ranges:*\n\n" +
-                       "👔 Formal Shirts: ₹2,000 - ₹3,500\n" +
-                       "👔 Ties: ₹700 - ₹1,200\n" +
-                       "👔 Belts: ₹1,000 - ₹1,500\n" +
-                       "👖 Trousers: ₹2,000 - ₹3,000\n\n" +
-                       "🎁 *Active Offers:*\n" +
+                return "*Price Ranges:*\n\n" +
+                       "Formal Shirts: ₹2,000 - ₹3,500\n" +
+                       "Ties: ₹700 - ₹1,200\n" +
+                       "Belts: ₹1,000 - ₹1,500\n" +
+                       "Trousers: ₹2,000 - ₹3,000\n\n" +
+                       "*Active Offers:*\n" +
                        "• 3+ items: 20% off\n" +
                        "• Shirt + Tie: 15% off";
             }
@@ -3197,14 +3303,14 @@
                         "Start shopping"
                     ]);
                 }, 500);
-                return "🎁 *Current Offers:*\n\n" +
-                       "1️⃣ *Bundle Bonanza*\n" +
+                return "*Current Offers:*\n\n" +
+                       "1. *Bundle Bonanza*\n" +
                        "Buy 3+ items → 20% OFF\n\n" +
-                       "2️⃣ *Perfect Pair*\n" +
+                       "2. *Perfect Pair*\n" +
                        "Shirt + Tie → 15% OFF\n\n" +
-                       "3️⃣ *Loyalty Reward*\n" +
+                       "3. *Loyalty Reward*\n" +
                        "You have 500 points = ₹200 discount\n\n" +
-                       "4️⃣ *Free Delivery*\n" +
+                       "4. *Free Delivery*\n" +
                        "Orders above ₹2,500";
             }
             
@@ -3218,11 +3324,11 @@
                         "Continue browsing"
                     ]);
                 }, 500);
-                return "📏 *Size Guide:*\n\n" +
+                return "*Size Guide:*\n\n" +
                        "*Shirts:* 38, 40, 42, 44, 46\n" +
                        "*Trousers:* 30, 32, 34, 36, 38\n" +
                        "*Belts:* 32, 34, 36, 38\n\n" +
-                       "💡 *Based on your profile:*\n" +
+                       "*Based on your profile:*\n" +
                        "Size 40 fits you perfectly!";
             }
             
@@ -3234,7 +3340,7 @@
                     const shirts = [
                         {id: "VH001", name: "Classic Blue Formal Shirt", category: "Formal Shirts", price: 2500, size: "40"},
                         {id: "VH002", name: "White Premium Formal Shirt", category: "Formal Shirts", price: 2800, size: "40"},
-                        {id: "VH008", name: "Light Pink Formal Shirt", category: "Formal Shirts", price: 2600, size: "40"}
+                        {id: "VH003", name: "Light Pink Formal Shirt", category: "Formal Shirts", price: 2600, size: "40"}
                     ];
                     
                     shirts.forEach((shirt, i) => {
@@ -3262,8 +3368,8 @@
                     
                     const recommendations = [
                         {id: "VH004", name: "Navy Blue Silk Tie", category: "Perfect match for formal shirts", price: 800},
-                        {id: "VH005", name: "Brown Leather Belt", category: "Completes the formal look", price: 1200},
-                        {id: "VH003", name: "Navy Formal Trousers", category: "Complete your outfit", price: 2200, size: "32"}
+                        {id: "VH006", name: "Brown Leather Belt", category: "Completes the formal look", price: 1200},
+                        {id: "VH008", name: "Blue Formal Trousers", category: "Complete your outfit", price: 2200, size: "32"}
                     ];
                     
                     recommendations.forEach((item, i) => {
@@ -3290,9 +3396,9 @@
                     addBotMessage("Here are our latest additions to the collection:");
                     
                     const newArrivals = [
-                        {id: "VH012", name: "Premium Linen Shirt", category: "New Arrival - Summer Collection", price: 3200, size: "40"},
-                        {id: "VH013", name: "Silk Blend Tie", category: "New Arrival - Premium", price: 1100},
-                        {id: "VH014", name: "Italian Leather Belt", category: "New Arrival - Luxury", price: 1800}
+                        {id: "VH012", name: "Blue Formal Shoes", category: "New Arrival - Summer Collection", price: 3500, size: "9"},
+                        {id: "VH005C", name: "White Silk Tie", category: "New Arrival - Premium", price: 750},
+                        {id: "VH006A", name: "Blue Leather Belt", category: "New Arrival - Luxury", price: 1250}
                     ];
                     
                     newArrivals.forEach((item, i) => {
@@ -3310,7 +3416,7 @@
                     }, 1000);
                 }, 100);
                 
-                return "Let me show you what just arrived! ✨";
+                return "Let me show you what just arrived!";
             }
             
             // STOCK CHECK
@@ -3323,7 +3429,7 @@
                         "Add to cart"
                     ]);
                 }, 500);
-                return "📦 *Stock Status:*\n\n" +
+                return "*Stock Status:*\n\n" +
                        "All your cart items are in stock:\n" +
                        "• Blue Formal Shirt (Size 40) - 3 available at Bandra\n" +
                        "• Navy Blue Tie - 5 available at Bandra\n\n" +
@@ -3348,14 +3454,14 @@
                             "Find store near me"
                         ]);
                     }, 500);
-                    return "Yes, I'm here! How can I help you? 😊";
+                    return "Yes, I'm here! How can I help you?";
                 }
                 
                 // First time greeting
                 setTimeout(() => {
                     addBotMessage("How can I assist you today?");
                 }, 100);
-                return "Hello! 👋 Great to see you!";
+                return "Hello! Great to see you!";
             }
             
             // HELP
@@ -3368,7 +3474,7 @@
                         "See current offers"
                     ]);
                 }, 500);
-                return "I'm here to help! 🤝\n\n" +
+                return "I'm here to help!\n\n" +
                        "*I can assist you with:*\n" +
                        "• Finding formal wear\n" +
                        "• Understanding your preferences\n" +
@@ -3388,7 +3494,7 @@
                         "Find nearest store"
                     ]);
                 }, 500);
-                return "Let me help you find what you need! 🎯\n\nTry: 'Looking for formal wear' or 'Show recommendations'";
+                return "Let me help you find what you need!\n\nTry: 'Looking for formal wear' or 'Show recommendations'";
             }
         }
 
@@ -3425,7 +3531,64 @@
             // Add suggestions if we found any
             if (suggestions.length > 0) {
                 setTimeout(() => addSuggestions(suggestions), 300);
+                return true;
             }
+            return false;
+        }
+
+        // Never leave the customer at a dead end: offer sensible next steps
+        function addNextStepSuggestions() {
+            const suggestions = cartItems.length > 0
+                ? ["Checkout", "Show recommendations", "Check store availability", "View my cart"]
+                : ["Show formal shirts", "Need outfit suggestions", "Store locations", "View my cart"];
+            setTimeout(() => addSuggestions(suggestions), 300);
+        }
+
+        // Ask how the shopping process was, after an order is confirmed
+        function askForRating(orderId) {
+            addBotMessage('Your order is placed. How was your shopping experience with us? Please rate it.');
+            const container = document.getElementById('chatMessages');
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'suggestions';
+            [['5 - Excellent', 5], ['4 - Good', 4], ['3 - Average', 3], ['2 - Poor', 2], ['1 - Very poor', 1]].forEach(([text, rating]) => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-btn';
+                btn.textContent = text;
+                btn.onclick = async () => {
+                    buttonsDiv.remove();
+                    addUserMessage(`${rating} out of 5`);
+                    try {
+                        await fetch(`${API_URL}/api/feedback/rating`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({session_id: sessionId, rating: rating, order_id: orderId})
+                        });
+                    } catch (error) {
+                        console.error('Error sending rating:', error);
+                    }
+                    addBotMessage(rating >= 4
+                        ? 'Thank you, we are glad you enjoyed it. Is there anything else you need today?'
+                        : 'Thank you for telling us. We will use it to do better. Is there anything we can fix for you now?');
+                    addNextStepSuggestions();
+                };
+                buttonsDiv.appendChild(btn);
+            });
+            container.appendChild(buttonsDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function isUsePointsRequest(message) {
+            return !isKeepPointsRequest(message) && /(use|apply|redeem).*(loyalty|points)/i.test(message);
+        }
+
+        function isKeepPointsRequest(message) {
+            return /(keep|save|don'?t use|do not use|remove|skip).*(loyalty|points)/i.test(message);
+        }
+
+        // Cart questions are answered here, from the shared cart
+        function isCartViewRequest(message) {
+            const text = message.toLowerCase();
+            return /\bcart\b/.test(text) && !/(checkout|pay|buy|purchase|discount|offer|add|remove)/.test(text);
         }
 
         function getCurrentTime() {

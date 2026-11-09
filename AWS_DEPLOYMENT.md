@@ -23,8 +23,8 @@ This guide deploys the AI Sales Orchestrator on **AWS EC2**, with the product ca
 ```
 
 - **S3** is the source of truth for catalog and inventory data. To update products or stock, upload new files to S3 and restart the service.
-- **EC2** runs the FastAPI backend and serves the frontend through Nginx. On every start, the service pulls the latest data from S3 into `backend/data/`.
-- `sessions.json` is runtime state. It stays on the instance and is never overwritten by the sync.
+- **EC2** runs the FastAPI backend and serves the frontend through Nginx. On every start, the service pulls the latest data from S3 into `data/`.
+- Live sessions and carts are stored in Redis, and orders, user preferences and LangGraph checkpoints in PostgreSQL. Both run on the instance in this guide, so the S3 sync never touches them.
 
 ---
 
@@ -41,9 +41,9 @@ This guide deploys the AI Sales Orchestrator on **AWS EC2**, with the product ca
 ```bash
 aws s3 mb s3://<your-bucket-name> --region ap-south-1
 
-aws s3 cp backend/data/products.json  s3://<your-bucket-name>/data/
-aws s3 cp backend/data/stores.json    s3://<your-bucket-name>/data/
-aws s3 cp backend/data/customers.json s3://<your-bucket-name>/data/
+aws s3 cp data/products.json  s3://<your-bucket-name>/data/
+aws s3 cp data/stores.json    s3://<your-bucket-name>/data/
+aws s3 cp data/customers.json s3://<your-bucket-name>/data/
 ```
 
 Keep the bucket private. Block Public Access stays on, since the instance reads it through an IAM role.
@@ -84,16 +84,22 @@ Port 8000 does **not** need to be open. Nginx proxies to Uvicorn locally.
 ```bash
 ssh -i <key>.pem ubuntu@<ec2-public-ip>
 
-sudo apt update && sudo apt install -y python3-venv git nginx awscli
+sudo apt update && sudo apt install -y git nginx awscli redis-server postgresql
 git clone https://github.com/Varsha-1605/AI-Sales-Orchestrator.git
-cd AI-Sales-Orchestrator/backend
+cd AI-Sales-Orchestrator
 
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync --no-dev          # creates the virtual environment in .venv at the repo root
 ```
 
-Create `backend/.env`:
+Create the database for orders and checkpoints:
+
+```bash
+sudo -u postgres psql -c "CREATE USER sales WITH PASSWORD '<db-password>';"
+sudo -u postgres psql -c "CREATE DATABASE sales OWNER sales;"
+```
+
+Create `.env` in the repo root (all settings are listed in `.env.example`):
 
 ```env
 ANTHROPIC_API_KEY=your-key
@@ -101,16 +107,19 @@ ANTHROPIC_MODEL=claude-sonnet-4-20250514
 FASTAPI_HOST=127.0.0.1
 FASTAPI_PORT=8000
 DEBUG_MODE=False
-ALLOWED_ORIGINS=http://<ec2-public-ip>
+AUTH_ENABLED=true
+ALLOWED_ORIGINS=["http://<ec2-public-ip>"]
+REDIS_URL=redis://localhost:6379/0
+POSTGRES_URL=postgresql://sales:<db-password>@localhost:5432/sales
 ```
 
 ## 5. Point the frontend at the server
 
-The frontend pages call `http://localhost:8000`. Replace it with the instance address so requests go through Nginx:
+The frontend pages read the backend address from `frontend/config.js` (the WebSocket address is derived from it). Replace `http://localhost:8000` with the instance address so requests go through Nginx:
 
 ```bash
 cd ~/AI-Sales-Orchestrator/frontend
-sed -i "s#http://localhost:8000#http://<ec2-public-ip>#g; s#ws://localhost:8000#ws://<ec2-public-ip>#g" *.html
+sed -i "s#http://localhost:8000#http://<ec2-public-ip>#" config.js
 ```
 
 ## 6. Run the backend as a service
@@ -120,21 +129,21 @@ Create `/etc/systemd/system/orchestrator.service`:
 ```ini
 [Unit]
 Description=AI Sales Orchestrator (FastAPI)
-After=network.target
+After=network.target redis-server.service postgresql.service
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/AI-Sales-Orchestrator/backend
+WorkingDirectory=/home/ubuntu/AI-Sales-Orchestrator
 # Pull the latest catalog and inventory data from S3 before every start
-ExecStartPre=/usr/bin/aws s3 sync s3://<your-bucket-name>/data/ /home/ubuntu/AI-Sales-Orchestrator/backend/data/ --exclude sessions.json
-ExecStart=/home/ubuntu/AI-Sales-Orchestrator/backend/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+ExecStartPre=/usr/bin/aws s3 sync s3://<your-bucket-name>/data/ /home/ubuntu/AI-Sales-Orchestrator/data/
+ExecStart=/home/ubuntu/AI-Sales-Orchestrator/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-The backend must run from the `backend/` directory, because it loads data from relative `data/` paths.
+The backend must run from the repo root, because it loads `.env` and the `data/` folder (`DATA_DIR`) from relative paths.
 
 ```bash
 sudo systemctl daemon-reload
@@ -159,6 +168,7 @@ server {
         proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_buffering off;    # lets streamed chat replies reach the browser as they are written
     }
 
     # WebSocket
@@ -190,7 +200,7 @@ Open `http://<ec2-public-ip>/index.html`.
 ## Updating catalog or inventory data
 
 ```bash
-aws s3 cp backend/data/products.json s3://<your-bucket-name>/data/
+aws s3 cp data/products.json s3://<your-bucket-name>/data/
 ssh ubuntu@<ec2-public-ip> "sudo systemctl restart orchestrator"   # re-syncs from S3 on start
 ```
 
