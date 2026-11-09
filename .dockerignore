@@ -1,0 +1,9 @@
+.git
+.venv
+.env
+__pycache__
+tests
+evals
+goldens
+frontend
+*.md

@@ -1,3 +1,52 @@
+# ---- Secrets: never commit real keys. Commit only .env.example ----
 .env
+.env.*
+!.env.example
+
+# ---- Python environments ----
+.venv/
+venv/
 myenv/
+env/
+
+# ---- Python build and cache files ----
 __pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# ---- Test, lint and coverage output ----
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# ---- Eval reports (written by `python -m evals.run_evals`) ----
+evals/results/
+
+# ---- Local runtime files ----
+data/sessions.json
+*.log
+logs/
+
+# ---- Local database copies (the docker-compose volumes live outside the repo) ----
+*.sqlite3
+*.db
+dump.rdb
+
+# ---- Editors and operating system ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Claude Code: personal settings stay local (CLAUDE.md is committed) ----
+.claude/settings.local.json
+
+
+restructure_plan.md

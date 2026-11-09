@@ -1,0 +1,1416 @@
+{
+  "products": [
+    {
+      "product_id": "VH001",
+      "name": "Classic Blue Formal Shirt",
+      "brand": "Van Heusen",
+      "price": 2500,
+      "sizes": [
+        "38",
+        "40",
+        "42",
+        "44"
+      ],
+      "colors": [
+        "Blue"
+      ],
+      "category": "Formal Shirts",
+      "tags": [
+        "wedding",
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shirt1.jpg",
+      "match_score": 0.95,
+      "inventory": {
+        "Bandra": {
+          "40": 3,
+          "42": 5
+        },
+        "Powai": {
+          "40": 1,
+          "42": 2
+        },
+        "Andheri": {
+          "40": 0,
+          "42": 3
+        }
+      }
+    },
+    {
+      "product_id": "VH001B",
+      "name": "Light Blue Formal Shirt",
+      "brand": "Van Heusen",
+      "price": 2450,
+      "sizes": [
+        "38",
+        "40",
+        "42",
+        "44"
+      ],
+      "colors": [
+        "Light Blue",
+        "Sky Blue"
+      ],
+      "category": "Formal Shirts",
+      "tags": [
+        "wedding",
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shirt1b.jpg",
+      "match_score": 0.94,
+      "inventory": {
+        "Bandra": {
+          "38": 0,
+          "40": 0,
+          "42": 0,
+          "44": 0
+        },
+        "Powai": {
+          "38": 0,
+          "40": 0,
+          "42": 0,
+          "44": 0
+        },
+        "Andheri": {
+          "38": 0,
+          "40": 0,
+          "42": 0,
+          "44": 0
+        },
+        "Kurla": {
+          "38": 0,
+          "40": 0,
+          "42": 0,
+          "44": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH002",
+      "name": "White Premium Formal Shirt",
+      "brand": "Van Heusen",
+      "price": 2800,
+      "sizes": [
+        "38",
+        "40",
+        "42",
+        "44"
+      ],
+      "colors": [
+        "White"
+      ],
+      "category": "Formal Shirts",
+      "tags": [
+        "wedding",
+        "formal",
+        "premium",
+        "office"
+      ],
+      "image": "/assets/images/products/shirt2.jpg",
+      "match_score": 0.92,
+      "inventory": {
+        "Bandra": {
+          "38": 4,
+          "40": 4,
+          "42": 4,
+          "44": 4
+        },
+        "Powai": {
+          "38": 3,
+          "40": 3,
+          "42": 3,
+          "44": 3
+        },
+        "Andheri": {
+          "38": 2,
+          "40": 2,
+          "42": 2,
+          "44": 2
+        },
+        "Kurla": {
+          "38": 2,
+          "40": 2,
+          "42": 2,
+          "44": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH003",
+      "name": "Light Pink Formal Shirt",
+      "brand": "Van Heusen",
+      "price": 2600,
+      "sizes": [
+        "38",
+        "40",
+        "42"
+      ],
+      "colors": [
+        "Light Pink",
+        "Pink"
+      ],
+      "category": "Formal Shirts",
+      "tags": [
+        "wedding",
+        "smart-casual"
+      ],
+      "image": "/assets/images/products/shirt3.jpg",
+      "match_score": 0.88,
+      "inventory": {
+        "Bandra": {
+          "38": 3,
+          "40": 0,
+          "42": 2
+        },
+        "Powai": {
+          "38": 5,
+          "40": 4,
+          "42": 2
+        },
+        "Andheri": {
+          "38": 0,
+          "40": 1,
+          "42": 3
+        },
+        "Kurla": {
+          "38": 5,
+          "40": 0,
+          "42": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH004",
+      "name": "Navy Blue Silk Tie",
+      "brand": "Van Heusen",
+      "price": 800,
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        "Navy Blue",
+        "Blue"
+      ],
+      "category": "Ties",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/tie1.jpg",
+      "match_score": 0.85,
+      "inventory": {
+        "Bandra": {
+          "One Size": 5
+        },
+        "Powai": {
+          "One Size": 2
+        },
+        "Andheri": {
+          "One Size": 3
+        },
+        "Kurla": {
+          "One Size": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH005",
+      "name": "Light Blue Silk Tie",
+      "brand": "Van Heusen",
+      "price": 750,
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        "Light Blue",
+        "Sky Blue"
+      ],
+      "category": "Ties",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/tie2.jpg",
+      "match_score": 0.84,
+      "inventory": {
+        "Bandra": {
+          "One Size": 3
+        },
+        "Powai": {
+          "One Size": 4
+        },
+        "Andheri": {
+          "One Size": 0
+        },
+        "Kurla": {
+          "One Size": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH005B",
+      "name": "Striped Silk Tie",
+      "brand": "Van Heusen",
+      "price": 750,
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        "Navy",
+        "Silver"
+      ],
+      "category": "Ties",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/tie2.jpg",
+      "match_score": 0.85,
+      "inventory": {
+        "Bandra": {
+          "One Size": 5
+        },
+        "Powai": {
+          "One Size": 3
+        },
+        "Andheri": {
+          "One Size": 2
+        },
+        "Kurla": {
+          "One Size": 4
+        }
+      }
+    },
+    {
+      "product_id": "VH005C",
+      "name": "White Silk Tie",
+      "brand": "Van Heusen",
+      "price": 750,
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        "White",
+        "Ivory"
+      ],
+      "category": "Ties",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/tie_white.jpg",
+      "match_score": 0.84,
+      "inventory": {
+        "Bandra": {
+          "One Size": 5
+        },
+        "Powai": {
+          "One Size": 1
+        },
+        "Andheri": {
+          "One Size": 1
+        },
+        "Kurla": {
+          "One Size": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH005D",
+      "name": "Pink Silk Tie",
+      "brand": "Van Heusen",
+      "price": 750,
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        "Pink",
+        "Light Pink"
+      ],
+      "category": "Ties",
+      "tags": [
+        "wedding",
+        "party"
+      ],
+      "image": "/assets/images/products/tie_pink.jpg",
+      "match_score": 0.83,
+      "inventory": {
+        "Bandra": {
+          "One Size": 5
+        },
+        "Powai": {
+          "One Size": 1
+        },
+        "Andheri": {
+          "One Size": 2
+        },
+        "Kurla": {
+          "One Size": 3
+        }
+      }
+    },
+    {
+      "product_id": "VH006",
+      "name": "Brown Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1200,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "Brown",
+        "Tan"
+      ],
+      "category": "Belts",
+      "tags": [
+        "formal",
+        "casual",
+        "office"
+      ],
+      "image": "/assets/images/products/belt1.jpg",
+      "match_score": 0.78,
+      "inventory": {
+        "Bandra": {
+          "32": 4,
+          "34": 3,
+          "36": 3,
+          "38": 4
+        },
+        "Powai": {
+          "32": 5,
+          "34": 0,
+          "36": 4,
+          "38": 1
+        },
+        "Andheri": {
+          "32": 0,
+          "34": 3,
+          "36": 3,
+          "38": 0
+        },
+        "Kurla": {
+          "32": 3,
+          "34": 4,
+          "36": 0,
+          "38": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH006A",
+      "name": "Blue Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1250,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "Blue",
+        "Navy Blue"
+      ],
+      "category": "Belts",
+      "tags": [
+        "formal",
+        "office",
+        "wedding"
+      ],
+      "image": "/assets/images/products/belt_blue.jpg",
+      "match_score": 0.77,
+      "inventory": {
+        "Bandra": {
+          "32": 5,
+          "34": 4,
+          "36": 4,
+          "38": 5
+        },
+        "Powai": {
+          "32": 1,
+          "34": 4,
+          "36": 4,
+          "38": 3
+        },
+        "Andheri": {
+          "32": 3,
+          "34": 0,
+          "36": 4,
+          "38": 1
+        },
+        "Kurla": {
+          "32": 1,
+          "34": 2,
+          "36": 0,
+          "38": 3
+        }
+      }
+    },
+    {
+      "product_id": "VH006B",
+      "name": "Light Blue Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1250,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "Light Blue"
+      ],
+      "category": "Belts",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/belt_lightblue.jpg",
+      "match_score": 0.77,
+      "inventory": {
+        "Bandra": {
+          "32": 2,
+          "34": 3,
+          "36": 5,
+          "38": 2
+        },
+        "Powai": {
+          "32": 2,
+          "34": 3,
+          "36": 1,
+          "38": 0
+        },
+        "Andheri": {
+          "32": 4,
+          "34": 1,
+          "36": 1,
+          "38": 2
+        },
+        "Kurla": {
+          "32": 0,
+          "34": 5,
+          "36": 3,
+          "38": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH006C",
+      "name": "White Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1250,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "White"
+      ],
+      "category": "Belts",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/belt_white.jpg",
+      "match_score": 0.77,
+      "inventory": {
+        "Bandra": {
+          "32": 3,
+          "34": 2,
+          "36": 4,
+          "38": 5
+        },
+        "Powai": {
+          "32": 2,
+          "34": 3,
+          "36": 1,
+          "38": 0
+        },
+        "Andheri": {
+          "32": 0,
+          "34": 5,
+          "36": 3,
+          "38": 2
+        },
+        "Kurla": {
+          "32": 4,
+          "34": 5,
+          "36": 3,
+          "38": 4
+        }
+      }
+    },
+    {
+      "product_id": "VH006D",
+      "name": "Pink Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1200,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "Pink"
+      ],
+      "category": "Belts",
+      "tags": [
+        "casual",
+        "party"
+      ],
+      "image": "/assets/images/products/belt_pink.jpg",
+      "match_score": 0.75,
+      "inventory": {
+        "Bandra": {
+          "32": 0,
+          "34": 5,
+          "36": 1,
+          "38": 2
+        },
+        "Powai": {
+          "32": 3,
+          "34": 4,
+          "36": 2,
+          "38": 1
+        },
+        "Andheri": {
+          "32": 3,
+          "34": 2,
+          "36": 2,
+          "38": 5
+        },
+        "Kurla": {
+          "32": 5,
+          "34": 4,
+          "36": 4,
+          "38": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH007",
+      "name": "Black Leather Belt",
+      "brand": "Van Heusen",
+      "price": 1300,
+      "sizes": [
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "category": "Belts",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/belt2.jpg",
+      "match_score": 0.76,
+      "inventory": {
+        "Bandra": {
+          "32": 1,
+          "34": 2,
+          "36": 4,
+          "38": 3
+        },
+        "Powai": {
+          "32": 1,
+          "34": 0,
+          "36": 4,
+          "38": 3
+        },
+        "Andheri": {
+          "32": 4,
+          "34": 3,
+          "36": 1,
+          "38": 4
+        },
+        "Kurla": {
+          "32": 5,
+          "34": 0,
+          "36": 4,
+          "38": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH008",
+      "name": "Blue Formal Trousers",
+      "brand": "Van Heusen",
+      "price": 2200,
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "colors": [
+        "Blue",
+        "Navy"
+      ],
+      "category": "Trousers",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/trouser1.jpg",
+      "match_score": 0.72,
+      "inventory": {
+        "Bandra": {
+          "30": 2,
+          "32": 0,
+          "34": 3,
+          "36": 5
+        },
+        "Powai": {
+          "30": 3,
+          "32": 3,
+          "34": 0,
+          "36": 0
+        },
+        "Andheri": {
+          "30": 5,
+          "32": 3,
+          "34": 0,
+          "36": 2
+        },
+        "Kurla": {
+          "30": 1,
+          "32": 1,
+          "34": 0,
+          "36": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH008D",
+      "name": "Light Blue Formal Trousers",
+      "brand": "Van Heusen",
+      "price": 2250,
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "colors": [
+        "Light Blue",
+        "Sky Blue"
+      ],
+      "category": "Trousers",
+      "tags": [
+        "formal",
+        "office",
+        "wedding"
+      ],
+      "image": "/assets/images/products/trouser4.jpg",
+      "match_score": 0.74,
+      "inventory": {
+        "Bandra": {
+          "30": 3,
+          "32": 3,
+          "34": 2,
+          "36": 2
+        },
+        "Powai": {
+          "30": 3,
+          "32": 1,
+          "34": 0,
+          "36": 0
+        },
+        "Andheri": {
+          "30": 1,
+          "32": 3,
+          "34": 0,
+          "36": 0
+        },
+        "Kurla": {
+          "30": 3,
+          "32": 5,
+          "34": 2,
+          "36": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH008E",
+      "name": "White Formal Trousers",
+      "brand": "Van Heusen",
+      "price": 2400,
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "colors": [
+        "White",
+        "Ivory"
+      ],
+      "category": "Trousers",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/trouser_white.jpg",
+      "match_score": 0.75,
+      "inventory": {
+        "Bandra": {
+          "30": 4,
+          "32": 2,
+          "34": 5,
+          "36": 5
+        },
+        "Powai": {
+          "30": 1,
+          "32": 5,
+          "34": 4,
+          "36": 2
+        },
+        "Andheri": {
+          "30": 1,
+          "32": 5,
+          "34": 4,
+          "36": 4
+        },
+        "Kurla": {
+          "30": 5,
+          "32": 5,
+          "34": 4,
+          "36": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH008F",
+      "name": "Pink Formal Trousers",
+      "brand": "Van Heusen",
+      "price": 2350,
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "colors": [
+        "Pink",
+        "Light Pink"
+      ],
+      "category": "Trousers",
+      "tags": [
+        "wedding",
+        "party"
+      ],
+      "image": "/assets/images/products/trouser_pink.jpg",
+      "match_score": 0.73,
+      "inventory": {
+        "Bandra": {
+          "30": 5,
+          "32": 1,
+          "34": 0,
+          "36": 0
+        },
+        "Powai": {
+          "30": 2,
+          "32": 0,
+          "34": 3,
+          "36": 3
+        },
+        "Andheri": {
+          "30": 4,
+          "32": 2,
+          "34": 5,
+          "36": 5
+        },
+        "Kurla": {
+          "30": 0,
+          "32": 4,
+          "34": 1,
+          "36": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH008C",
+      "name": "Black Formal Trousers",
+      "brand": "Van Heusen",
+      "price": 2300,
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "category": "Trousers",
+      "tags": [
+        "formal",
+        "wedding",
+        "office"
+      ],
+      "image": "/assets/images/products/trouser3.jpg",
+      "match_score": 0.73,
+      "inventory": {
+        "Bandra": {
+          "30": 2,
+          "32": 4,
+          "34": 1,
+          "36": 5
+        },
+        "Powai": {
+          "30": 4,
+          "32": 2,
+          "34": 1,
+          "36": 1
+        },
+        "Andheri": {
+          "30": 2,
+          "32": 0,
+          "34": 1,
+          "36": 3
+        },
+        "Kurla": {
+          "30": 4,
+          "32": 2,
+          "34": 5,
+          "36": 5
+        }
+      }
+    },
+    {
+      "product_id": "VH012",
+      "name": "Blue Formal Shoes",
+      "brand": "Van Heusen",
+      "price": 3500,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "colors": [
+        "Blue"
+      ],
+      "category": "Shoes",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shoes_blue.jpg",
+      "match_score": 0.88,
+      "inventory": {
+        "Bandra": {
+          "7": 0,
+          "8": 5,
+          "9": 1,
+          "10": 0,
+          "11": 4
+        },
+        "Powai": {
+          "7": 5,
+          "8": 0,
+          "9": 2,
+          "10": 4,
+          "11": 0
+        },
+        "Andheri": {
+          "7": 1,
+          "8": 0,
+          "9": 0,
+          "10": 2,
+          "11": 0
+        },
+        "Kurla": {
+          "7": 3,
+          "8": 4,
+          "9": 2,
+          "10": 4,
+          "11": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH012B",
+      "name": "Light Blue Formal Shoes",
+      "brand": "Van Heusen",
+      "price": 3400,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "colors": [
+        "Light Blue"
+      ],
+      "category": "Shoes",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shoes_lightblue.jpg",
+      "match_score": 0.87,
+      "inventory": {
+        "Bandra": {
+          "7": 4,
+          "8": 5,
+          "9": 5,
+          "10": 0,
+          "11": 4
+        },
+        "Powai": {
+          "7": 0,
+          "8": 5,
+          "9": 3,
+          "10": 4,
+          "11": 4
+        },
+        "Andheri": {
+          "7": 5,
+          "8": 2,
+          "9": 4,
+          "10": 3,
+          "11": 5
+        },
+        "Kurla": {
+          "7": 2,
+          "8": 5,
+          "9": 5,
+          "10": 0,
+          "11": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH012C",
+      "name": "White Formal Shoes",
+      "brand": "Van Heusen",
+      "price": 3600,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "colors": [
+        "White"
+      ],
+      "category": "Shoes",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shoes_white.jpg",
+      "match_score": 0.88,
+      "inventory": {
+        "Bandra": {
+          "7": 0,
+          "8": 5,
+          "9": 1,
+          "10": 1,
+          "11": 5
+        },
+        "Powai": {
+          "7": 2,
+          "8": 5,
+          "9": 5,
+          "10": 4,
+          "11": 2
+        },
+        "Andheri": {
+          "7": 4,
+          "8": 1,
+          "9": 1,
+          "10": 3,
+          "11": 5
+        },
+        "Kurla": {
+          "7": 2,
+          "8": 1,
+          "9": 5,
+          "10": 0,
+          "11": 4
+        }
+      }
+    },
+    {
+      "product_id": "VH012D",
+      "name": "Pink Formal Shoes",
+      "brand": "Van Heusen",
+      "price": 3400,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "colors": [
+        "Pink"
+      ],
+      "category": "Shoes",
+      "tags": [
+        "wedding",
+        "party"
+      ],
+      "image": "/assets/images/products/shoes_pink.jpg",
+      "match_score": 0.85,
+      "inventory": {
+        "Bandra": {
+          "7": 3,
+          "8": 2,
+          "9": 2,
+          "10": 0,
+          "11": 4
+        },
+        "Powai": {
+          "7": 4,
+          "8": 5,
+          "9": 5,
+          "10": 5,
+          "11": 5
+        },
+        "Andheri": {
+          "7": 1,
+          "8": 0,
+          "9": 2,
+          "10": 4,
+          "11": 0
+        },
+        "Kurla": {
+          "7": 0,
+          "8": 5,
+          "9": 5,
+          "10": 5,
+          "11": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH013",
+      "name": "Black Formal Shoes",
+      "brand": "Van Heusen",
+      "price": 3800,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "category": "Shoes",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/shoes_black.jpg",
+      "match_score": 0.9,
+      "inventory": {
+        "Bandra": {
+          "7": 0,
+          "8": 1,
+          "9": 5,
+          "10": 5,
+          "11": 1
+        },
+        "Powai": {
+          "7": 3,
+          "8": 4,
+          "9": 2,
+          "10": 2,
+          "11": 4
+        },
+        "Andheri": {
+          "7": 4,
+          "8": 3,
+          "9": 5,
+          "10": 0,
+          "11": 4
+        },
+        "Kurla": {
+          "7": 5,
+          "8": 4,
+          "9": 0,
+          "10": 4,
+          "11": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH014",
+      "name": "Blue Formal Socks",
+      "brand": "Van Heusen",
+      "price": 300,
+      "sizes": [
+        "Free Size"
+      ],
+      "colors": [
+        "Blue"
+      ],
+      "category": "Socks",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/socks_blue.jpg",
+      "match_score": 0.7,
+      "inventory": {
+        "Bandra": {
+          "Free Size": 1
+        },
+        "Powai": {
+          "Free Size": 1
+        },
+        "Andheri": {
+          "Free Size": 0
+        },
+        "Kurla": {
+          "Free Size": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH014B",
+      "name": "Light Blue Formal Socks",
+      "brand": "Van Heusen",
+      "price": 300,
+      "sizes": [
+        "Free Size"
+      ],
+      "colors": [
+        "Light Blue"
+      ],
+      "category": "Socks",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/socks_lightblue.jpg",
+      "match_score": 0.7,
+      "inventory": {
+        "Bandra": {
+          "Free Size": 3
+        },
+        "Powai": {
+          "Free Size": 4
+        },
+        "Andheri": {
+          "Free Size": 3
+        },
+        "Kurla": {
+          "Free Size": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH014C",
+      "name": "White Formal Socks",
+      "brand": "Van Heusen",
+      "price": 300,
+      "sizes": [
+        "Free Size"
+      ],
+      "colors": [
+        "White"
+      ],
+      "category": "Socks",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/socks_white.jpg",
+      "match_score": 0.7,
+      "inventory": {
+        "Bandra": {
+          "Free Size": 4
+        },
+        "Powai": {
+          "Free Size": 2
+        },
+        "Andheri": {
+          "Free Size": 0
+        },
+        "Kurla": {
+          "Free Size": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH014D",
+      "name": "Pink Formal Socks",
+      "brand": "Van Heusen",
+      "price": 300,
+      "sizes": [
+        "Free Size"
+      ],
+      "colors": [
+        "Pink"
+      ],
+      "category": "Socks",
+      "tags": [
+        "wedding",
+        "party"
+      ],
+      "image": "/assets/images/products/socks_pink.jpg",
+      "match_score": 0.68,
+      "inventory": {
+        "Bandra": {
+          "Free Size": 5
+        },
+        "Powai": {
+          "Free Size": 4
+        },
+        "Andheri": {
+          "Free Size": 3
+        },
+        "Kurla": {
+          "Free Size": 0
+        }
+      }
+    },
+    {
+      "product_id": "VH015",
+      "name": "Black Formal Socks",
+      "brand": "Van Heusen",
+      "price": 300,
+      "sizes": [
+        "Free Size"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "category": "Socks",
+      "tags": [
+        "formal",
+        "office"
+      ],
+      "image": "/assets/images/products/socks_black.jpg",
+      "match_score": 0.72,
+      "inventory": {
+        "Bandra": {
+          "Free Size": 4
+        },
+        "Powai": {
+          "Free Size": 1
+        },
+        "Andheri": {
+          "Free Size": 1
+        },
+        "Kurla": {
+          "Free Size": 1
+        }
+      }
+    },
+    {
+      "product_id": "VH010",
+      "name": "Black Formal Blazer",
+      "brand": "Van Heusen",
+      "price": 5500,
+      "sizes": [
+        "38",
+        "40",
+        "42"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "category": "Blazers",
+      "tags": [
+        "formal",
+        "office",
+        "wedding"
+      ],
+      "image": "/assets/images/products/blazer1.jpg",
+      "match_score": 0.82,
+      "inventory": {
+        "Bandra": {
+          "38": 3,
+          "40": 3,
+          "42": 3
+        },
+        "Powai": {
+          "38": 2,
+          "40": 2,
+          "42": 2
+        },
+        "Andheri": {
+          "38": 4,
+          "40": 4,
+          "42": 4
+        },
+        "Kurla": {
+          "38": 2,
+          "40": 2,
+          "42": 2
+        }
+      }
+    },
+    {
+      "product_id": "VH011",
+      "name": "Navy Blue Blazer",
+      "brand": "Van Heusen",
+      "price": 5800,
+      "sizes": [
+        "38",
+        "40",
+        "42"
+      ],
+      "colors": [
+        "Navy"
+      ],
+      "category": "Blazers",
+      "tags": [
+        "formal",
+        "office",
+        "wedding"
+      ],
+      "image": "/assets/images/products/blazer1.jpg",
+      "match_score": 0.8,
+      "inventory": {
+        "Bandra": {
+          "38": 2,
+          "40": 2,
+          "42": 2
+        },
+        "Powai": {
+          "38": 3,
+          "40": 3,
+          "42": 3
+        },
+        "Andheri": {
+          "38": 1,
+          "40": 1,
+          "42": 1
+        },
+        "Kurla": {
+          "38": 3,
+          "40": 3,
+          "42": 3
+        }
+      }
+    }
+  ]
+}

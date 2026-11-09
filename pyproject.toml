@@ -1,0 +1,42 @@
+[project]
+name = "ai-sales-orchestrator"
+version = "1.0.0"
+description = "Multi-agent system for omnichannel retail"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "loguru",
+    "httpx",
+    "langchain-core",
+    "langchain-anthropic",
+    "langchain-openai",
+    "langgraph",
+    "langgraph-checkpoint-postgres",
+    "psycopg[binary,pool]",
+    "redis",
+    "googletrans>=4.0.2",
+    "langsmith",
+    "prometheus-client",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "fakeredis",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+markers = [
+    "integration: needs a real Postgres database (set POSTGRES_URL)",
+]
